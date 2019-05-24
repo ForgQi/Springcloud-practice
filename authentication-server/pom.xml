@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
 <!--        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
     </parent>
-    <groupId>com.ForgQi</groupId>
+
     <artifactId>authentication-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>authentication-server</name>

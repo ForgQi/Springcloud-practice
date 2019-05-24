@@ -1,0 +1,41 @@
+server:
+  port: 8760
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+eureka:
+  client:
+    healthcheck:
+      # 使用health端点来代替心跳表明服务是否可用，反应到eureka server ui上服务的UP还是DOWN
+      enabled: true
+  instance:
+    # 获取此实例的相对健康检查URL路径，默认为/health
+    health-check-url-path: /actuator/health
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: dev
+  cloud:
+    gateway:
+      routes:
+        - id: service-base
+          # lb 表示负载均衡loadbalance
+          uri: lb://base-server
+          predicates:
+            - Path=/api/** # 所有api开头的请求走这个路由
+          filters:
+            - StripPrefix=1 # 转发之前将/api去掉
+#        - id: service-eureka
+#          uri: http://eureka-server:8761
+#          predicates:
+#            - Path=/eureka/**
+#          filters:
+#            - StripPrefix=1

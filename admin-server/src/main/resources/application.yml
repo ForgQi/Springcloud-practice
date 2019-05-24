@@ -1,0 +1,32 @@
+server:
+  port: 8769
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true #使用health端点来代替心跳表明服务是否可用，反应到eureka server ui上服务的UP还是DOWN
+  instance:
+    # 获取此实例的相对健康检查URL路径，默认为/health
+    health-check-url-path: /actuator/health
+#    需要在服务注册时带上 metadata-map 信息,用户名和密码
+    metadata-map:
+      user.name: ${spring.security.user.name}
+      user.password: ${spring.security.user.password}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+spring:
+  application:
+    name: admin-server
+  profiles:
+    active: dev
+  security:
+    user:
+      name: "admin"
+      password: "12345678"
