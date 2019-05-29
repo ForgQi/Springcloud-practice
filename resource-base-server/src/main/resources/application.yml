@@ -10,19 +10,43 @@ management:
 eureka:
   client:
     healthcheck:
-      enabled: true #Ê¹ÓÃhealth¶ËµãÀ´´úÌæĞÄÌø±íÃ÷·şÎñÊÇ·ñ¿ÉÓÃ£¬·´Ó¦µ½eureka server uiÉÏ·şÎñµÄUP»¹ÊÇDOWN
+      enabled: true #ä½¿ç”¨healthç«¯ç‚¹æ¥ä»£æ›¿å¿ƒè·³è¡¨æ˜æœåŠ¡æ˜¯å¦å¯ç”¨ï¼Œååº”åˆ°eureka server uiä¸ŠæœåŠ¡çš„UPè¿˜æ˜¯DOWN
   instance:
-    #   »ñÈ¡´ËÊµÀıµÄÏà¶Ô½¡¿µ¼ì²éURLÂ·¾¶£¬Ä¬ÈÏÎª/health
+    #   è·å–æ­¤å®ä¾‹çš„ç›¸å¯¹å¥åº·æ£€æŸ¥URLè·¯å¾„ï¼Œé»˜è®¤ä¸º/health
     health-check-url-path: /actuator/health
-
+    metadata-map:
+      user.name: ${spring.security.user.name}
+      user.password: ${spring.security.user.password}
 spring:
   profiles:
     active: dev
   application:
     name: base-server
-#logging:
-#  file:   # ÈÕÖ¾ÎÄ¼ş,¾ø¶ÔÂ·¾¶»òÏà¶ÔÂ·¾¶
-#  path:   # ±£´æÈÕÖ¾ÎÄ¼şÄ¿Â¼Â·¾¶
-#  config: # ÈÕÖ¾ÅäÖÃÎÄ¼ş,Spring BootÄ¬ÈÏÊ¹ÓÃclasspathÂ·¾¶ÏÂµÄÈÕÖ¾ÅäÖÃÎÄ¼ş,Èç:logback.xml
-#  level:  # ÈÕÖ¾¼¶±ğ
-#    org.springframework.web: DEBUG # ÅäÖÃspring webÈÕÖ¾¼¶±ğ
+  #logging:
+  #  file:   # æ—¥å¿—æ–‡ä»¶,ç»å¯¹è·¯å¾„æˆ–ç›¸å¯¹è·¯å¾„
+  #  path:   # ä¿å­˜æ—¥å¿—æ–‡ä»¶ç›®å½•è·¯å¾„
+  #  config: # æ—¥å¿—é…ç½®æ–‡ä»¶,Spring Booté»˜è®¤ä½¿ç”¨classpathè·¯å¾„ä¸‹çš„æ—¥å¿—é…ç½®æ–‡ä»¶,å¦‚:logback.xml
+  #  level:  # æ—¥å¿—çº§åˆ«
+  #    org.springframework.web: DEBUG # é…ç½®spring webæ—¥å¿—çº§åˆ«
+  redis:
+    host: 192.168.234.131
+    #    port: 6379
+    database: 0 #0-15 16ä¸ªåº“ é»˜è®¤0
+    lettuce:
+      pool:
+        max-active: 8 #æœ€å¤§è¿æ¥æ•°
+        max-wait: -1 #é»˜è®¤-1 æœ€å¤§è¿æ¥é˜»å¡ç­‰å¾…æ—¶é—´
+        max-idle: 8 #æœ€å¤§ç©ºé—²è¿æ¥ é»˜è®¤8
+        min-idle: 0 #æœ€å°ç©ºé—²è¿æ¥
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.234.131:3306/lzu
+    password: 12345678
+    username: root
+  security:
+    user:
+      name: 242bc36f
+      password: b5f6f597

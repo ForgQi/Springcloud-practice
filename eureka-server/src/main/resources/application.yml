@@ -1,18 +1,18 @@
 server:
-    port: 8761
+  port: 8761
 eureka:
-    environment: prod
+  environment: prod
 management:
-    endpoints:
-        web:
-            exposure:
-                include: "*"
-    endpoint:
-        health:
-            show-details: ALWAYS
-# 单例没有实际作用
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+# 鍗曚緥娌℃湁瀹為檯浣滅敤
 spring:
-    profiles:
-        active: peer1
-    application:
-        name: eureka-server-ha
+  profiles:
+    active: peer1
+  application:
+    name: eureka-server-ha

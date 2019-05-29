@@ -13,10 +13,10 @@ management:
 eureka:
   client:
     healthcheck:
-      # Ê¹ÓÃhealth¶ËµãÀ´´úÌæĞÄÌø±íÃ÷·şÎñÊÇ·ñ¿ÉÓÃ£¬·´Ó¦µ½eureka server uiÉÏ·şÎñµÄUP»¹ÊÇDOWN
+      # ä½¿ç”¨healthç«¯ç‚¹æ¥ä»£æ›¿å¿ƒè·³è¡¨æ˜æœåŠ¡æ˜¯å¦å¯ç”¨ï¼Œååº”åˆ°eureka server uiä¸ŠæœåŠ¡çš„UPè¿˜æ˜¯DOWN
       enabled: true
   instance:
-    # »ñÈ¡´ËÊµÀıµÄÏà¶Ô½¡¿µ¼ì²éURLÂ·¾¶£¬Ä¬ÈÏÎª/health
+    # è·å–æ­¤å®ä¾‹çš„ç›¸å¯¹å¥åº·æ£€æŸ¥URLè·¯å¾„ï¼Œé»˜è®¤ä¸º/health
     health-check-url-path: /actuator/health
 spring:
   application:
@@ -27,15 +27,13 @@ spring:
     gateway:
       routes:
         - id: service-base
-          # lb ±íÊ¾¸ºÔØ¾ùºâloadbalance
+          # lb è¡¨ç¤ºè´Ÿè½½å‡è¡¡loadbalance
           uri: lb://base-server
           predicates:
-            - Path=/api/** # ËùÓĞapi¿ªÍ·µÄÇëÇó×ßÕâ¸öÂ·ÓÉ
-          filters:
-            - StripPrefix=1 # ×ª·¢Ö®Ç°½«/apiÈ¥µô
-#        - id: service-eureka
-#          uri: http://eureka-server:8761
-#          predicates:
-#            - Path=/eureka/**
-#          filters:
-#            - StripPrefix=1
+            - Path=/api/** # æ‰€æœ‰apiå¼€å¤´çš„è¯·æ±‚èµ°è¿™ä¸ªè·¯ç”±
+        #          filters:
+        #            - StripPrefix=1 # è½¬å‘ä¹‹å‰å°†/apiå»æ‰
+        - id: service-auth
+          uri: lb://auth-server
+          predicates:
+            - Path=/oauth/**

@@ -4,11 +4,11 @@ server:
 eureka:
   client:
     healthcheck:
-      enabled: true #Ê¹ÓÃhealth¶ËµãÀ´´úÌæĞÄÌø±íÃ÷·şÎñÊÇ·ñ¿ÉÓÃ£¬·´Ó¦µ½eureka server uiÉÏ·şÎñµÄUP»¹ÊÇDOWN
+      enabled: true #ä½¿ç”¨healthç«¯ç‚¹æ¥ä»£æ›¿å¿ƒè·³è¡¨æ˜æœåŠ¡æ˜¯å¦å¯ç”¨ï¼Œååº”åˆ°eureka server uiä¸ŠæœåŠ¡çš„UPè¿˜æ˜¯DOWN
   instance:
-    # »ñÈ¡´ËÊµÀıµÄÏà¶Ô½¡¿µ¼ì²éURLÂ·¾¶£¬Ä¬ÈÏÎª/health
+    # è·å–æ­¤å®ä¾‹çš„ç›¸å¯¹å¥åº·æ£€æŸ¥URLè·¯å¾„ï¼Œé»˜è®¤ä¸º/health
     health-check-url-path: /actuator/health
-#    ĞèÒªÔÚ·şÎñ×¢²áÊ±´øÉÏ metadata-map ĞÅÏ¢,ÓÃ»§ÃûºÍÃÜÂë
+    #    éœ€è¦åœ¨æœåŠ¡æ³¨å†Œæ—¶å¸¦ä¸Š metadata-map ä¿¡æ¯,ç”¨æˆ·åå’Œå¯†ç 
     metadata-map:
       user.name: ${spring.security.user.name}
       user.password: ${spring.security.user.password}
