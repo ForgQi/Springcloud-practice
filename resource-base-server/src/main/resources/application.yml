@@ -43,10 +43,10 @@ spring:
       ddl-auto: update
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.234.131:3306/lzu
+    url: jdbc:mysql://192.168.234.132:3306/lzu
     password: 12345678
     username: root
-  security:
-    user:
-      name: 242bc36f
-      password: b5f6f597
+#  security:
+#    user:
+#      name: 242bc36f
+#      password: b5f6f597

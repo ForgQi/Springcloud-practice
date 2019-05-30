@@ -13,19 +13,19 @@ spring:
   redis:
     host: 192.168.234.131
     #    port: 6379
-    database: 0 #0-15 16¸ö¿â Ä¬ÈÏ0
+    database: 0 #0-15 16ä¸ªåº“ é»˜è®¤0
     lettuce:
       pool:
-        max-active: 8 #×î´óÁ¬½ÓÊı
-        max-wait: -1 #Ä¬ÈÏ-1 ×î´óÁ¬½Ó×èÈûµÈ´ıÊ±¼ä
-        max-idle: 8 #×î´ó¿ÕÏĞÁ¬½Ó Ä¬ÈÏ8
-        min-idle: 0 #×îĞ¡¿ÕÏĞÁ¬½Ó
+        max-active: 8 #æœ€å¤§è¿æ¥æ•°
+        max-wait: -1 #é»˜è®¤-1 æœ€å¤§è¿æ¥é˜»å¡ç­‰å¾…æ—¶é—´
+        max-idle: 8 #æœ€å¤§ç©ºé—²è¿æ¥ é»˜è®¤8
+        min-idle: 0 #æœ€å°ç©ºé—²è¿æ¥
   jpa:
     hibernate:
       ddl-auto: update
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.234.131:3306/lzu
+    url: jdbc:mysql://192.168.234.132:3306/lzu
     password: 12345678
     username: root
 server:
