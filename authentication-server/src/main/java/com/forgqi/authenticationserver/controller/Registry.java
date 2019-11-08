@@ -33,12 +33,12 @@ public class Registry {
     }
 
     @RequestMapping(value = "/roles", method = RequestMethod.POST)
-    public SysRole roles(@NotNull String name) {
-        SysRole sysRole = sysRoleRepository.findFirstByName(name);
+    public SysRole roles(@NotNull String role) {
+        SysRole sysRole = sysRoleRepository.findFirstByRole(role);
         if (sysRole != null) {
             return sysRole;
         }
-        return sysRoleRepository.save(new SysRole(name));
+        return sysRoleRepository.save(new SysRole(role));
 
     }
 

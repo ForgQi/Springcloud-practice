@@ -11,13 +11,13 @@ public class SysRole implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    private String name;
+    private String role;
 
     SysRole() {
     }
 
-    public SysRole(String name) {
-        this.name = name;
+    public SysRole(String role) {
+        this.role = role;
     }
 
     public Long getId() {
@@ -28,11 +28,11 @@ public class SysRole implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getRole() {
+        return role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.authentication.BearerTokenExtractor;
-import org.springframework.security.oauth2.provider.authentication.TokenExtractor;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/v1")
 public class UserController {
     @Autowired
     UserRepository userRepository;
@@ -52,13 +51,13 @@ public class UserController {
         List<SysRole> roles = new ArrayList<>();
         for (SysRole sysRole :
                 sysRoles) {
-            roles.add(sysRoleRepository.findFirstByName(sysRole.getName()));
+            roles.add(sysRoleRepository.findFirstByRole(sysRole.getRole()));
         }
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("用户不存在"));
 
-        if (user == null) {
-            throw new UsernameNotFoundException("用户不存在");
-        }
+//        if (user == null) {
+//            throw new UsernameNotFoundException("用户不存在");
+//        }
         reloadUserFromSecurityContext(authentication, roles, id);
         user.setRoles(roles);
         return userRepository.save(user);
@@ -80,7 +79,7 @@ public class UserController {
             List<com.forgqi.authenticationserver.entity.SysRole> sysRoleList = new ArrayList<>();
             for (SysRole role :
                     roles) {
-                com.forgqi.authenticationserver.entity.SysRole sysRole = new com.forgqi.authenticationserver.entity.SysRole(role.getName());
+                com.forgqi.authenticationserver.entity.SysRole sysRole = new com.forgqi.authenticationserver.entity.SysRole(role.getRole());
                 sysRole.setId(role.getId());
                 sysRoleList.add(sysRole);
             }

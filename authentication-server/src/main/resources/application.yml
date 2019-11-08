@@ -1,3 +1,5 @@
+ip:
+  addr: 192.168.44.128
 management:
   endpoints:
     web:
@@ -11,7 +13,7 @@ spring:
   application:
     name: auth-server
   redis:
-    host: 192.168.234.131
+    host: ${ip.addr}
     #    port: 6379
     database: 0 #0-15 16个库 默认0
     lettuce:
@@ -25,9 +27,14 @@ spring:
       ddl-auto: update
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.234.132:3306/lzu
+    url: jdbc:mysql://${ip.addr}:3306/lzu
     password: 12345678
     username: root
 server:
   port: 8081
 #debug: true
+eureka:
+  client:
+    service-url:
+      # 指定eureka server通信地址，注意/eureka/小尾巴不能少
+      defaultZone: http://${ip.addr}:8761/eureka/

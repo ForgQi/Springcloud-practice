@@ -2,6 +2,7 @@ package com.forgqi.authenticationserver.service;
 
 import com.forgqi.authenticationserver.entity.User;
 import com.forgqi.authenticationserver.repository.UserRepository;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,17 +11,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public CustomUserDetailService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findById(Long.valueOf(username)).orElse(null);
-        if (user == null) {
-            throw new UsernameNotFoundException("用户名不存在");
-        }
-        return user;
+        return userRepository.findByUserName(username)
+                .or(()->{
+                    if (StringUtils.isNumeric(username)){
+                        return userRepository.findById(Long.valueOf(username));
+                    }
+                    return java.util.Optional.empty();
+                })
+                .orElseThrow(()->new UsernameNotFoundException("用户名不存在"));
     }
 
 }

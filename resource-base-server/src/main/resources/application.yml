@@ -1,3 +1,5 @@
+ip:
+  addr: 192.168.44.128
 management:
   endpoints:
     web:
@@ -29,7 +31,7 @@ spring:
   #  level:  # 日志级别
   #    org.springframework.web: DEBUG # 配置spring web日志级别
   redis:
-    host: 192.168.234.131
+    host: ${ip.addr}
     #    port: 6379
     database: 0 #0-15 16个库 默认0
     lettuce:
@@ -43,10 +45,15 @@ spring:
       ddl-auto: update
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.234.132:3306/lzu
+    url: jdbc:mysql://${ip.addr}:3306/lzu
     password: 12345678
     username: root
-#  security:
+  servlet:
+    multipart:
+      max-file-size: 10MB # 上传文件最大为 10M （默认值 1M 根据自身业务自行控制即可）
+
+  #  security:
 #    user:
 #      name: 242bc36f
 #      password: b5f6f597
+
