@@ -16,13 +16,12 @@ public class RichTextDTO {
     private Map<String, ?> profile;
     public Post convertToPost(User user, String subject){
         Post post = new Post();
-        post.setAvatar(user.getAvatar());
         post.setContent(html);
         post.setSubject(subject);
         post.setImageUrl(imageUrl);
         post.setSummary(new RichTextHelper(html).parseSummary());
         post.setTitle(title);
-        post.setUserId(user.getId());
+        post.setUser(user);
         return post;
     }
     public String getHtml() {

@@ -1,6 +1,9 @@
 package com.forgqi.resourcebaseserver.controller;
 
 import com.forgqi.resourcebaseserver.common.FileHandleUtil;
+import com.forgqi.resourcebaseserver.common.OperationException;
+import com.forgqi.resourcebaseserver.common.UserHelper;
+import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.UserFile;
 import com.forgqi.resourcebaseserver.repository.FileRepository;
 import org.springframework.util.DigestUtils;
@@ -14,7 +17,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/upload")
+@RequestMapping("/v1")
 public class UploadController {
     private final FileRepository fileRepository;
 
@@ -33,8 +36,8 @@ public class UploadController {
             if (name != null) {
                 type = name.substring(name.lastIndexOf(".") == -1?name.length()-1:name.lastIndexOf("."));
             }
-            String path = FileHandleUtil.upload(inputStream, "image/", hex);
-            fileRepository.save(new UserFile(name, path, type, hex));
+            String path = FileHandleUtil.upload(file, "image/", hex+type);
+            fileRepository.save(new UserFile(hex, name, path, file.getContentType(), UserHelper.getUserBySecurityContext().orElse(new User()).getUserName()));
             map.put("uploaded","true");
 //            map.put("url", "http://localhost:8080"+path);
             map.put("url", path);
@@ -46,9 +49,12 @@ public class UploadController {
         return map;
     }
 
-    @DeleteMapping("/images")
-    public UserFile deleteImage(@RequestBody String path) {
-        FileHandleUtil.delete(path);
-        return fileRepository.deleteByPath(path);
+    @DeleteMapping("/image")
+    public Integer deleteImage(String path) {
+        boolean isDelete = FileHandleUtil.delete(path);
+        if (isDelete){
+            return fileRepository.deleteUserFileByPath(path);
+        }
+        throw new OperationException.NonexistenceException("文件不存在或删除错误");
     }
 }

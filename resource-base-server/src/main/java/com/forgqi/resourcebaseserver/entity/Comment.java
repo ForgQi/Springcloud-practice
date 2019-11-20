@@ -1,6 +1,7 @@
 package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-public class Comment {
+public class Comment extends AbstractAuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
     @Column(name = "id", nullable = false)
@@ -18,9 +19,13 @@ public class Comment {
     @NotEmpty(message = "内容不能为空")
     @Size(min = 2, max = 100)
     @Column(nullable = false, length = 100) // 映射为字段，值不能为空
+    @Audited
     private String content;
-    private Long userId;//所属作者
-    private String avatar;
+    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示author不能为空。删除文章，不影响用户
+    @JoinColumn(name="user_id")//设置在post表中的关联字段(外键)
+    private User user;//所属用户
+    private Long toUser;
+    private String imageUrl;
     @JsonIgnore
     @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示author不能为空。删除文章，不影响用户
     @JoinColumn(name="post_id")//设置在post表中的关联字段(外键)
@@ -30,9 +35,10 @@ public class Comment {
     //拥有mappedBy注解的实体类为关系被维护端
     //mappedBy="comment"中的comment是Reply中的comment属性
     private List<Reply> replyList;//回复列表
-    @CreatedDate
-    @Column(name = "created_date", updatable = false)
-    private Instant createdDate = Instant.now();
+    @Column(nullable = false)
+    private Integer upVote = 0;
+    @Column(nullable = false)
+    private Integer downVote = 0;
 
     public Long getId() {
         return id;
@@ -48,22 +54,6 @@ public class Comment {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public Post getPost() {
@@ -82,11 +72,43 @@ public class Comment {
         this.replyList = replyList;
     }
 
-    public Instant getCreatedDate() {
-        return createdDate;
+    public Long getToUser() {
+        return toUser;
     }
 
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
+    public void setToUser(Long toUser) {
+        this.toUser = toUser;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Integer getUpVote() {
+        return upVote;
+    }
+
+    public void setUpVote(Integer upVote) {
+        this.upVote = upVote;
+    }
+
+    public Integer getDownVote() {
+        return downVote;
+    }
+
+    public void setDownVote(Integer downVote) {
+        this.downVote = downVote;
     }
 }

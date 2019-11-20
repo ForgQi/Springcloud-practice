@@ -1,5 +1,7 @@
 package com.forgqi.resourcebaseserver.dto;
 
+import com.forgqi.resourcebaseserver.entity.User;
+
 import java.time.Instant;
 import java.util.List;
 
@@ -8,9 +10,7 @@ public interface IPostDTO {
 
     String getTitle();
 
-    Long getUserId();
-
-    String getAvatar();
+    User getUser();
 
     String getSubject();
 

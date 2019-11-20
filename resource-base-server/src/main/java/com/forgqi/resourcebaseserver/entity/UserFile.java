@@ -5,28 +5,30 @@ import javax.persistence.*;
 @Entity
 public class UserFile {
     @Id // 主键
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
     @Column(nullable = false)
-    private Long id;
+    private String id;
     private String name;
     @Column(nullable = false)
     private String path;
     private String type;
+    private String userId;
 
-    private String md5;
+    public UserFile() {
+    }
 
-    public UserFile(String name, String path, String type, String md5) {
+    public UserFile(String id, String name, String path, String type, String userId) {
+        this.id = id;
         this.name = name;
         this.path = path;
         this.type = type;
-        this.md5 = md5;
+        this.userId = userId;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -54,11 +56,11 @@ public class UserFile {
         this.type = type;
     }
 
-    public String getMd5() {
-        return md5;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setMd5(String md5) {
-        this.md5 = md5;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

@@ -12,6 +12,6 @@ spring:
   redis:
     host: redis
   datasource:
-    url: jdbc:mysql://mysql:3306/lzu
-    password: 12345678
-    username: root
+    url: jdbc:mysql://172.18.0.1:3306/lzu
+    username: lzu
+    password: 1234lzu5678

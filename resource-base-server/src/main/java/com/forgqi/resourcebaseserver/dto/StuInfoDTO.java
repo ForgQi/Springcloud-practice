@@ -80,9 +80,7 @@ public class StuInfoDTO {
     public User convertToUser(LoginDTO loginDTO){
         User user = new User();
         BeanUtils.copyProperties(this, user);
-        user.setUserName(loginDTO.getUserName());
-        user.setNickname(loginDTO.getNickname());
-        user.setPassword(loginDTO.getPassWord());
+        BeanUtils.copyProperties(loginDTO, user);
         return user;
     }
     @Override

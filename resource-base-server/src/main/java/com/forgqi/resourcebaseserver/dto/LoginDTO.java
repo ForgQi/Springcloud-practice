@@ -1,13 +1,17 @@
 package com.forgqi.resourcebaseserver.dto;
 
+import com.forgqi.resourcebaseserver.common.UserHelper;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoginDTO {
     private String userName;
-    private String passWord;
-    private String nickname;
+    private String password;
+    private String nickName;
     private String avatar;
+    private String clientId;
+    private String clientSecret;
 
     public String getUserName() {
         return userName;
@@ -16,29 +20,29 @@ public class LoginDTO {
         this.userName = userName;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getPassword() {
+        return password;
     }
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-
-    public Map<String, String> convertToMap(){
+    public Map<String, String> convertToTokenMap(){
         Map<String, String> map = new HashMap<>();
-        map.put("Login.Token1",this.userName);
-        map.put("Login.Token2",this.passWord);
-        map.put("goto", "http://my.lzu.edu.cn/loginSuccess.portal");
-        map.put("gotoOnFail", "http://my.lzu.edu.cn/loginFailure.portal");
+        map.put("username", userName);
+        map.put("password", password);
+        map.put("grant_type", "password");
+        map.put("client_id", clientId);
+        map.put("client_secret", clientSecret);
         return map;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getAvatar() {
@@ -49,5 +53,20 @@ public class LoginDTO {
         this.avatar = avatar;
     }
 
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+    }
 }
 

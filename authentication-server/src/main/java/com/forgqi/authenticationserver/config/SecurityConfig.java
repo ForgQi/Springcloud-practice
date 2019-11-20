@@ -1,8 +1,7 @@
 package com.forgqi.authenticationserver.config;
 
 import com.forgqi.authenticationserver.service.CustomUserDetailService;
-import com.forgqi.common.NoEncryptPasswordEncoder;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.forgqi.common.AESEncryptPasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,17 +18,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 //@EnableWebSecurity 没发现作用
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private CustomUserDetailService userDetailService;
+    private final CustomUserDetailService userDetailService;
 
-    //    @Autowired 构造器注入
-//    SecurityConfig(CustomUserDetailService userDetailService){
-//        this.userDetailService = userDetailService;
-//    }
+    public SecurityConfig(CustomUserDetailService userDetailService) {
+        this.userDetailService = userDetailService;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         //return new BCryptPasswordEncoder();
-        return new NoEncryptPasswordEncoder();
+        return new AESEncryptPasswordEncoder();
     }
 
     @Override

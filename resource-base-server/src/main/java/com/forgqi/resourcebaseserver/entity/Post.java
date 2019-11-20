@@ -1,6 +1,7 @@
 package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -11,7 +12,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-public class Post {
+public class Post extends AbstractAuditingEntity {
     @Id // 主键
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
     @Column(nullable = false)
@@ -26,10 +27,12 @@ public class Post {
     @NotEmpty(message = "内容不能为空")
     @Size(min = 2)
     @Column(nullable = false) // 映射为字段，值不能为空
+    @Audited
     private String content;//文章全文内容
 
-    private Long userId;//所属作者
-    private String avatar;
+    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示author不能为空。删除文章，不影响用户
+    @JoinColumn(name="user_id")//设置在post表中的关联字段(外键)
+    private User user;//所属用户
     @JsonIgnore
     @OneToMany(mappedBy = "post",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
     //级联保存、更新、删除、刷新;延迟加载。当删除用户，会级联删除该用户的所有文章
@@ -55,12 +58,6 @@ public class Post {
     private Integer downVote = 0;
     @Column(nullable = false)
     private Integer pv = 0;
-    @CreatedDate
-    @Column(name = "created_date", updatable = false)
-    private Instant createdDate = Instant.now();
-    @LastModifiedDate
-    @Column(name = "last_modified_date")
-    private Instant lastModifiedDate = Instant.now();
 
     public Long getId() {
         return id;
@@ -84,22 +81,6 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public List<Comment> getCommentList() {
@@ -174,27 +155,19 @@ public class Post {
         this.pv = pv;
     }
 
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
     public String getSubject() {
         return subject;
     }
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

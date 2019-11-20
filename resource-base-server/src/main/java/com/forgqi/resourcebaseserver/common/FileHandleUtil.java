@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,12 +34,12 @@ public class FileHandleUtil {
      * 最后文件存放路径为：static/upload/image/test.jpg
      * 文件访问路径为：http://127.0.0.1:8080/upload/image/test.jpg
      * 该方法返回值为：/upload/image/test.jpg
-     * @param inputStream 文件流
+     * @param file 文件
      * @param path 文件路径，如：image/
      * @param filename 文件名，如：test.jpg
      * @return 成功：上传后的文件访问路径，失败返回：null
      */
-    public static String upload(InputStream inputStream, String path, String filename) throws IOException {
+    public static String upload(MultipartFile file, String path, String filename) throws IOException {
         //第一次会创建文件夹
 //        createDirIfNotExists();
 
@@ -46,8 +47,8 @@ public class FileHandleUtil {
 
         //存文件
         File uploadFile = new File(absolutePath, staticDir + resultPath);
-
-        FileUtils.copyInputStreamToFile(inputStream, uploadFile);
+        file.transferTo(uploadFile);
+//        FileUtils.copyInputStreamToFile(inputStream, uploadFile);
 
         return resultPath;
     }
@@ -74,6 +75,7 @@ public class FileHandleUtil {
                 log.debug(upload.getAbsolutePath());
             }
         }
+        log.info(upload.getAbsolutePath());
     }
 
     /**

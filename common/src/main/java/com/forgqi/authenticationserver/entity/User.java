@@ -17,7 +17,7 @@ public class User implements UserDetails, Serializable {
 
     private String password;
     private String avatar;
-    private String nickname;
+    private String nickName;
     private String userName;
     private List<SysRole> roles;
 
@@ -25,6 +25,7 @@ public class User implements UserDetails, Serializable {
     private String college;
     private String subject;
     private String education;
+    private Type type;
     private String grade;
     private String classNo;
     private String idCard;
@@ -54,7 +55,6 @@ public class User implements UserDetails, Serializable {
     public String getPassword() {
         return this.password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -66,12 +66,12 @@ public class User implements UserDetails, Serializable {
         this.id = id;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
     @Override
     public String getUsername() {
@@ -184,5 +184,18 @@ public class User implements UserDetails, Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public enum Type {
+        STUDENT,
+        GRADUATE;
     }
 }

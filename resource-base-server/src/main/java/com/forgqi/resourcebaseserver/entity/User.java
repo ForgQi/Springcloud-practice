@@ -1,57 +1,56 @@
 package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
+import static com.forgqi.authenticationserver.entity.User.Type;
+
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(indexes = {@Index(columnList = "user_name", unique = true)})
-public class User implements UserDetails, Serializable {
+public class User extends AbstractAuditingEntity implements UserDetails, Serializable {
     private static final long serialVersionUID = -1205293048576328829L;
     @Id
     private long id;
     @Column(name = "user_name")
     private String userName;
+    @JsonIgnore
     private String password;
-    private String nickname;
+    private String nickName;
     private String avatar;
 
     private String name;
     private String college;
     private String subject;
     private String education;
+    private Type type = Type.STUDENT;
+
     private String grade;
     private String classNo;
-    private String idCard;
-    @CreatedDate
-    @Column(updatable = false)
-    private Instant createdDate;
-    @LastModifiedDate
-    @Column
     @JsonIgnore
-    private Instant lastModifiedDate;
+    private String idCard;
+
     //级联更新，急加载 会查询role表
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    private List<SysRole> roles;
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    private List<SysRole> roles = Collections.emptyList();
 
     public User() {
     }
 
-    User(long id, String password, String nickname) {
+    User(long id, String password, String nickName) {
         this.id = id;
-        this.nickname = nickname;
+        this.nickName = nickName;
         this.password = password;
     }
 
@@ -112,12 +111,12 @@ public class User implements UserDetails, Serializable {
         this.id = id;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public List<SysRole> getRoles() {
@@ -188,7 +187,7 @@ public class User implements UserDetails, Serializable {
         return "User{" +
                 "id=" + id +
                 ", password='" + password + '\'' +
-                ", nickname='" + nickname + '\'' +
+                ", nickname='" + nickName + '\'' +
                 ", name='" + name + '\'' +
                 ", college='" + college + '\'' +
                 ", subject='" + subject + '\'' +
@@ -198,14 +197,6 @@ public class User implements UserDetails, Serializable {
                 ", idCard='" + idCard + '\'' +
                 ", roles=" + roles +
                 '}';
-    }
-
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
     }
 
     public String getAvatar() {
@@ -224,11 +215,12 @@ public class User implements UserDetails, Serializable {
         this.userName = userName;
     }
 
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
+    public Type getType() {
+        return type;
     }
 
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
+    public void setType(Type type) {
+        this.type = type;
     }
+
 }

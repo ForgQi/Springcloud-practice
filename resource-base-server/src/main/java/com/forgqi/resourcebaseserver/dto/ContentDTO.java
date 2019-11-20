@@ -9,20 +9,21 @@ import java.util.Objects;
 
 public class ContentDTO {
     private String content;
+    private Long toUser;
+    private String imageUrl;
+
 
     public Reply convertToReply(User user, Comment comment){
         Reply t = new Reply();
         t.setContent(content);
-        t.setUserId(user.getId());
-        t.setAvatar(user.getAvatar());
+        t.setUser(user);
         t.setComment(comment);
         return t;
     }
     public Comment convertToComment(User user, Post post){
         Comment t = new Comment();
         t.setContent(content);
-        t.setUserId(user.getId());
-        t.setAvatar(user.getAvatar());
+        t.setUser(user);
         t.setPost(post);
         return t;
     }
@@ -34,4 +35,19 @@ public class ContentDTO {
         this.content = content;
     }
 
+    public Long getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(Long toUser) {
+        this.toUser = toUser;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

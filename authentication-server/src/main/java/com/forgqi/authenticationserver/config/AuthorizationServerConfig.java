@@ -21,14 +21,17 @@ import javax.sql.DataSource;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private RedisConnectionFactory connectionFactory;
-    @Autowired
-    private CustomUserDetailService userDetailService;
-    @Autowired
-    private DataSource dataSource;
+    private final AuthenticationManager authenticationManager;
+    private final RedisConnectionFactory connectionFactory;
+    private final CustomUserDetailService userDetailService;
+    private final DataSource dataSource;
+
+    public AuthorizationServerConfig(AuthenticationManager authenticationManager, RedisConnectionFactory connectionFactory, CustomUserDetailService userDetailService, DataSource dataSource) {
+        this.authenticationManager = authenticationManager;
+        this.connectionFactory = connectionFactory;
+        this.userDetailService = userDetailService;
+        this.dataSource = dataSource;
+    }
 
     @Bean
     public RedisTokenStore tokenStore() {

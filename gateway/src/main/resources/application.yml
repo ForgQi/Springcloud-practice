@@ -26,14 +26,14 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: service-auth
+          uri: lb://auth-server
+          predicates:
+            - Path=/oauth/** # 所有oauth开头的请求走这个路由
         - id: service-base
           # lb 表示负载均衡loadbalance
           uri: lb://base-server
           predicates:
-            - Path=/api/** # 所有api开头的请求走这个路由
+            - Path=/** # 按顺序匹配其他请求走这个路由
         #          filters:
         #            - StripPrefix=1 # 转发之前将/api去掉
-        - id: service-auth
-          uri: lb://auth-server
-          predicates:
-            - Path=/oauth/**

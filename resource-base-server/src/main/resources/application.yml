@@ -41,6 +41,7 @@ spring:
         max-idle: 8 #最大空闲连接 默认8
         min-idle: 0 #最小空闲连接
   jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
   datasource:
@@ -56,4 +57,7 @@ spring:
 #    user:
 #      name: 242bc36f
 #      password: b5f6f597
-
+#  只能支持特定的时间格式如Java8之前的date
+#  jackson:
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    timeZone: GMT+8

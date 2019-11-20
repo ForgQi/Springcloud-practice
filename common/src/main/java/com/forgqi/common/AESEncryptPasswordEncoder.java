@@ -1,5 +1,7 @@
 package com.forgqi.common;
 
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -7,11 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * 重写了PasswordEncoder  密码是不加密的
  * 加密的话 使用 BCryptPasswordEncoder
  *
- * @author wangmx
+ * @author ???
  * @since 1.0.0
  */
-public class NoEncryptPasswordEncoder implements PasswordEncoder {
-
+public class AESEncryptPasswordEncoder implements PasswordEncoder {
+    private final TextEncryptor textEncryptor = Encryptors.text("lzu", "deadbeef");
     @Override
     public String encode(CharSequence charSequence) {
         return (String) charSequence;
@@ -22,6 +24,10 @@ public class NoEncryptPasswordEncoder implements PasswordEncoder {
         //密码对比 密码对 true 反之 false
         //CharSequence 数据库中的密码
         //s 前台传入的密码
-        return s.equals((String) charSequence);
+        try {
+            return textEncryptor.decrypt(charSequence.toString()).equals(textEncryptor.decrypt(s));
+        }catch (Exception e){
+            return false;
+        }
     }
 }

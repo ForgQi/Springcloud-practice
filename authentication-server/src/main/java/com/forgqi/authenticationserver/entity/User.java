@@ -24,7 +24,7 @@ public class User implements UserDetails, Serializable {
     @NotBlank
     private String password;
     private String avatar;
-    private String nickname;
+    private String nickName;
     @Column(name = "user_name")
     private String userName;
     //级联更新，急加载 会查询role表
@@ -35,6 +35,7 @@ public class User implements UserDetails, Serializable {
     private String college;
     private String subject;
     private String education;
+    private Type type;
     private String grade;
     private String classNo;
     private String idCard;
@@ -45,9 +46,9 @@ public class User implements UserDetails, Serializable {
     User() {
     }
 
-    User(long id, String password, String nickname) {
+    User(long id, String password, String nickName) {
         this.id = id;
-        this.nickname = nickname;
+        this.nickName = nickName;
         this.password = password;
     }
 
@@ -107,12 +108,12 @@ public class User implements UserDetails, Serializable {
         this.id = id;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public List<SysRole> getRoles() {
@@ -209,5 +210,18 @@ public class User implements UserDetails, Serializable {
 
     public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public enum Type {
+        STUDENT,
+        GRADUATE;
     }
 }

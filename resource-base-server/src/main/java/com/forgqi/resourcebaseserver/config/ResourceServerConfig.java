@@ -20,8 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-    @Autowired
-    private RedisConnectionFactory connectionFactory;
+    private final RedisConnectionFactory connectionFactory;
+
+    public ResourceServerConfig(RedisConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
 
     @Bean
     public RedisTokenStore tokenStore() {

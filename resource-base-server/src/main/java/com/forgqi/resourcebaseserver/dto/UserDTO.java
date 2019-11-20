@@ -1,6 +1,15 @@
 package com.forgqi.resourcebaseserver.dto;
 
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.forgqi.resourcebaseserver.entity.SysRole;
+import com.forgqi.resourcebaseserver.entity.User;
+import org.springframework.beans.BeanUtils;
+
+import java.time.Instant;
+import java.util.List;
+
 public class UserDTO {
     private Long id;
     private String name;
@@ -9,12 +18,16 @@ public class UserDTO {
     private String education;
     private String grade;
     private String classNo;
-    private String accessToken;
-    private String tokenType;
-    private String refreshToken;
-    private String expiresIn;
-    private String scope;
+    private Instant createdDate;
+    private TokenDTO tokenDTO;
+    private List<SysRole> roles;
+    private String nickname;
+    private String avatar;
 
+    public UserDTO convertFor(User user){
+        BeanUtils.copyProperties(user, this);
+        return this;
+    }
     public Long getId() {
         return id;
     }
@@ -71,43 +84,43 @@ public class UserDTO {
         this.classNo = classNo;
     }
 
-    public String getAccessToken() {
-        return accessToken;
+    public TokenDTO getTokenDTO() {
+        return tokenDTO;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setTokenDTO(TokenDTO tokenDTO) {
+        this.tokenDTO = tokenDTO;
     }
 
-    public String getTokenType() {
-        return tokenType;
+    public Instant getCreatedDate() {
+        return createdDate;
     }
 
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
+    public List<SysRole> getRoles() {
+        return roles;
     }
 
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+    public void setRoles(List<SysRole> roles) {
+        this.roles = roles;
     }
 
-    public String getExpiresIn() {
-        return expiresIn;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setExpiresIn(String expiresIn) {
-        this.expiresIn = expiresIn;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public String getScope() {
-        return scope;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setScope(String scope) {
-        this.scope = scope;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
