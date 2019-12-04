@@ -1,11 +1,9 @@
-package com.forgqi.resourcebaseserver.dto;
+package com.forgqi.resourcebaseserver.service.dto;
 
 import com.forgqi.resourcebaseserver.entity.Comment;
 import com.forgqi.resourcebaseserver.entity.Post;
 import com.forgqi.resourcebaseserver.entity.Reply;
 import com.forgqi.resourcebaseserver.entity.User;
-
-import java.util.Objects;
 
 public class ContentDTO {
     private String content;
@@ -13,20 +11,22 @@ public class ContentDTO {
     private String imageUrl;
 
 
-    public Reply convertToReply(User user, Comment comment){
+    public Reply convertToReply(User user, Comment comment) {
         Reply t = new Reply();
         t.setContent(content);
         t.setUser(user);
         t.setComment(comment);
         return t;
     }
-    public Comment convertToComment(User user, Post post){
+
+    public Comment convertToComment(User user, Post post) {
         Comment t = new Comment();
         t.setContent(content);
         t.setUser(user);
         t.setPost(post);
         return t;
     }
+
     public String getContent() {
         return content;
     }

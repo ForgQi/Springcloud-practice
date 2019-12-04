@@ -1,6 +1,5 @@
 package com.forgqi.resourcebaseserver.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -20,14 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-    private final RedisConnectionFactory connectionFactory;
-
-    public ResourceServerConfig(RedisConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
-    }
 
     @Bean
-    public RedisTokenStore tokenStore() {
+    public RedisTokenStore tokenStore(RedisConnectionFactory connectionFactory) {
         return new RedisTokenStore(connectionFactory);
     }
 //    // 远程连接authServer服务
@@ -61,9 +55,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     }
 
     @Bean
-    public DefaultTokenServices defaultTokenServices() {
+    public DefaultTokenServices defaultTokenServices(RedisTokenStore tokenStore) {
         DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(tokenStore());
+        tokenServices.setTokenStore(tokenStore);
 
         return tokenServices;
     }

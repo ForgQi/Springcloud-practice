@@ -1,8 +1,8 @@
-package com.forgqi.resourcebaseserver.dto;
+package com.forgqi.resourcebaseserver.service.dto;
 
-import com.forgqi.resourcebaseserver.dto.Util.RichTextHelper;
 import com.forgqi.resourcebaseserver.entity.Post;
 import com.forgqi.resourcebaseserver.entity.User;
+import com.forgqi.resourcebaseserver.service.dto.util.RichTextHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,8 @@ public class RichTextDTO {
     private List<String> imageUrl;
     private List<String> topicList;
     private Map<String, ?> profile;
-    public Post convertToPost(User user, String subject){
+
+    public Post convertToPost(User user, String subject) {
         Post post = new Post();
         post.setContent(html);
         post.setSubject(subject);
@@ -24,6 +25,7 @@ public class RichTextDTO {
         post.setUser(user);
         return post;
     }
+
     public String getHtml() {
         return html;
     }
@@ -55,6 +57,7 @@ public class RichTextDTO {
     public void setTopicList(List<String> topicList) {
         this.topicList = topicList;
     }
+
     public List<String> getImageUrl() {
         return imageUrl;
     }

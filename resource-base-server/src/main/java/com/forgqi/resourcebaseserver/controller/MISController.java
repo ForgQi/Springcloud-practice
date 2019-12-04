@@ -1,12 +1,12 @@
 package com.forgqi.resourcebaseserver.controller;
 
-import com.forgqi.resourcebaseserver.common.UserHelper;
-import com.forgqi.resourcebaseserver.dto.CourseDTO;
+import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.service.client.GmsService;
 import com.forgqi.resourcebaseserver.service.client.JwkService;
 import com.forgqi.resourcebaseserver.service.client.YjsxgService;
 import com.forgqi.resourcebaseserver.service.client.ZhxgService;
+import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,13 +33,14 @@ public class MISController {
         this.zhxgService = zhxgService;
         this.yjsxgService = yjsxgService;
     }
+
     @GetMapping(value = "/course")
     List<CourseDTO> getCourse(Integer user) throws IOException {
         User user1 = UserHelper.getUserBySecurityContext().orElseThrow();
         List<CourseDTO> courseDTOList;
-        if (user1.getType() == Type.STUDENT){
+        if (user1.getType() == Type.STUDENT) {
             courseDTOList = jwkService.getCourse();
-        }else {
+        } else {
             courseDTOList = gmsService.getCourse();
         }
         courseDTOList.forEach(courseDTO -> courseDTO.setUser(user));
@@ -50,7 +51,7 @@ public class MISController {
     public Map<String, List<HttpCookie>> getCookie() {
         HashMap<String, List<HttpCookie>> map = new HashMap<>();
         User user = UserHelper.getUserBySecurityContext().orElseThrow();
-        if (user.getType() == Type.STUDENT){
+        if (user.getType() == Type.STUDENT) {
             map.put("jwk", jwkService.getCookie());
             map.put("zhxg", zhxgService.getCookie());
             return map;

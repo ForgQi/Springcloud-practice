@@ -10,7 +10,7 @@ eureka:
 
 logging:
   level:
-      com.forgqi.resourcebaseserver.client: debug
+    com.forgqi.resourcebaseserver.client: debug
 #swagger的配置
 swagger:
   #正式线上，修改为true,就无法访问文档了

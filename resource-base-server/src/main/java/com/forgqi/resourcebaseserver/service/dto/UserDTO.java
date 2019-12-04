@@ -1,9 +1,14 @@
-package com.forgqi.resourcebaseserver.dto;
+package com.forgqi.resourcebaseserver.service.dto;
 
+
+import com.forgqi.resourcebaseserver.entity.SysRole;
 import com.forgqi.resourcebaseserver.entity.User;
 import org.springframework.beans.BeanUtils;
 
-public class StuInfoDTO {
+import java.time.Instant;
+import java.util.List;
+
+public class UserDTO {
     private Long id;
     private String name;
     private String college;
@@ -11,7 +16,16 @@ public class StuInfoDTO {
     private String education;
     private String grade;
     private String classNo;
-    private String idCard;
+    private Instant createdDate;
+    private TokenDTO tokenDTO;
+    private List<SysRole> roles;
+    private String nickname;
+    private String avatar;
+
+    public UserDTO convertFor(User user) {
+        BeanUtils.copyProperties(user, this);
+        return this;
+    }
 
     public Long getId() {
         return id;
@@ -69,31 +83,43 @@ public class StuInfoDTO {
         this.classNo = classNo;
     }
 
-    public String getIdCard() {
-        return idCard;
+    public TokenDTO getTokenDTO() {
+        return tokenDTO;
     }
 
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
+    public void setTokenDTO(TokenDTO tokenDTO) {
+        this.tokenDTO = tokenDTO;
     }
 
-    public User convertToUser(LoginDTO loginDTO){
-        User user = new User();
-        BeanUtils.copyProperties(this, user);
-        BeanUtils.copyProperties(loginDTO, user);
-        return user;
+    public Instant getCreatedDate() {
+        return createdDate;
     }
-    @Override
-    public String toString() {
-        return "StudentDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", college='" + college + '\'' +
-                ", subject='" + subject + '\'' +
-                ", education='" + education + '\'' +
-                ", grade='" + grade + '\'' +
-                ", classNo='" + classNo + '\'' +
-                ", idCard='" + idCard + '\'' +
-                '}';
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public List<SysRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<SysRole> roles) {
+        this.roles = roles;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

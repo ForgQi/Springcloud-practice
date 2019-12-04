@@ -1,8 +1,12 @@
 package com.forgqi.resourcebaseserver.controller;
 
-import com.forgqi.resourcebaseserver.dto.Editable;
+import com.forgqi.resourcebaseserver.entity.Notice;
 import com.forgqi.resourcebaseserver.entity.User;
+import com.forgqi.resourcebaseserver.repository.NoticeRepository;
 import com.forgqi.resourcebaseserver.service.UserService;
+import com.forgqi.resourcebaseserver.service.dto.Editable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,13 +17,15 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final NoticeRepository noticeRepository;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, NoticeRepository noticeRepository) {
         this.userService = userService;
+        this.noticeRepository = noticeRepository;
     }
 
     @PutMapping(value = "/editable")
-    public Optional<User> change(Editable editable){
+    public Optional<User> change(Editable editable) {
         return userService.changeAvatarOrNickName(editable);
     }
 
@@ -31,4 +37,20 @@ public class UserController {
         return userService.reloadUserFromSecurityContext(id, sysRoles);
     }
 
+    @GetMapping(value = "/profile")
+    public Optional<User> getProfile() {
+        return userService.findUserBySecurityContextFormRepository();
+    }
+
+    @GetMapping(value = "/notice")
+    @Cacheable(cacheNames = {"notice"}, key = "'notify'")
+    public Optional<Notice> getNotice() {
+        return noticeRepository.findFirstByOrderByIdDesc();
+    }
+
+    @CacheEvict(cacheNames = {"notice"}, key = "'notify'")
+    @PostMapping(value = "/notice")
+    public Notice pushNotice(@RequestBody Notice notice) {
+        return noticeRepository.save(notice);
+    }
 }

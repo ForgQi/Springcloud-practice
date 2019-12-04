@@ -45,6 +45,8 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
+    hikari:
+      maximumPoolSize: 16
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${ip.addr}:3306/lzu
     password: 12345678
@@ -61,3 +63,11 @@ spring:
 #  jackson:
 #    date-format: yyyy-MM-dd HH:mm:ss
 #    timeZone: GMT+8
+#feign:
+##  okhttp:
+##    enabled: true
+#  client:
+#    config:
+#      default:
+#        connectTimeout: 10000
+#        readTimeout: 10000

@@ -2,12 +2,10 @@ package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.envers.Audited;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.time.Instant;
 
 @Entity
 public class Reply extends AbstractAuditingEntity {
@@ -22,12 +20,14 @@ public class Reply extends AbstractAuditingEntity {
     private String content;
     private Long toUser;
     private String imageUrl;
-    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示author不能为空。删除文章，不影响用户
-    @JoinColumn(name="user_id")//设置在post表中的关联字段(外键)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
+//可选属性optional=false,表示author不能为空。删除文章，不影响用户
+    @JoinColumn(name = "user_id")//设置在post表中的关联字段(外键)
     private User user;//所属用户
     @JsonIgnore
-    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示author不能为空。删除文章，不影响用户
-    @JoinColumn(name="comment_id")//设置在comment表中的关联字段(外键)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
+//可选属性optional=false,表示author不能为空。删除文章，不影响用户
+    @JoinColumn(name = "comment_id")//设置在comment表中的关联字段(外键)
     private Comment comment;//所属评论
 
 

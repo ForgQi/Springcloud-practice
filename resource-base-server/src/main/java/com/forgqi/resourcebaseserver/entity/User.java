@@ -2,12 +2,14 @@ package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +27,8 @@ public class User extends AbstractAuditingEntity implements UserDetails, Seriali
     @Column(name = "user_name")
     private String userName;
     @JsonIgnore
+    @NotNull
+    @Column(nullable = false)
     private String password;
     private String nickName;
     private String avatar;
@@ -43,6 +47,7 @@ public class User extends AbstractAuditingEntity implements UserDetails, Seriali
     //级联更新，急加载 会查询role表
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    @NotAudited
     private List<SysRole> roles = Collections.emptyList();
 
     public User() {
@@ -126,6 +131,7 @@ public class User extends AbstractAuditingEntity implements UserDetails, Seriali
     public void setRoles(List<SysRole> roles) {
         this.roles = roles;
     }
+
     public String getName() {
         return name;
     }

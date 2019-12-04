@@ -2,13 +2,10 @@ package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.envers.Audited;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -30,11 +27,12 @@ public class Post extends AbstractAuditingEntity {
     @Audited
     private String content;//文章全文内容
 
-    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)//可选属性optional=false,表示author不能为空。删除文章，不影响用户
-    @JoinColumn(name="user_id")//设置在post表中的关联字段(外键)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
+//可选属性optional=false,表示author不能为空。删除文章，不影响用户
+    @JoinColumn(name = "user_id")//设置在post表中的关联字段(外键)
     private User user;//所属用户
     @JsonIgnore
-    @OneToMany(mappedBy = "post",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     //级联保存、更新、删除、刷新;延迟加载。当删除用户，会级联删除该用户的所有文章
     //拥有mappedBy注解的实体类为关系被维护端
     //mappedBy="post"中的post是comment中的post属性

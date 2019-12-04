@@ -1,4 +1,4 @@
-package com.forgqi.resourcebaseserver.dto;
+package com.forgqi.resourcebaseserver.service.dto;
 
 import com.forgqi.resourcebaseserver.entity.User;
 

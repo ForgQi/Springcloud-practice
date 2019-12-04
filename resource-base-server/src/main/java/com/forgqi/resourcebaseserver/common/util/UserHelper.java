@@ -1,9 +1,10 @@
-package com.forgqi.resourcebaseserver.common;
+package com.forgqi.resourcebaseserver.common.util;
 
-import com.forgqi.resourcebaseserver.entity.SysRole;
+import com.forgqi.resourcebaseserver.client.parse.SsoParse;
 import com.forgqi.resourcebaseserver.entity.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -21,20 +22,24 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 @Component
 public class UserHelper {
 
+    private final static
+    TextEncryptor textEncryptor = Encryptors.text("lzu", "deadbeef");
     private static
     TokenStore tokenStore;
     private static
     ResourceServerTokenServices tokenServices;
-    private final static
-    TextEncryptor textEncryptor = Encryptors.text("lzu", "deadbeef");
+    private static SsoParse ssoParse;
 
-    public static Optional<User> getUserBySecurityContext(){
+    public static Optional<User> getUserBySecurityContext() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
                 .map(authentication -> {
@@ -43,28 +48,35 @@ public class UserHelper {
                     return user;
                 });
     }
-    public static Optional<Map<String, String>> getUserLoginMap(){
+
+    public static Optional<Map<String, String>> getUserLoginMap() {
         return getUserBySecurityContext()
                 .map(user -> getLoginMap(user.getUsername(), user.getPassword()));
     }
 
-    public static Map<String, String> getLoginMap(String userName, String password){
-        Map<String, String> map = new HashMap<>();
-        map.put("Login.Token1", userName);
-        map.put("Login.Token2", textEncryptor.decrypt(password));
-        map.put("goto", "http://my.lzu.edu.cn/loginSuccess.portal");
-        map.put("gotoOnFail", "http://my.lzu.edu.cn/loginFailure.portal");
-        return map;
+    public static Map<String, String> getLoginMap(String userName, String password) {
+        Map<String, String> loginMap = ssoParse.getLoginMap();
+        loginMap.put("username", userName);
+        loginMap.put("password", textEncryptor.decrypt(password));
+
+//        Map<String, String> map = new HashMap<>();
+//        map.put("Login.Token1", userName);
+//        map.put("Login.Token2", textEncryptor.decrypt(password));
+//        map.put("goto", "http://my.lzu.edu.cn/loginSuccess.portal");
+//        map.put("gotoOnFail", "http://my.lzu.edu.cn/loginFailure.portal");
+        return loginMap;
     }
 
     // 修改id所指用户
     public static void reloadUserFromSecurityContext(Consumer<com.forgqi.authenticationserver.entity.User> consumer, Long id) {
         reloadUserFromSecurityContext(String.valueOf(id), consumer);
     }
+
     // 修改当前会话的用户
     public static void reloadUserFromSecurityContext(Consumer<com.forgqi.authenticationserver.entity.User> consumer) {
         reloadUserFromSecurityContext(getUserBySecurityContext().map(User::getUsername).get(), consumer);
     }
+
     private static void reloadUserFromSecurityContext(String username, Consumer<com.forgqi.authenticationserver.entity.User> consumer) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         Authentication authentication = new BearerTokenExtractor().extract(request);
@@ -91,12 +103,21 @@ public class UserHelper {
         }
 
     }
+
     @Autowired
-    public static void setTokenStore(TokenStore tokenStore) {
+    public void setSsoParse(SsoParse ssoParse) {
+        UserHelper.ssoParse = ssoParse;
+    }
+
+    @Autowired
+    @Qualifier("tokenStore")
+    public void setTokenStore(TokenStore tokenStore) {
         UserHelper.tokenStore = tokenStore;
     }
+
     @Autowired
-    public static void setTokenServices(ResourceServerTokenServices tokenServices) {
+    @Qualifier("defaultTokenServices")
+    public void setTokenServices(ResourceServerTokenServices tokenServices) {
         UserHelper.tokenServices = tokenServices;
     }
 }

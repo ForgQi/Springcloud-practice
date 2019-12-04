@@ -1,15 +1,15 @@
-package com.forgqi.resourcebaseserver.dto;
+package com.forgqi.resourcebaseserver.service.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class TokenDTO {
-    private  String accessToken;
-    private  String tokenType;
-    private  String refreshToken;
-    private  String expiresIn;
-    private  String scope;
+    private String accessToken;
+    private String tokenType;
+    private String refreshToken;
+    private String expiresIn;
+    private String scope;
 
     public String getAccessToken() {
         return accessToken;
