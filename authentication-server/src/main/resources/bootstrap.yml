@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: auth-server
+  cloud:
+    consul:
+      config:
+        format: YAML
+      host: 192.168.44.128
+      port: 8500

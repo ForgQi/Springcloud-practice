@@ -1,21 +1,58 @@
 package com.forgqi.resourcebaseserver;
 
+import com.forgqi.resourcebaseserver.common.Voted;
+import com.forgqi.resourcebaseserver.common.errors.InvalidPasswordException;
+import com.forgqi.resourcebaseserver.common.errors.NonexistenceException;
+import com.forgqi.resourcebaseserver.service.dto.TokenDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.context.encrypt.EncryptorFactory;
-import org.springframework.security.crypto.encrypt.Encryptors;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.security.crypto.keygen.KeyGenerators;
+import org.springframework.data.util.Pair;
+import org.springframework.data.util.StreamUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.security.auth.kerberos.EncryptionKey;
+import java.time.*;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.time.temporal.TemporalAdjusters.previous;
+import static java.time.temporal.TemporalAdjusters.previousOrSame;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+//用来注入request
+@WebAppConfiguration
 public class ResourceBaseServerApplicationTests {
+    @Autowired
+    MockHttpServletRequest request;
 
     @Test
     public void contextLoads() {
+        InvalidPasswordException invalidPasswordException = new InvalidPasswordException("");
+        System.out.println(invalidPasswordException.create(request));
+        System.out.println(Voted.State.valueOf("up".toUpperCase()));
+        System.out.println(Voted.State.valueOf("down".toUpperCase()));
+
+        LocalDate date1 = LocalDate.of(2019, 1, 15);
+        LocalDate date2 = LocalDate.of(2019, 3, 10);
+        Period period = Period.between(date1, date2);
+        System.out.println(period.getYears() + "-" + period.getMonths() + "-" + period.getDays());
+        LocalDate now = LocalDate.of(2019, 12, 16);
+        LocalDate date = now.with(previous(DayOfWeek.MONDAY));
+        System.out.println(date);
+        LocalDate now1 = LocalDate.of(2019, 12, 16);
+        LocalDate date0 = now1.with(previousOrSame(DayOfWeek.MONDAY));
+        System.out.println(date0);
+        System.out.println((double) 2/5);
+
+        System.out.println(Instant.from(date.atStartOfDay(ZoneId.systemDefault())));
+
     }
 }

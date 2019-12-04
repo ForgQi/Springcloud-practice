@@ -32,7 +32,9 @@ public class User implements UserDetails, Serializable {
     private Instant createdDate;
     private Instant lastModifiedDate;
 
+    private String signature;
 
+    private boolean accountNonLocked = true;
     public List<SysRole> getRoles() {
         return roles;
     }
@@ -55,9 +57,11 @@ public class User implements UserDetails, Serializable {
     public String getPassword() {
         return this.password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
+
     public long getId() {
         return id;
     }
@@ -72,30 +76,6 @@ public class User implements UserDetails, Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
-    }
-    @Override
-    public String getUsername() {
-        return String.valueOf(this.id);
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
     public String getName() {
@@ -194,8 +174,46 @@ public class User implements UserDetails, Serializable {
         this.type = type;
     }
 
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
     public enum Type {
         STUDENT,
         GRADUATE;
+    }
+
+    @Override
+    public String getUsername() {
+        return String.valueOf(this.id);
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -10,14 +10,14 @@ management:
     health:
       show-details: ALWAYS
 
-eureka:
-  client:
-    healthcheck:
-      # 使用health端点来代替心跳表明服务是否可用，反应到eureka server ui上服务的UP还是DOWN
-      enabled: true
-  instance:
-    # 获取此实例的相对健康检查URL路径，默认为/health
-    health-check-url-path: /actuator/health
+#eureka:
+#  client:
+#    healthcheck:
+#      # 使用health端点来代替心跳表明服务是否可用，反应到eureka server ui上服务的UP还是DOWN
+#      enabled: true
+#  instance:
+#    # 获取此实例的相对健康检查URL路径，默认为/health
+#    health-check-url-path: /actuator/health
 spring:
   application:
     name: gateway

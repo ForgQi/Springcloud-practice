@@ -5,10 +5,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +16,7 @@ public class ParseUtil {
             "#BF3cb371", "#BF6b8e23", "#BFfa8072",
     };
     private static final Map<Character, Integer> numMap = new HashMap<>();
+
     static {
         numMap.put('一', 1);
         numMap.put('二', 2);
@@ -28,21 +26,27 @@ public class ParseUtil {
         numMap.put('六', 6);
         numMap.put('日', 7);
     }
-    public static Document getDocument(Response response) throws IOException {
-        return Jsoup.parse(new String(response.body().asInputStream().readAllBytes(),
-                response.headers().get("content-type").stream().findFirst().orElse("charset=UTF-8").split("=")[1]));
+
+    public static Optional<Document> getDocument(Response response) {
+        try {
+            return Optional.ofNullable(Jsoup.parse(new String(response.body().asInputStream().readAllBytes(),
+                    response.headers().get("content-type").stream().findFirst().orElse("charset=UTF-8").split("=")[1])));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
 
-    static int paresZh(char zh){
+    static int paresZh(char zh) {
         return numMap.get(zh);
     }
 
-    public static List<String> OddEvenWeek(String odd_even_week_code){
+    public static List<String> OddEvenWeek(String odd_even_week_code) {
 
         List<String> stringList = new ArrayList<>();
 
 
-        String course_week[] = odd_even_week_code.split(",");
+        String[] course_week = odd_even_week_code.split(",");
         for (String StringCourseWeek : course_week) {
 
             if (StringCourseWeek.contains("-")) {
@@ -53,10 +57,10 @@ public class ParseUtil {
                     if (StringCourseWeek.contains("单")) {
                         if (j % 2 == 1)
                             stringList.add(getNum(j + ""));
-                    }else if (StringCourseWeek.contains("双")) {
+                    } else if (StringCourseWeek.contains("双")) {
                         if (j % 2 == 0)
                             stringList.add(getNum(j + ""));
-                    }else {
+                    } else {
                         stringList.add(getNum(j + ""));
 
                     }
@@ -73,8 +77,8 @@ public class ParseUtil {
 
     }
 
-    public static String getNum(String s){
-        if (s !=null && s.length()>0) {
+    public static String getNum(String s) {
+        if (s != null && s.length() > 0) {
 
             Pattern p = Pattern.compile("[^0-9]");
             Matcher m = p.matcher(s);
@@ -84,7 +88,7 @@ public class ParseUtil {
             } else {
                 return "";
             }
-        }else {
+        } else {
             return "";
         }
     }

@@ -1,15 +1,15 @@
 package com.forgqi.resourcebaseserver.client.parse;
 
 import com.forgqi.resourcebaseserver.client.GmsFeignClient;
-import com.forgqi.resourcebaseserver.dto.CourseDTO;
-import com.forgqi.resourcebaseserver.dto.StuInfoDTO;
+import com.forgqi.resourcebaseserver.entity.User;
+import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
+import com.forgqi.resourcebaseserver.service.dto.StuInfoDTO;
 import feign.Response;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +24,9 @@ public class GmsParse {
         this.gmsFeignClient = gmsFeignClient;
     }
 
-    public StuInfoDTO getStuInfo() throws IOException {
+    public User getStuInfo() {
         Response response = gmsFeignClient.getStuInfo();
-        Document document = ParseUtil.getDocument(response);
+        Document document = ParseUtil.getDocument(response).orElseThrow();
 
         Element element = document.getElementsByClass("xSectionForm").first();
         Element child1 = element.child(0);
@@ -40,12 +40,12 @@ public class GmsParse {
         stuInfoDTO.setGrade(child2.select("td").get(4).text());
         stuInfoDTO.setClassNo(child2.select("td").get(17).text());
         stuInfoDTO.setIdCard(child1.select("tr").get(6).select("td").get(0).text());
-        return stuInfoDTO;
+        return stuInfoDTO.convertToUser();
     }
 
-    public List<CourseDTO> getCourse() throws IOException {
+    public List<CourseDTO> getCourse() {
         Response currCourse = gmsFeignClient.getCurrCourse();
-        Document document = ParseUtil.getDocument(currCourse);
+        Document document = ParseUtil.getDocument(currCourse).orElseThrow();
 
 
         Elements lessons = document.getElementsByClass("datalist").first().select("tbody").first().select("tr");
@@ -143,7 +143,6 @@ public class GmsParse {
                             course_day = "暂无时间";
                             e.printStackTrace();
                         }
-
 
 
                         course_time = s[0] + "-" + s[1] + "，" + s[2] + "-" + s[3];

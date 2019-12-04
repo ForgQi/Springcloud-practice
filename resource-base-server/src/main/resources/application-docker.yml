@@ -1,17 +1,17 @@
-eureka:
-  client:
-    service-url:
-      # 指定eureka server通信地址，注意/eureka/小尾巴不能少
-      defaultZone: http://eureka-server1:8761/eureka/, http://eureka-server2:8761/eureka/
-    #  instance:
-    # 是否注册IP到eureka server，如不指定或设为false，那就会注册主机名到eureka server
-    # prefer-ip-address: true
-    # UI显示为系统hostname，实际访问时为此hostname
-    # hostname: base-server
 spring:
+  cloud:
+    consul:
+      host: consul-client
   redis:
     host: redis
+  #    host: 172.18.0.2
   datasource:
     url: jdbc:mysql://172.18.0.1:3306/lzu
-    username: lzu
-    password: 1234lzu5678
+
+#server:
+#  #端口号
+#  port: 9090
+logstash:
+  enabled: true
+  host: elk
+  port: 5045

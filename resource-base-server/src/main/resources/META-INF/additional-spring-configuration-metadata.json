@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "logstash.enabled",
+      "type": "java.lang.Boolean",
+      "description": "是否发送日志到logstash"
+    },
+    {
+      "name": "logstash.host",
+      "type": "java.lang.String",
+      "description": "logstash地址"
+    },
+    {
+      "name": "logstash.port",
+      "type": "java.lang.String",
+      "description": "logstash端口"
+    }
+  ] }

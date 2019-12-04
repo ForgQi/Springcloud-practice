@@ -1,9 +1,7 @@
 package com.forgqi.authenticationserver.service;
 
-import com.forgqi.authenticationserver.entity.User;
 import com.forgqi.authenticationserver.repository.UserRepository;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,13 +19,13 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         return userRepository.findByUserName(username)
-                .or(()->{
-                    if (StringUtils.isNumeric(username)){
+                .or(() -> {
+                    if (StringUtils.isNumeric(username)) {
                         return userRepository.findById(Long.valueOf(username));
                     }
                     return java.util.Optional.empty();
                 })
-                .orElseThrow(()->new UsernameNotFoundException("用户名不存在"));
+                .orElseThrow(() -> new UsernameNotFoundException("用户名不存在"));
     }
 
 }

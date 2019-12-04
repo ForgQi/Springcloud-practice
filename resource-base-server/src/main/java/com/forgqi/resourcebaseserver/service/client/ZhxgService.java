@@ -1,13 +1,11 @@
 package com.forgqi.resourcebaseserver.service.client;
 
 import com.forgqi.resourcebaseserver.client.ZhxgFeignClient;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 @Service

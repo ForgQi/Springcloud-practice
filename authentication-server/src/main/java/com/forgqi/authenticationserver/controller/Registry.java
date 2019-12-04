@@ -8,10 +8,7 @@ import com.forgqi.authenticationserver.repository.SysRoleRepository;
 import com.forgqi.authenticationserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
@@ -19,12 +16,18 @@ import javax.validation.constraints.NotNull;
 @RequestMapping("/oauth")
 @Validated
 public class Registry {
-    @Autowired
+    private final
     UserRepository userRepository;
-    @Autowired
+    private final
     SysRoleRepository sysRoleRepository;
-    @Autowired
+    private final
     OauthClientDetailsRepository oauthClientDetailsRepository;
+
+    public Registry(UserRepository userRepository, SysRoleRepository sysRoleRepository, OauthClientDetailsRepository oauthClientDetailsRepository) {
+        this.userRepository = userRepository;
+        this.sysRoleRepository = sysRoleRepository;
+        this.oauthClientDetailsRepository = oauthClientDetailsRepository;
+    }
 
     @RequestMapping(value = "/registry", method = RequestMethod.POST)
     public User register(@RequestBody User user) {

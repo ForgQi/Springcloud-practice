@@ -1,8 +1,8 @@
 package com.forgqi.resourcebaseserver.controller;
 
-import com.forgqi.resourcebaseserver.common.FileHandleUtil;
-import com.forgqi.resourcebaseserver.common.OperationException;
-import com.forgqi.resourcebaseserver.common.UserHelper;
+import com.forgqi.resourcebaseserver.common.errors.NonexistenceException;
+import com.forgqi.resourcebaseserver.common.util.FileHandleUtil;
+import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.UserFile;
 import com.forgqi.resourcebaseserver.repository.FileRepository;
@@ -32,18 +32,18 @@ public class UploadController {
             String name = file.getOriginalFilename();
             InputStream inputStream = file.getInputStream();
             String hex = DigestUtils.md5DigestAsHex(inputStream);
-            String type =null;
+            String type = null;
             if (name != null) {
-                type = name.substring(name.lastIndexOf(".") == -1?name.length()-1:name.lastIndexOf("."));
+                type = name.substring(name.lastIndexOf(".") == -1 ? name.length() - 1 : name.lastIndexOf("."));
             }
-            String path = FileHandleUtil.upload(file, "image/", hex+type);
+            String path = FileHandleUtil.upload(file, "image/", hex + type);
             fileRepository.save(new UserFile(hex, name, path, file.getContentType(), UserHelper.getUserBySecurityContext().orElse(new User()).getUserName()));
-            map.put("uploaded","true");
+            map.put("uploaded", "true");
 //            map.put("url", "http://localhost:8080"+path);
             map.put("url", path);
         } catch (IOException e) {
             e.printStackTrace();
-            map.put("uploaded","false");
+            map.put("uploaded", "false");
             map.put("url", "#");
         }
         return map;
@@ -52,9 +52,9 @@ public class UploadController {
     @DeleteMapping("/image")
     public Integer deleteImage(String path) {
         boolean isDelete = FileHandleUtil.delete(path);
-        if (isDelete){
+        if (isDelete) {
             return fileRepository.deleteUserFileByPath(path);
         }
-        throw new OperationException.NonexistenceException("文件不存在或删除错误");
+        throw new NonexistenceException("文件不存在或删除错误:" + path);
     }
 }

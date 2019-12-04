@@ -1,15 +1,15 @@
 package com.forgqi.resourcebaseserver.client.parse;
 
 import com.forgqi.resourcebaseserver.client.JwkFeignClient;
-import com.forgqi.resourcebaseserver.dto.CourseDTO;
-import com.forgqi.resourcebaseserver.dto.StuInfoDTO;
+import com.forgqi.resourcebaseserver.entity.User;
+import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
+import com.forgqi.resourcebaseserver.service.dto.StuInfoDTO;
 import feign.Response;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -27,12 +27,11 @@ public class JwkParse {
         this.jwkFeignClient = jwkFeignClient;
     }
 
-    public StuInfoDTO getStuInfo() throws IOException {
+    public User getStuInfo() {
         Response response = jwkFeignClient.getStuInfo();
 
-        Document document = ParseUtil.getDocument(response);
-
-        Element element = document.getElementsByClass("form").first();
+        Document document = ParseUtil.getDocument(response).orElseThrow();
+        Element element = document.select("tbody").first();
         StuInfoDTO stuInfoDTO = new StuInfoDTO();
         stuInfoDTO.setId(Long.valueOf(element.select("tr").get(0).select("td").get(0).text()));
         stuInfoDTO.setName(element.select("tr").get(0).select("td").get(1).text());
@@ -42,12 +41,12 @@ public class JwkParse {
         stuInfoDTO.setGrade(element.select("tr").get(3).select("td").get(0).text());
         stuInfoDTO.setClassNo(element.select("tr").get(3).select("td").get(1).text());
         stuInfoDTO.setIdCard(element.select("tr").get(4).select("td").get(1).text());
-        return stuInfoDTO;
+        return stuInfoDTO.convertToUser();
     }
 
-    public List<CourseDTO> getCourse() throws IOException {
+    public List<CourseDTO> getCourse() {
         Response currCourse = jwkFeignClient.getCurrCourse();
-        Document document = ParseUtil.getDocument(currCourse);
+        Document document = ParseUtil.getDocument(currCourse).orElseThrow();
 
         Elements lessons = document.select("table").get(3).getElementsByClass("infolist_common");
 

@@ -31,11 +31,15 @@ spring:
     url: jdbc:mysql://${ip.addr}:3306/lzu
     password: 12345678
     username: root
+  cloud:
+    consul:
+      host: ${ip.addr}
+      port: 8500
 server:
   port: 8081
 #debug: true
-eureka:
-  client:
-    service-url:
-      # 指定eureka server通信地址，注意/eureka/小尾巴不能少
-      defaultZone: http://${ip.addr}:8761/eureka/
+#eureka:
+#  client:
+#    service-url:
+#      # 指定eureka server通信地址，注意/eureka/小尾巴不能少
+#      defaultZone: http://${ip.addr}:8761/eureka/
