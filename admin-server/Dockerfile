@@ -1,6 +1,6 @@
 FROM openjdk:11
 #VOLUME /opt/data
-COPY target/*.jar /opt/jar/app.jar
+COPY target/*.jar /srv/actuator.jar
 EXPOSE 8769
-WORKDIR /opt/data
-ENTRYPOINT ["java","-jar","../jar/app.jar","--spring.profiles.active=docker"]
+WORKDIR /srv
+ENTRYPOINT ["java","-jar","actuator.jar","--spring.profiles.active=docker"]

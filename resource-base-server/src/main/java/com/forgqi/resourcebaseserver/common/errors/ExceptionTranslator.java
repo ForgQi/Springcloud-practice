@@ -17,12 +17,12 @@ public class ExceptionTranslator {
 
     //    @ResponseBody
     @ExceptionHandler(OperationException.class)
-    public ResponseEntity exceptionHandler(HttpServletRequest request, OperationException throwable) {
+    public ResponseEntity<?> exceptionHandler(HttpServletRequest request, OperationException throwable) {
         return throwable.create(request);
     }
 
     @ExceptionHandler(InvalidPasswordException.class)
-    public ResponseEntity exceptionHandler(HttpServletRequest request, InvalidPasswordException throwable) {
+    public ResponseEntity<?> exceptionHandler(HttpServletRequest request, InvalidPasswordException throwable) {
         log.info(append("user_name", throwable.getUsrName()), "用户名密码错误");
         return throwable.create(request);
     }

@@ -46,7 +46,7 @@ public class ParseUtil {
         List<String> stringList = new ArrayList<>();
 
 
-        String course_week[] = odd_even_week_code.split(",");
+        String[] course_week = odd_even_week_code.split(",");
         for (String StringCourseWeek : course_week) {
 
             if (StringCourseWeek.contains("-")) {

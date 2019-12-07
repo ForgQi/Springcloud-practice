@@ -1,6 +1,9 @@
 package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -9,21 +12,28 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.ArrayList;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.forgqi.authenticationserver.entity.User.Type;
 
 @Entity
 @Table(indexes = {@Index(columnList = "user_name", unique = true)})
-public class User extends AbstractAuditingEntity implements UserDetails, Serializable {
+@Getter
+@Setter
+public class User extends AbstractAuditingEntity implements UserDetails {
     private static final long serialVersionUID = -1205293048576328829L;
+
+    // 最小值为1可以取到1
+    @Min(value = 1, message = "id不能小于0")
     @Id
     private long id;
+
     @Column(name = "user_name")
     private String userName;
     @JsonIgnore
@@ -44,6 +54,13 @@ public class User extends AbstractAuditingEntity implements UserDetails, Seriali
     @JsonIgnore
     private String idCard;
 
+    @Size(max = 50)
+    private String signature;
+
+    @ColumnDefault("1")
+    private boolean accountNonLocked = true;
+
+    @JsonIgnore
     //级联更新，急加载 会查询role表
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
@@ -59,27 +76,15 @@ public class User extends AbstractAuditingEntity implements UserDetails, Seriali
         this.password = password;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> auths = new ArrayList<>();
-        List<SysRole> roles = this.getRoles();
-        if (roles == null) {
-            return auths;
-        }
-
-        for (SysRole role : roles) {
-            auths.add(new SimpleGrantedAuthority(role.getRole()));
-        }
-        return auths;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+        return getRoles().stream()
+                .map(sysRole -> new SimpleGrantedAuthority(sysRole.getRole()))
+                .collect(Collectors.toSet());
     }
 
     @JsonIgnore
@@ -94,11 +99,6 @@ public class User extends AbstractAuditingEntity implements UserDetails, Seriali
     }
 
     @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
@@ -106,127 +106,6 @@ public class User extends AbstractAuditingEntity implements UserDetails, Seriali
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public List<SysRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<SysRole> roles) {
-        this.roles = roles;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCollege() {
-        return college;
-    }
-
-    public void setCollege(String college) {
-        this.college = college;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getEducation() {
-        return education;
-    }
-
-    public void setEducation(String education) {
-        this.education = education;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
-    public String getClassNo() {
-        return classNo;
-    }
-
-    public void setClassNo(String classNo) {
-        this.classNo = classNo;
-    }
-
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", password='" + password + '\'' +
-                ", nickname='" + nickName + '\'' +
-                ", name='" + name + '\'' +
-                ", college='" + college + '\'' +
-                ", subject='" + subject + '\'' +
-                ", education='" + education + '\'' +
-                ", grade='" + grade + '\'' +
-                ", classNo='" + classNo + '\'' +
-                ", idCard='" + idCard + '\'' +
-                ", roles=" + roles +
-                '}';
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
 }

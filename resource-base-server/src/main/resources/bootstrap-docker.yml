@@ -1,0 +1,4 @@
+spring:
+  cloud:
+    consul:
+      host: consul-client

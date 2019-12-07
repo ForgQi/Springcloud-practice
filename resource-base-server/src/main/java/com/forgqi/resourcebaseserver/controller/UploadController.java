@@ -55,6 +55,6 @@ public class UploadController {
         if (isDelete) {
             return fileRepository.deleteUserFileByPath(path);
         }
-        throw new NonexistenceException("文件不存在或删除错误");
+        throw new NonexistenceException("文件不存在或删除错误:" + path);
     }
 }

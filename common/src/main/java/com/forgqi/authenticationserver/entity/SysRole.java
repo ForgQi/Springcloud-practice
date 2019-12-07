@@ -9,13 +9,16 @@ public class SysRole implements Serializable {
     private Long id;
     private String role;
 
-    SysRole() {
+    public SysRole() {
     }
 
     public SysRole(String role) {
         this.role = role;
     }
-
+    public SysRole(Long id, String role) {
+        this.role = role;
+        this.id = id;
+    }
     public Long getId() {
         return id;
     }

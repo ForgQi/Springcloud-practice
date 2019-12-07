@@ -2,17 +2,24 @@ package com.forgqi.resourcebaseserver.config;
 
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.LoggerContext;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.appender.LogstashTcpSocketAppender;
 import net.logstash.logback.encoder.LogstashEncoder;
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Configuration;
 
 import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 
+@Slf4j
 @Configuration
 @ConditionalOnProperty(name = "logstash.enabled")
 public class LoggingConfiguration {
@@ -20,36 +27,27 @@ public class LoggingConfiguration {
 
     private static final String ASYNC_LOGSTASH_APPENDER_NAME = "ASYNC_LOGSTASH";
 
-    private final Logger log = LoggerFactory.getLogger(LoggingConfiguration.class);
-    private final String version;
-    private final String appName;
-    private final String serverPort;
-    private final String logstashHost;
-    private final int logstashPort;
-    private LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 
-    LoggingConfiguration(@Value("${spring.application.name}") String appName,
-                         @Value("${server.port:8080}") String serverPort,
-                         @Value("${info.project.version:}") String version,
-                         @Value("${logstash.host}") String logstashHost,
-                         @Value("${logstash.port}") Integer logstashPort) {
-        this.appName = appName;
-        this.serverPort = serverPort;
-        this.logstashHost = logstashHost;
-        this.logstashPort = logstashPort;
-        this.version = version;
-        addLogstashAppender(context);
-    }
+    public LoggingConfiguration(@Value("${spring.application.name}") String appName,
+                                @Value("${server.port:8080}") String serverPort,
+                                @Value("${logstash.host}") String logstashHost,
+                                @Value("${logstash.port}") Integer logstashPort,
+                                ObjectProvider<BuildProperties> buildProperties,
+                                ObjectMapper mapper) throws JsonProcessingException {
 
-    private void addLogstashAppender(LoggerContext context) {
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("app_name", appName);
+        map.put("app_port", serverPort);
+        buildProperties.ifAvailable(it -> map.put("version", it.getVersion()));
+        String customFields = mapper.writeValueAsString(map);
+
         log.info("Initializing Logstash logging");
 
         LogstashTcpSocketAppender logstashAppender = new LogstashTcpSocketAppender();
         logstashAppender.setName(LOGSTASH_APPENDER_NAME);
         logstashAppender.setContext(context);
-        String optionalFields = "";
-        String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"," +
-                optionalFields + "\"version\":\"" + version + "\"}";
 
         // More documentation is available at: https://github.com/logstash/logstash-logback-encoder
         LogstashEncoder logstashEncoder = new LogstashEncoder();
@@ -61,8 +59,6 @@ public class LoggingConfiguration {
         ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
         throwableConverter.setRootCauseFirst(true);
         logstashEncoder.setThrowableConverter(throwableConverter);
-        // 不知道为什么要设置两次
-//        logstashEncoder.setCustomFields(customFields);
 
         logstashAppender.setEncoder(logstashEncoder);
         logstashAppender.start();

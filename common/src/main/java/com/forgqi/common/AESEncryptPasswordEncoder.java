@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class AESEncryptPasswordEncoder implements PasswordEncoder {
     private final TextEncryptor textEncryptor = Encryptors.text("lzu", "deadbeef");
+
     @Override
     public String encode(CharSequence charSequence) {
         return (String) charSequence;
@@ -26,7 +27,7 @@ public class AESEncryptPasswordEncoder implements PasswordEncoder {
         //s 前台传入的密码
         try {
             return textEncryptor.decrypt(charSequence.toString()).equals(textEncryptor.decrypt(s));
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

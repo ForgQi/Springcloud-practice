@@ -31,8 +31,7 @@ public class JwkParse {
         Response response = jwkFeignClient.getStuInfo();
 
         Document document = ParseUtil.getDocument(response).orElseThrow();
-
-        Element element = document.getElementsByClass("form").first();
+        Element element = document.select("tbody").first();
         StuInfoDTO stuInfoDTO = new StuInfoDTO();
         stuInfoDTO.setId(Long.valueOf(element.select("tr").get(0).select("td").get(0).text()));
         stuInfoDTO.setName(element.select("tr").get(0).select("td").get(1).text());

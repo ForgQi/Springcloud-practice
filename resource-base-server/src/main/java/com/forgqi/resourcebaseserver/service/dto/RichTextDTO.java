@@ -1,12 +1,14 @@
 package com.forgqi.resourcebaseserver.service.dto;
 
-import com.forgqi.resourcebaseserver.entity.Post;
 import com.forgqi.resourcebaseserver.entity.User;
+import com.forgqi.resourcebaseserver.entity.forum.Post;
 import com.forgqi.resourcebaseserver.service.dto.util.RichTextHelper;
+import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
 
+@Data
 public class RichTextDTO {
     private String title;
     private String html;
@@ -24,45 +26,5 @@ public class RichTextDTO {
         post.setTitle(title);
         post.setUser(user);
         return post;
-    }
-
-    public String getHtml() {
-        return html;
-    }
-
-    public void setHtml(String html) {
-        this.html = html;
-    }
-
-    public Map<String, ?> getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Map<String, ?> profile) {
-        this.profile = profile;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<String> getTopicList() {
-        return topicList;
-    }
-
-    public void setTopicList(List<String> topicList) {
-        this.topicList = topicList;
-    }
-
-    public List<String> getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(List<String> imageUrl) {
-        this.imageUrl = imageUrl;
     }
 }

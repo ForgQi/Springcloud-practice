@@ -47,16 +47,11 @@ public class CacheConfig {
                 .entryTtl(Duration.ofMinutes(30));  // 设置缓存的默认过期时间，也是使用Duration设置
         // .disableCachingNullValues();     // 不缓存空值
 
-        // 设置一个初始化的缓存空间set集合
-//        Set<String> cacheNames = new HashSet<>();
-//        cacheNames.add("testt");
-//        cacheNames.add("my-redis-cache2");
-
         // 对每个缓存空间应用不同的配置
         Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
 //        configMap.put("my-redis-cache1", redisCacheConfiguration);
         configMap.put("notice", redisCacheConfiguration.entryTtl(Duration.ofHours(12)));
-
+        configMap.put("studyMode", redisCacheConfiguration.entryTtl(Duration.ofMinutes(5)));
         return RedisCacheManager.builder(redisConnectionFactory)
 //                .initialCacheNames(cacheNames)  // 给这些缓存用默认配置，后修改的默认配置对此时设置的不起效，详见源码
                 .withInitialCacheConfigurations(configMap)
@@ -69,25 +64,19 @@ public class CacheConfig {
     public RedisTemplate<Object, Object> redisTemplate() {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
-
+        // 不用json-starter装配的objectmapper的话json序列化不通用会有各种问题
 //        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
         template.setValueSerializer(jackson2JsonRedisSerializer());
         //使用StringRedisSerializer来序列化和反序列化redis的key值
         template.setKeySerializer(new StringRedisSerializer());
-        template.afterPropertiesSet();
+        // 应该不需要，会在 Bean 初始化之后执行
+//        template.afterPropertiesSet();
         return template;
-    }
-
-    @Bean
-    public StringRedisTemplate stringRedisTemplate() {
-        StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
-        stringRedisTemplate.setConnectionFactory(redisConnectionFactory);
-        return stringRedisTemplate;
     }
 
     private Jackson2JsonRedisSerializer<?> jackson2JsonRedisSerializer() {
         //使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
-        Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        Jackson2JsonRedisSerializer<?> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
         serializer.setObjectMapper(om);
         return serializer;
     }

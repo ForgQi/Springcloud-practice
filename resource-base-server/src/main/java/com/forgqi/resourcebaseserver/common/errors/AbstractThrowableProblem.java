@@ -10,19 +10,19 @@ import java.util.LinkedHashMap;
 
 public abstract class AbstractThrowableProblem extends RuntimeException {
     // 自定义错误码暂时没用
-    private Integer errorCode;
+    protected Integer errorCode;
 
-
-
-    private HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+    protected HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
     AbstractThrowableProblem(String message) {
         super(message);
     }
+
     AbstractThrowableProblem(String message, HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }
+
     AbstractThrowableProblem(String message, Integer errorCode) {
         super(message);
         this.errorCode = errorCode;
@@ -46,7 +46,7 @@ public abstract class AbstractThrowableProblem extends RuntimeException {
         return httpStatus.getReasonPhrase();
     }
 
-    public ResponseEntity create(HttpServletRequest request) {
+    public ResponseEntity<?> create(HttpServletRequest request) {
         HashMap<String, Object> map = new LinkedHashMap<>();
         map.put("timestamp", Instant.now());
         map.put("status", getHttpStatusCode());

@@ -1,7 +1,11 @@
 package com.forgqi.resourcebaseserver.common.util;
 
 import com.forgqi.resourcebaseserver.client.parse.SsoParse;
+import com.forgqi.resourcebaseserver.common.errors.OperationException;
+import com.forgqi.resourcebaseserver.entity.SysRole;
 import com.forgqi.resourcebaseserver.entity.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,10 +31,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Component
 public class UserHelper {
-
+    private final static Logger log = LoggerFactory.getLogger(UserHelper.class);
     private final static
     TextEncryptor textEncryptor = Encryptors.text("lzu", "deadbeef");
     private static
@@ -42,9 +47,13 @@ public class UserHelper {
     public static Optional<User> getUserBySecurityContext() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
-                .map(authentication -> {
+                .map(authentication -> (com.forgqi.authenticationserver.entity.User) authentication.getPrincipal())
+                .map(principal -> {
                     User user = new User();
-                    BeanUtils.copyProperties(authentication.getPrincipal(), user);
+                    BeanUtils.copyProperties(principal, user);
+                    user.setRoles(principal.getRoles().stream()
+                            .map(sysRole -> new SysRole(sysRole.getId(), sysRole.getRole()))
+                            .collect(Collectors.toUnmodifiableList()));
                     return user;
                 });
     }
@@ -55,16 +64,22 @@ public class UserHelper {
     }
 
     public static Map<String, String> getLoginMap(String userName, String password) {
-        Map<String, String> loginMap = ssoParse.getLoginMap();
-        loginMap.put("username", userName);
-        loginMap.put("password", textEncryptor.decrypt(password));
+        try {
+            Map<String, String> loginMap = ssoParse.getLoginMap();
+            loginMap.put("username", userName);
+            loginMap.put("password", textEncryptor.decrypt(password));
+            return loginMap;
+        } catch (NullPointerException e) {
+            log.warn(e.getMessage(), e);
+            throw new OperationException("登录出错请稍后再试");
+        }
+
 
 //        Map<String, String> map = new HashMap<>();
 //        map.put("Login.Token1", userName);
 //        map.put("Login.Token2", textEncryptor.decrypt(password));
 //        map.put("goto", "http://my.lzu.edu.cn/loginSuccess.portal");
 //        map.put("gotoOnFail", "http://my.lzu.edu.cn/loginFailure.portal");
-        return loginMap;
     }
 
     // 修改id所指用户
@@ -102,6 +117,10 @@ public class UserHelper {
             tokenStore.storeRefreshToken(tokenServices.readAccessToken(oToken.getValue()).getRefreshToken(), oAuth2Authentication);
         }
 
+    }
+
+    public User getUser() {
+        return getUserBySecurityContext().orElseThrow();
     }
 
     @Autowired

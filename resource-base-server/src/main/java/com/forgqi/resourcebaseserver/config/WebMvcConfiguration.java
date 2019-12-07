@@ -1,12 +1,15 @@
 package com.forgqi.resourcebaseserver.config;
 
-//@Configuration
-//public class WebMvcConfiguration implements WebMvcConfigurer {
-//
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/upload/**")
-//                .addResourceLocations("file:"
-//                        + Paths.get(FileHandleUtil.absolutePath,FileHandleUtil.staticDir,"upload")
-//                        +System.getProperty("file.separator"));
-//    }
-//}
+import com.forgqi.resourcebaseserver.common.AuthenticationInterceptor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebMvcConfiguration implements WebMvcConfigurer {
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new AuthenticationInterceptor()).addPathPatterns("/posts/**");
+    }
+}

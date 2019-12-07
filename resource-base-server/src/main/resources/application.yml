@@ -9,17 +9,19 @@ management:
     health:
       show-details: ALWAYS
 
-eureka:
-  client:
-    healthcheck:
-      enabled: true #使用health端点来代替心跳表明服务是否可用，反应到eureka server ui上服务的UP还是DOWN
-  instance:
-    #   获取此实例的相对健康检查URL路径，默认为/health
-    health-check-url-path: /actuator/health
-    metadata-map:
-      user.name: ${spring.security.user.name}
-      user.password: ${spring.security.user.password}
 spring:
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+  #  cloud:
+#    consul:
+#      discovery:
+#        consul注册id要求字母开头，这个设置将hostname放在id第一部分，
+#        docker生成的hostname有可能是数字开头因此不行，
+#        自定义docker hostname将导致容器间不能通过hostname访问，通过设置docker的dns为consul的也许可行，
+#        目前先调整id中的hostname位置
+#        include-hostname-in-instance-id: true
   profiles:
     active: dev
   application:
@@ -30,6 +32,10 @@ spring:
   #  config: # 日志配置文件,Spring Boot默认使用classpath路径下的日志配置文件,如:logback.xml
   #  level:  # 日志级别
   #    org.springframework.web: DEBUG # 配置spring web日志级别
+#  data:
+#    redis:
+#      repositories:
+#        enabled: false
   redis:
     host: ${ip.addr}
     #    port: 6379
@@ -41,6 +47,10 @@ spring:
         max-idle: 8 #最大空闲连接 默认8
         min-idle: 0 #最小空闲连接
   jpa:
+    # spring.jpa.open-in-view is enabled by default.
+    # Therefore, database queries may be performed during view rendering.
+    # Explicitly configure spring.jpa.open-in-view to disable this warning
+#    open-in-view: false
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
@@ -54,7 +64,9 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB # 上传文件最大为 10M （默认值 1M 根据自身业务自行控制即可）
-
+server:
+  #端口号
+  port: 8080
   #  security:
 #    user:
 #      name: 242bc36f
