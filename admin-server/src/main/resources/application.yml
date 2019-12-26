@@ -29,7 +29,7 @@ spring:
   security:
     user:
       name: "admin"
-      password: "MtScmluZPB420"
+      password: "12345678"
   boot:
     admin:
       discovery:
