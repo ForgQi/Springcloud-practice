@@ -1,16 +1,11 @@
-package com.forgqi.resourcebaseserver.common;
+package com.forgqi.resourcebaseserver.security;
 
-import com.forgqi.resourcebaseserver.common.util.UserHelper;
-import com.forgqi.resourcebaseserver.entity.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.MethodParameter;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 
 @Slf4j
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {

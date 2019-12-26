@@ -22,17 +22,17 @@ public class OtherController {
     }
 
     @PostMapping(value = "/study-modes")
-    Optional<StudyMode> creat(Instant estimate) {
+    public Optional<StudyMode> creat(Instant estimate) {
         return studyModeService.creat(estimate);
     }
 
     @DeleteMapping(value = "/study-modes/{id}")
-    void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         studyModeService.delete(id);
     }
 
     @PutMapping(value = "/study-modes/{id}")
-    Optional<StudyMode> completed(@PathVariable Long id) {
+    public Optional<StudyMode> completed(@PathVariable Long id) {
         return studyModeService.completed(id);
     }
 

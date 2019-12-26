@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
 import java.time.Duration;
 import java.time.Instant;
 

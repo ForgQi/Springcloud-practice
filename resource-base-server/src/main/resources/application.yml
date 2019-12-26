@@ -15,13 +15,13 @@ spring:
       ribbon:
         enabled: false
   #  cloud:
-#    consul:
-#      discovery:
-#        consul注册id要求字母开头，这个设置将hostname放在id第一部分，
-#        docker生成的hostname有可能是数字开头因此不行，
-#        自定义docker hostname将导致容器间不能通过hostname访问，通过设置docker的dns为consul的也许可行，
-#        目前先调整id中的hostname位置
-#        include-hostname-in-instance-id: true
+  #    consul:
+  #      discovery:
+  #        consul注册id要求字母开头，这个设置将hostname放在id第一部分，
+  #        docker生成的hostname有可能是数字开头因此不行，
+  #        自定义docker hostname将导致容器间不能通过hostname访问，通过设置docker的dns为consul的也许可行，
+  #        目前先调整id中的hostname位置
+  #        include-hostname-in-instance-id: true
   profiles:
     active: dev
   application:
@@ -32,10 +32,10 @@ spring:
   #  config: # 日志配置文件,Spring Boot默认使用classpath路径下的日志配置文件,如:logback.xml
   #  level:  # 日志级别
   #    org.springframework.web: DEBUG # 配置spring web日志级别
-#  data:
-#    redis:
-#      repositories:
-#        enabled: false
+  #  data:
+  #    redis:
+  #      repositories:
+  #        enabled: false
   redis:
     host: ${ip.addr}
     #    port: 6379
@@ -50,7 +50,7 @@ spring:
     # spring.jpa.open-in-view is enabled by default.
     # Therefore, database queries may be performed during view rendering.
     # Explicitly configure spring.jpa.open-in-view to disable this warning
-#    open-in-view: false
+    #    open-in-view: false
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update

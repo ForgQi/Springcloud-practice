@@ -1,23 +1,41 @@
 package com.forgqi.resourcebaseserver.service;
 
+import com.forgqi.resourcebaseserver.common.util.UserHelper;
+import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.IForum;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.forgqi.resourcebaseserver.security.Authorize;
+import com.forgqi.resourcebaseserver.security.ForumPermissionManager;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
 
-public interface ForumService<R extends IForum, S, T> {
-    Optional<R> save(S content, T attach);
+public interface ForumService<R extends IForum, S, T> extends ForumPermissionManager {
 
-    void delete(Long id);
-
-    default Optional<R> update(JpaRepository<R, Long> repository, Long id, String content) {
-        return repository.findById(id)
-                .map(update -> {
-                    update.setContent(content);
-                    return repository.save(update);
-                });
+    default Optional<R> save(S content, T attach) {
+        return UserHelper.getUserBySecurityContext()
+                .map(user -> getRepository().save(packageInstance(user, content, attach)));
     }
 
-    Optional<R> update(Long id, String content);
+    @Authorize
+    default void delete(Long id) {
+        getRepository().deleteById(id);
+    }
+
+    default Optional<R> update(Long id, String content) {
+        CrudRepository<R, Long> repository = getRepository();
+        return UserHelper.getUserBySecurityContext().flatMap(user -> repository.findById(id)
+                .map(update -> {
+                    if (update.getUser().getId() == user.getId()){
+                        update.setContent(content);
+                        return repository.save(update);
+                    }
+                    return null;
+                })
+        );
+    }
+
+    R packageInstance(User user, S content, T attach);
+
+    CrudRepository<R, Long> getRepository();
 }

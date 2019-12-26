@@ -1,23 +1,23 @@
 package com.forgqi.resourcebaseserver.service;
 
 import com.forgqi.resourcebaseserver.common.Voted;
-import com.forgqi.resourcebaseserver.common.errors.OperationException;
+import com.forgqi.resourcebaseserver.common.errors.UnsupportedOperationException;
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.entity.studymode.MonthRank;
 import com.forgqi.resourcebaseserver.entity.studymode.PersonalData;
 import com.forgqi.resourcebaseserver.entity.studymode.StudyMode;
 import com.forgqi.resourcebaseserver.entity.studymode.WeekRank;
+import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.repository.studymode.MonthRepository;
 import com.forgqi.resourcebaseserver.repository.studymode.PersonalDataRepository;
 import com.forgqi.resourcebaseserver.repository.studymode.StudyModeRepository;
-import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.repository.studymode.WeekRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.time.temporal.TemporalAdjusters.*;
+import static java.time.temporal.TemporalAdjusters.firstDayOfNextMonth;
+import static java.time.temporal.TemporalAdjusters.next;
 
 @Service
 @Slf4j
@@ -43,11 +44,11 @@ public class StudyModeService extends AbstractVoteService<WeekRank> {
 
     @Cacheable(cacheNames = "studyMode", key = "target.userHelper.user.username")
     public Optional<StudyMode> creat(Instant estimate) {
+        if (Duration.between(Instant.now(), estimate).isNegative()) {
+            return Optional.empty();
+        }
         return UserHelper.getUserBySecurityContext()
                 .map(user -> {
-                    if (Duration.between(Instant.now(), estimate).isNegative()) {
-                        return null;
-                    }
                     try {
                         return studyModeRepository.save(new StudyMode(estimate, new PersonalData(user.getId())));
                     } catch (InvalidDataAccessApiUsageException e) {
@@ -113,7 +114,7 @@ public class StudyModeService extends AbstractVoteService<WeekRank> {
     public Optional<WeekRank> vote(Long id, String state) {
         ZonedDateTime zonedDateTime = LocalDate.now().with(next(DayOfWeek.MONDAY)).atStartOfDay(ZoneId.systemDefault());
         long epochSecond = zonedDateTime.toEpochSecond();
-        decide(id + epochSecond, Voted.Type.STUDY_MODE, Voted.State.UP);
+        decide(id + epochSecond, Voted.State.UP);
         Instant now = Instant.now();
         long seconds = Duration.between(now, zonedDateTime).toSeconds();
         Duration duration = Duration.between(now, LocalDate.now().with(firstDayOfNextMonth()).atStartOfDay(ZoneId.systemDefault()));
@@ -132,5 +133,15 @@ public class StudyModeService extends AbstractVoteService<WeekRank> {
                     weekRank.setUpVote(weekRank.getUpVote() + 1);
                     return weekRepository.save(weekRank);
                 }).or(() -> Optional.of(weekRepository.save(new WeekRank(id, 1, seconds))));
+    }
+
+    @Override
+    protected Voted.Type getType() {
+        return Voted.Type.STUDY_MODE;
+    }
+
+    @Override
+    public CrudRepository<WeekRank, Long> getRepository() {
+        throw new UnsupportedOperationException("无返回仓库");
     }
 }
