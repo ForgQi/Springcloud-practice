@@ -1,7 +1,6 @@
 package com.forgqi.resourcebaseserver.entity;
 
 import lombok.Data;
-import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

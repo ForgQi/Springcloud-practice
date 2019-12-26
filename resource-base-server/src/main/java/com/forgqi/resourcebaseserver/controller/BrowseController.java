@@ -7,11 +7,11 @@ import com.forgqi.resourcebaseserver.entity.forum.Comment;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
 import com.forgqi.resourcebaseserver.entity.forum.Reply;
 import com.forgqi.resourcebaseserver.entity.studymode.PersonalData;
-import com.forgqi.resourcebaseserver.repository.studymode.MonthRepository;
-import com.forgqi.resourcebaseserver.repository.studymode.PersonalDataRepository;
 import com.forgqi.resourcebaseserver.repository.forum.CommentRepository;
 import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
 import com.forgqi.resourcebaseserver.repository.forum.ReplyRepository;
+import com.forgqi.resourcebaseserver.repository.studymode.MonthRepository;
+import com.forgqi.resourcebaseserver.repository.studymode.PersonalDataRepository;
 import com.forgqi.resourcebaseserver.repository.studymode.WeekRepository;
 import com.forgqi.resourcebaseserver.service.StudyModeService;
 import com.forgqi.resourcebaseserver.service.UserService;
@@ -54,15 +54,15 @@ public class BrowseController {
         if (dateOptional.isPresent()) {
             LocalDate date = dateOptional.get();
             Map<Long, Map<String, ?>> map = studyModeService.aggregationTotalTime(Instant.from(date.atStartOfDay(zone)), Instant.now());
-            if (query != null){
-                var crudRepository = "thisWeek".equals(query) ? weekRepository : monthRepository ;
+            if (query != null) {
+                var crudRepository = "thisWeek".equals(query) ? weekRepository : monthRepository;
                 return map.entrySet().parallelStream()
                         .map(longMapEntry -> crudRepository.findById(longMapEntry.getKey())
                                 .map(v -> {
                                     Map<String, Object> m = new HashMap<>(longMapEntry.getValue());
                                     m.put("like", v.getUpVote());
                                     return Map.entry(longMapEntry.getKey(), m);
-                                }).orElse(Map.entry(longMapEntry.getKey(), (Map<String, Object>)longMapEntry.getValue())))
+                                }).orElse(Map.entry(longMapEntry.getKey(), (Map<String, Object>) longMapEntry.getValue())))
                         .collect(Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue));
             }
             return map;
@@ -85,7 +85,7 @@ public class BrowseController {
 
     @GetMapping(value = {"/posts/subjects/{subject}", "/posts/subjects"})
     public Page<IPostDTO> getPage(@PathVariable(required = false) String subject, @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        if (subject == null){
+        if (subject == null) {
             return postRepository.findAllBy(pageable);
         }
         return postRepository.findBySubjectEquals(subject, pageable);

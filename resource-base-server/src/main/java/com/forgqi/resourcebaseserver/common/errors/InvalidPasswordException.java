@@ -6,8 +6,6 @@ public class InvalidPasswordException extends AbstractThrowableProblem {
 
     private String usrName;
 
-//    protected HttpStatus httpStatus;
-
     private InvalidPasswordException() {
         super("Incorrect password");
         httpStatus = HttpStatus.BAD_REQUEST;

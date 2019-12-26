@@ -9,7 +9,7 @@ public interface IVoteEntity {
 
     void setDownVote(Integer downVote);
 
-    abstract class VoteEntityAdapter implements IVoteEntity{
+    abstract class VoteEntityAdapter implements IVoteEntity {
 
         @Override
         public Integer getUpVote() {

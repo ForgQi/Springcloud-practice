@@ -2,18 +2,16 @@ package com.forgqi.resourcebaseserver.aop;
 
 import com.forgqi.resourcebaseserver.client.*;
 import com.forgqi.resourcebaseserver.client.parse.ParseUtil;
-import com.forgqi.resourcebaseserver.client.parse.SsoParse;
 import com.forgqi.resourcebaseserver.common.errors.InvalidPasswordException;
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
 import feign.Response;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.net.CookieManager;
 import java.util.Optional;
 
 // 如果在同一个 aspect 类中，针对同一个 pointcut，定义了两个相同的 advice(比如，定义了两个 @Before)，
@@ -22,24 +20,14 @@ import java.util.Optional;
 // 直接根据这个位置两个方法名中字符的ACSII码大小决定通知执行的顺序，ACSII码越小的通知越先执行。
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class LoginAspect {
     private final LoginFeignClient loginFeignClient;
     private final JwkFeignClient jwkFeignClient;
     private final GmsFeignClient gmsFeignClient;
     private final ZhxgFeignClient zhxgFeignClient;
     private final YjsxgFeignClient yjsxgFeignClient;
-    private final CookieManager cookieManager;
-    private final SsoParse ssoParse;
 
-    public LoginAspect(LoginFeignClient loginFeignClient, JwkFeignClient jwkFeignClient, GmsFeignClient gmsFeignClient, ZhxgFeignClient zhxgFeignClient, YjsxgFeignClient yjsxgFeignClient, CookieManager cookieManager, SsoParse ssoParse) {
-        this.loginFeignClient = loginFeignClient;
-        this.jwkFeignClient = jwkFeignClient;
-        this.gmsFeignClient = gmsFeignClient;
-        this.zhxgFeignClient = zhxgFeignClient;
-        this.yjsxgFeignClient = yjsxgFeignClient;
-        this.cookieManager = cookieManager;
-        this.ssoParse = ssoParse;
-    }
 
     @Pointcut("within(com.forgqi.resourcebaseserver.service.client.JwkService)")
     public void jwkServicePointcut() {
@@ -49,7 +37,7 @@ public class LoginAspect {
     @Before(value = "execution(* com.forgqi.resourcebaseserver.service.client.*.saveStuInfo(..)) && " +
 //            "execution(* com.forgqi.resourcebaseserver.service.client.GmsService.saveStuInfo(..)) && " +
             "args(usrPswDTO)")
-    public void loginFirst(UsrPswDTO usrPswDTO) throws IOException {
+    public void loginFirst(UsrPswDTO usrPswDTO) {
 //            cookieManager.getCookieStore().removeAll();
 //            ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 //            RequestContextHolder.setRequestAttributes(sra, true);

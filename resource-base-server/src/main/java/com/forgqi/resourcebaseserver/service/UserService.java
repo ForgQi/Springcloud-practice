@@ -13,7 +13,6 @@ import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -47,9 +46,7 @@ public class UserService {
             user = jwkService.saveStuInfo(usrPswDTO);
         }
         User temporaryUser = new User();
-        userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> {
-            BeanUtils.copyProperties(u, temporaryUser);
-        });
+        userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> BeanUtils.copyProperties(u, temporaryUser));
         String[] nullPropertyNames = ParseUtil.getNullPropertyNames(user);
         String[] copyOf = Arrays.copyOf(nullPropertyNames, nullPropertyNames.length + 2);
         copyOf[nullPropertyNames.length] = "accountNonLocked";
