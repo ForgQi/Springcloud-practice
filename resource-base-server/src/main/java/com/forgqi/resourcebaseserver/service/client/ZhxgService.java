@@ -1,6 +1,7 @@
 package com.forgqi.resourcebaseserver.service.client;
 
 import com.forgqi.resourcebaseserver.client.ZhxgFeignClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.net.CookieManager;
@@ -9,14 +10,9 @@ import java.net.URI;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ZhxgService {
-    private final ZhxgFeignClient zhxgFeignClient;
     private final CookieManager cookieManager;
-
-    public ZhxgService(ZhxgFeignClient zhxgFeignClient, CookieManager cookieManager) {
-        this.zhxgFeignClient = zhxgFeignClient;
-        this.cookieManager = cookieManager;
-    }
 
     public List<HttpCookie> getCookie() {
         return cookieManager.getCookieStore().get(URI.create("http://zhxg.lzu.edu.cn/"));

@@ -2,6 +2,7 @@ package com.forgqi.resourcebaseserver.controller;
 
 import com.forgqi.resourcebaseserver.common.errors.NonexistenceException;
 import com.forgqi.resourcebaseserver.common.util.ParseUtil;
+import com.forgqi.resourcebaseserver.common.util.ThreadLocalUtil;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
@@ -76,10 +77,10 @@ public class BrowseController {
     }
 
     @PostMapping(value = "/registry")
-    public User register(@RequestBody UsrPswDTO usrPswDTO, String type) throws IOException {
+    public User register(String type) {
         //        UserDTO userDTO = new UserDTO().convertFor(user);
 //        userDTO.setTokenDTO(authorizationFeignClient.getToken(loginDTO.convertToTokenMap()));
-
+        UsrPswDTO usrPswDTO = (UsrPswDTO)ThreadLocalUtil.get();
         return userService.registerUser(usrPswDTO, type);
     }
 

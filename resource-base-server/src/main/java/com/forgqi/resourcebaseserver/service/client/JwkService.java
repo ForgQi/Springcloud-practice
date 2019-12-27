@@ -6,6 +6,7 @@ import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
 import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,36 +17,17 @@ import java.net.URI;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class JwkService {
-    private final UserRepository userRepository;
     private final JwkParse jwkParse;
-    private final JwkFeignClient jwkFeignClient;
     private final CookieManager cookieManager;
 
-
-    public JwkService(UserRepository userRepository, JwkParse jwkParse, JwkFeignClient jwkFeignClient, CookieManager cookieManager) {
-        this.userRepository = userRepository;
-        this.jwkParse = jwkParse;
-        this.jwkFeignClient = jwkFeignClient;
-        this.cookieManager = cookieManager;
-    }
-
     /**
-     * 参数不能省，给aop登录使用
-     *
-     * @param usrPswDTO 用户名密码
      * @return 用户信息
-     * @throws IOException 解析可能出错
      */
     @Transactional
-    public User saveStuInfo(UsrPswDTO usrPswDTO) throws IOException {
+    public User saveStuInfo() {
         return jwkParse.getStuInfo();
-//            userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> {
-//                user.setCreatedDate(u.getCreatedDate());
-//                user.setUserName(usrPswDTO.getUserName());
-//                user.setPassword(usrPswDTO.getPassword());
-//            });
-//            return userRepository.save(user);
     }
 
     public List<HttpCookie> getCookie() {

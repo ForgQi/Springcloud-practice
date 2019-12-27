@@ -38,12 +38,12 @@ public class UserService {
         this.jwkService = jwkService;
     }
 
-    public User registerUser(UsrPswDTO usrPswDTO, String type) throws IOException {
+    public User registerUser(UsrPswDTO usrPswDTO, String type){
         User user;
         if ("graduate".equals(type)) {
-            user = gmsService.saveStuInfo(usrPswDTO);
+            user = gmsService.saveStuInfo();
         } else {
-            user = jwkService.saveStuInfo(usrPswDTO);
+            user = jwkService.saveStuInfo();
         }
         User temporaryUser = new User();
         userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> BeanUtils.copyProperties(u, temporaryUser));

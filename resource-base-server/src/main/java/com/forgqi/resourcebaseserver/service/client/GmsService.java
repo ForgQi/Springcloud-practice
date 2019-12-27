@@ -6,6 +6,7 @@ import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
 import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,27 +17,16 @@ import java.net.URI;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class GmsService {
     private final GmsParse gmsParse;
-    private final UserRepository userRepository;
     private final CookieManager cookieManager;
 
-
-    public GmsService(GmsParse gmsParse, UserRepository userRepository, CookieManager cookieManager) {
-        this.gmsParse = gmsParse;
-        this.userRepository = userRepository;
-        this.cookieManager = cookieManager;
-    }
-
     /**
-     * 参数不能省给aop登录使用
-     *
-     * @param usrPswDTO 用户名密码
      * @return 用户信息
-     * @throws IOException 解析可能出错
      */
     @Transactional
-    public User saveStuInfo(UsrPswDTO usrPswDTO) throws IOException {
+    public User saveStuInfo(){
         User user = gmsParse.getStuInfo();
 //            userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> user.setCreatedDate(u.getCreatedDate()));
         user.setType(Type.GRADUATE);

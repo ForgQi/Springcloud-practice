@@ -93,10 +93,15 @@ public class StudyModeService extends AbstractVoteService<WeekRank> {
         return studyModeRepository.findAllByCreatedDateBetween(start, end).parallelStream()
                 .collect(Collectors.groupingByConcurrent(studyMode -> studyMode.getPersonalData().getId(), Collectors.summingLong(studyMode -> studyMode.getTotalTime().toMinutes())))
                 .entrySet().parallelStream()
-                .map(entry -> userRepository.findById(entry.getKey()).map(user -> Pair.of(entry.getKey(), Map.of("sum", entry.getValue(), "nickName", Optional.ofNullable(user.getNickName()).orElse("兰朵儿"), "signature", Optional.ofNullable(user.getSignature()).orElse("每天都要好好的，加油！")))).get())
+                .map(entry -> userRepository.findById(entry.getKey())
+                        .map(user -> Pair.of(
+                                entry.getKey(),
+                                Map.of("sum", entry.getValue(),
+                                        "nickName", Optional.ofNullable(user.getNickName()).orElse("兰朵儿"),
+                                        "signature", Optional.ofNullable(user.getSignature()).orElse("每天都要好好的，加油！"),
+                                        "avatar", Optional.ofNullable(user.getAvatar()))))
+                        .get())
                 .collect(Collectors.toConcurrentMap(Pair::getFirst, Pair::getSecond));
-//                .collect(Collectors.toConcurrentMap(Pair::getFirst, Pair::getSecond, (oldVal, newVal) -> oldVal, TreeMap::new));
-
     }
 
     public Optional<List<StudyMode>> findPersonalData(Instant start, Instant end) {

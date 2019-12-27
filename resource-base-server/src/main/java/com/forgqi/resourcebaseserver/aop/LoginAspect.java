@@ -34,54 +34,30 @@ public class LoginAspect {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 
-    @Before(value = "execution(* com.forgqi.resourcebaseserver.service.client.*.saveStuInfo(..)) && " +
-//            "execution(* com.forgqi.resourcebaseserver.service.client.GmsService.saveStuInfo(..)) && " +
-            "args(usrPswDTO)")
-    public void loginFirst(UsrPswDTO usrPswDTO) {
-//            cookieManager.getCookieStore().removeAll();
-//            ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-//            RequestContextHolder.setRequestAttributes(sra, true);
-        //        Map<String, String> loginMap = ssoParse.getLoginMap();
-//            loginFeignClient.login(UserHelper.getLoginMap(usrPswDTO.getUserName(), usrPswDTO.getPassword()));
-        Response login = loginFeignClient.login(UserHelper.getLoginMap(usrPswDTO.getUserName(), usrPswDTO.getPassword()));
-        Optional.of(login).flatMap(ParseUtil::getDocument).ifPresent(document -> {
-            if (!"兰州大学个人工作台".equals(document.title())) {
-                throw new InvalidPasswordException(usrPswDTO.getUserName());
-            }
-        });
-
-        //        Response response = loginFeignClient.post(UserHelper.getLoginMap(usrPswDTO.getUserName(), usrPswDTO.getPassword()));
-        //        Optional.ofNullable(response.headers().get("Set-Cookie"))
-        //                .orElseThrow(()-> new UsernameNotFoundException("用户名或密码错误！"));
-        //        Document document = ParseUtil.getDocument(html);不跳转暂时不启用
-        //        Element mailbox1 = document.getElementById("mailbox1");
-        //        loginDTO.setUserName(mailbox1.attr("value"));
-    }
+//    @Before(value = "execution(* com.forgqi.resourcebaseserver.service.client.*.saveStuInfo(..)) && " +
+////            "execution(* com.forgqi.resourcebaseserver.service.client.GmsService.saveStuInfo(..)) && " +
+//            "args(usrPswDTO)")
+//    public void loginFirst(UsrPswDTO usrPswDTO) {
+//    .map(loginMap -> loginFeignClient.post(loginMap).headers().get("Set-Cookie"))
+//                .orElseThrow(()-> new UsernameNotFoundException("用户名或密码错误！"));
+//    }
 
     @Before("within(com.forgqi.resourcebaseserver.service.client.*) && " +
             "!execution(* com.forgqi.resourcebaseserver.service.client.JwkService.saveStuInfo(..)) && " +
             "!execution(* com.forgqi.resourcebaseserver.service.client.GmsService.saveStuInfo(..))")
     public void login() {
-//            cookieManager.getCookieStore().removeAll();
-//            System.out.println("????????????????????????????????????????????");
         UserHelper.getUserLoginMap()
                 .map(loginFeignClient::login).flatMap(ParseUtil::getDocument)
                 .ifPresent(document -> {
-                    if (!"兰州大学个人工作台".equals(document.title())) {
+                    if (!document.head().getElementsByAttributeValueContaining("href", "login").isEmpty()) {
                         throw new InvalidPasswordException(UserHelper.getUserBySecurityContext().orElseThrow().getUsername());
                     }
                 });
-//                .orElseThrow(()-> new UsernameNotFoundException("用户名或密码错误！"));
-//        UserHelper.getUserLoginMap()
-//                .map(loginMap -> loginFeignClient.post(loginMap).headers().get("Set-Cookie"))
-//                .orElseThrow(()-> new UsernameNotFoundException("用户名或密码错误！"));
     }
 
     @Before("jwkServicePointcut()")
     public void loginJwk() {
         jwkFeignClient.login();
-//        UserHelper.getUserLoginMap()
-//                .map(loginFeignClient::loginJwk);
     }
 
     @Before("within(com.forgqi.resourcebaseserver.service.client.GmsService)")

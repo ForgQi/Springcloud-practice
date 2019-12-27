@@ -17,7 +17,7 @@ public abstract class AbstractVoteService<R extends IVoteEntity> {
 
     protected abstract Voted.Type getType();
 
-    public abstract CrudRepository<R, Long> getRepository();
+    protected abstract CrudRepository<R, Long> getRepository();
 
     void decide(Long id, Voted.State state) {
         Voted.Type type = getType();
