@@ -14,13 +14,14 @@ import java.io.IOException;
 import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.URI;
+import java.net.http.HttpClient;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class JwkService {
     private final JwkParse jwkParse;
-    private final CookieManager cookieManager;
+    private final HttpClient httpClient;
 
     /**
      * @return 用户信息
@@ -31,7 +32,8 @@ public class JwkService {
     }
 
     public List<HttpCookie> getCookie() {
-        return cookieManager.getCookieStore().get(URI.create("http://jwk.lzu.edu.cn/"));
+        return ((CookieManager)httpClient.cookieHandler().orElseThrow())
+                .getCookieStore().get(URI.create("http://jwk.lzu.edu.cn/"));
 //        return cookieManager.getCookieStore().get(URI.create("http://jwk.lzu.edu.cn/"))
 //                .stream().filter(httpCookie -> "JSESSIONID".equals(httpCookie.getName()))
 //                .findFirst()

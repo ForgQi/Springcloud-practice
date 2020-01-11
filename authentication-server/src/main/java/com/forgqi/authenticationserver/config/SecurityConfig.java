@@ -1,7 +1,6 @@
 package com.forgqi.authenticationserver.config;
 
 import com.forgqi.authenticationserver.service.CustomUserDetailService;
-import com.forgqi.common.AESEncryptPasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +8,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -56,5 +57,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    public static class AESEncryptPasswordEncoder implements PasswordEncoder {
+        private final TextEncryptor textEncryptor = Encryptors.text("lzu", "deadbeef");
+
+        @Override
+        public String encode(CharSequence charSequence) {
+            return (String) charSequence;
+        }
+
+        @Override
+        public boolean matches(CharSequence charSequence, String s) {
+            //密码对比 密码对 true 反之 false
+            //CharSequence 数据库中的密码
+            //s 前台传入的密码
+            try {
+                return textEncryptor.decrypt(charSequence.toString()).equals(textEncryptor.decrypt(s));
+            } catch (Exception e) {
+                return false;
+            }
+        }
     }
 }

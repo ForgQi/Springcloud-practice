@@ -14,13 +14,14 @@ import java.io.IOException;
 import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.URI;
+import java.net.http.HttpClient;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class GmsService {
     private final GmsParse gmsParse;
-    private final CookieManager cookieManager;
+    private final HttpClient httpClient;
 
     /**
      * @return 用户信息
@@ -34,7 +35,8 @@ public class GmsService {
     }
 
     public List<HttpCookie> getCookie() {
-        return cookieManager.getCookieStore().get(URI.create("http://gms.lzu.edu.cn/"));
+        return ((CookieManager)httpClient.cookieHandler().orElseThrow())
+                .getCookieStore().get(URI.create("http://gms.lzu.edu.cn/"));
     }
 
     public List<CourseDTO> getCourse() throws IOException {

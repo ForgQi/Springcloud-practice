@@ -1,12 +1,17 @@
 package com.forgqi.resourcebaseserver.client;
 
+import com.forgqi.resourcebaseserver.client.parse.Config;
+import feign.Client;
 import feign.RequestInterceptor;
 import feign.Response;
+import feign.http2client.Http2Client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "GmsFeignClient", url = "http://gms.lzu.edu.cn/graduate", configuration = GmsFeignClient.Config.class)
+import java.net.http.HttpClient;
+
+@FeignClient(name = "GmsFeignClient", url = "http://gms.lzu.edu.cn/graduate", configuration = Config.Http2ClientConfig.class)
 public interface GmsFeignClient {
     @GetMapping(value = "/ssoLogin.do")
     Response login();
@@ -16,13 +21,4 @@ public interface GmsFeignClient {
 
     @GetMapping(value = "/studentschedule/showStudentSchedule.do")
     Response getCurrCourse();
-
-    class Config {
-
-        @Bean
-        RequestInterceptor userAgentInterceptor() {
-            return (template) -> template.header("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1")
-                    .header("Accept", "text/html;charset=UTF-8");
-        }
-    }
 }
