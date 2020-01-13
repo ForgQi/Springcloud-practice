@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity
-public class Reply extends AbstractAuditingEntity implements IForum {
+public class Reply extends AbstractAuditingEntity implements IForum<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
     @Column(name = "id", nullable = false)

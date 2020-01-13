@@ -52,8 +52,8 @@ public class ForumController {
     }
 
     @PutMapping(value = "/{service}/{id}")
-    public Optional<?> update(@PathVariable Long id, @PathVariable String service, String content) {
-        return forumServiceMap.get(service + "Service").update(id, content);
+    public Optional<?> update(@PathVariable Long id, @PathVariable String service, @RequestBody Map<String, ?> editable) {
+        return forumServiceMap.get(service + "Service").update(id, editable);
     }
 
     @DeleteMapping(value = "/{service}/{id}")

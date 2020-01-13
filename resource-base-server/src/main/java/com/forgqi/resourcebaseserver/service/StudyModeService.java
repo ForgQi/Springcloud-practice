@@ -90,9 +90,9 @@ public class StudyModeService extends AbstractVoteService<WeekRank> {
     }
 
     public Map<Long, Map<String, ?>> aggregationTotalTime(Instant start, Instant end) {
-        return studyModeRepository.findAllByCreatedDateBetween(start, end).stream()
+        return studyModeRepository.findAllByCreatedDateBetween(start, end).parallelStream()
                 .collect(Collectors.groupingByConcurrent(studyMode -> studyMode.getPersonalData().getId(), Collectors.summingLong(studyMode -> studyMode.getTotalTime().toMinutes())))
-                .entrySet().stream()
+                .entrySet().parallelStream()
                 .map(entry -> userRepository.findById(entry.getKey())
                         .map(user -> Pair.of(
                                 entry.getKey(),

@@ -57,7 +57,7 @@ public class BrowseController {
             Map<Long, Map<String, ?>> map = studyModeService.aggregationTotalTime(Instant.from(date.atStartOfDay(zone)), Instant.now());
             if (query != null) {
                 var crudRepository = "thisWeek".equals(query) ? weekRepository : monthRepository;
-                return map.entrySet().stream()
+                return map.entrySet().parallelStream()
                         .map(longMapEntry -> crudRepository.findById(longMapEntry.getKey())
                                 .map(v -> {
                                     Map<String, Object> m = new HashMap<>(longMapEntry.getValue());

@@ -27,3 +27,4 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+resource-base-server/src/test/java/com/forgqi/resourcebaseserver/ObjectIOTest.java

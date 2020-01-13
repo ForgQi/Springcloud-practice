@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum {
+public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum<List<String>> {
     @Id // 主键
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
     @Column(nullable = false)
