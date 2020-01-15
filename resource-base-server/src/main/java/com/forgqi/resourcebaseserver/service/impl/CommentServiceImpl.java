@@ -20,6 +20,7 @@ public class CommentServiceImpl extends AbstractVoteService<Comment> implements 
 
     @Override
     public Comment packageInstance(User user, ContentDTO content, Long attach) {
+        postService.changeNumSize(attach, "CommentSize");
         return content.convertToComment(user, new Post(attach));
     }
 

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.history.RevisionRepository;
 
 public interface PostRepository extends RevisionRepository<Post, Long, Integer>, JpaRepository<Post, Long> {
-    Page<IPostDTO> findBySubjectEquals(String subject, Pageable pageable);
+    Page<IPostDTO> findBySubjectEqualsAndSticky(String subject, boolean sticky, Pageable pageable);
 
-    Page<IPostDTO> findAllBy(Pageable pageable);
+    Page<IPostDTO> findAllBySticky(boolean sticky, Pageable pageable);
 }

@@ -11,6 +11,7 @@ import com.forgqi.resourcebaseserver.service.impl.CommentServiceImpl;
 import com.forgqi.resourcebaseserver.service.impl.PostServiceImpl;
 import com.forgqi.resourcebaseserver.service.impl.ReplyServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @RequestMapping("/v1")
 //@RequestMapping
 @RequiredArgsConstructor
+@Slf4j
 public class ForumController {
 
     private final Map<String, ForumService<?, ?, ?>> forumServiceMap;
@@ -56,8 +58,22 @@ public class ForumController {
         return forumServiceMap.get(service + "Service").update(id, editable);
     }
 
+    @PutMapping(value = "/posts/{id}/profile")
+    public Optional<Post> change(@PathVariable Long id, boolean sticky, @RequestParam(required = false, defaultValue = "false") boolean highlight) {
+        return postService.getRepository().findById(id).map(post -> {
+            post.setSticky(sticky);
+            post.setHighlight(highlight);
+            return postService.getRepository().save(post);
+        });
+    }
+
     @DeleteMapping(value = "/{service}/{id}")
     public void delete(@PathVariable Long id, @PathVariable String service) {
+        if ("comments".equals(service)){
+            commentService.getRepository().findById(id).ifPresent(comment -> postService.changeNumSize(comment.getPost().getId(), null));
+        }else if ("replies".equals(service)){
+            replyService.getRepository().findById(id).ifPresent(reply -> postService.changeNumSize(reply.getComment().getPost().getId(), null));
+        }
         forumServiceMap.get(service + "Service").delete(id);
     }
 }

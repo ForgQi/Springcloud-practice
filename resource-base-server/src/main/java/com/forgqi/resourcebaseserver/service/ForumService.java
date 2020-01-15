@@ -6,6 +6,7 @@ import com.forgqi.resourcebaseserver.entity.forum.IForum;
 import com.forgqi.resourcebaseserver.security.Authorize;
 import com.forgqi.resourcebaseserver.security.ForumPermissionManager;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.Optional;

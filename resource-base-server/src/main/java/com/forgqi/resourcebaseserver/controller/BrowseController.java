@@ -18,6 +18,7 @@ import com.forgqi.resourcebaseserver.service.StudyModeService;
 import com.forgqi.resourcebaseserver.service.UserService;
 import com.forgqi.resourcebaseserver.service.dto.IPostDTO;
 import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
+import com.forgqi.resourcebaseserver.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 @RequestMapping
 @RequiredArgsConstructor
 public class BrowseController {
+    private final PostServiceImpl postService;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
@@ -78,26 +80,24 @@ public class BrowseController {
 
     @PostMapping(value = "/registry")
     public User register(String type) {
-        //        UserDTO userDTO = new UserDTO().convertFor(user);
-//        userDTO.setTokenDTO(authorizationFeignClient.getToken(loginDTO.convertToTokenMap()));
         UsrPswDTO usrPswDTO = (UsrPswDTO)ThreadLocalUtil.get();
         return userService.registerUser(usrPswDTO, type);
     }
 
     @GetMapping(value = {"/posts/subjects/{subject}", "/posts/subjects"})
-    public Page<IPostDTO> getPage(@PathVariable(required = false) String subject, @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    public Page<IPostDTO> getPage(@PathVariable(required = false) String subject,
+                                  @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                  @RequestParam(required = false, defaultValue = "false")Boolean sticky) {
         if (subject == null) {
-            return postRepository.findAllBy(pageable);
+            return postRepository.findAllBySticky(sticky, pageable);
         }
-        return postRepository.findBySubjectEquals(subject, pageable);
+        return postRepository.findBySubjectEqualsAndSticky(subject, sticky, pageable);
     }
 
     @GetMapping(value = "/posts/{id}")
     public Post getPost(@PathVariable Long id) {
-        return postRepository.findById(id).map(post -> {
-            post.setPv(post.getPv() + 1);
-            return postRepository.save(post);
-        }).orElseThrow(() -> new NonexistenceException("帖子不存在"));
+        postService.changeNumSize(id, "Pv");
+        return postRepository.findById(id).orElseThrow(() -> new NonexistenceException("帖子不存在"));
     }
 
     @GetMapping(value = "/posts/{postId}/comments")

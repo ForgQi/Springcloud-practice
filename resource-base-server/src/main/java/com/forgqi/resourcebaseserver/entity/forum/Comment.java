@@ -49,6 +49,9 @@ public class Comment extends AbstractAuditingEntity implements IVoteEntity, IFor
     @Column(nullable = false)
     private Integer downVote = 0;
 
+    @Version
+    private Long version;
+
     public Comment() {
     }
 

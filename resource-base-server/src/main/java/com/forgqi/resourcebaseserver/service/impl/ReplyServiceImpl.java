@@ -3,6 +3,7 @@ package com.forgqi.resourcebaseserver.service.impl;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
 import com.forgqi.resourcebaseserver.entity.forum.Reply;
+import com.forgqi.resourcebaseserver.repository.forum.CommentRepository;
 import com.forgqi.resourcebaseserver.repository.forum.ReplyRepository;
 import com.forgqi.resourcebaseserver.service.ForumService;
 import com.forgqi.resourcebaseserver.service.dto.ContentDTO;
@@ -15,10 +16,14 @@ import org.springframework.stereotype.Service;
 public class ReplyServiceImpl implements ForumService<Reply, ContentDTO, Long> {
     private final ReplyRepository replyRepository;
     private final PostServiceImpl postService;
+    private final CommentRepository commentRepository;
 
     @Override
     public Reply packageInstance(User user, ContentDTO content, Long attach) {
-        return content.convertToReply(user, new Comment(attach));
+        return commentRepository.findById(attach).map(comment -> {
+            postService.changeNumSize(comment.getPost().getId(), "CommentSize");
+            return content.convertToReply(user, comment);
+        }).get();
     }
 
     @Override

@@ -43,6 +43,8 @@ public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum<
     //拥有mappedBy注解的实体类为关系被维护端
     //mappedBy="post"中的post是comment中的post属性
     private List<Comment> commentList;//评论列表
+    private Integer commentSize = 0;
+
     private String subject;
     @Size(min = 2, max = 50)
     @Column(nullable = false, length = 50) // 映射为字段，值不能为空
@@ -62,6 +64,9 @@ public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum<
     private Integer downVote = 0;
     @Column(nullable = false)
     private Integer pv = 0;
+
+    @Version
+    private Long version;
 
     public Post() {
     }
