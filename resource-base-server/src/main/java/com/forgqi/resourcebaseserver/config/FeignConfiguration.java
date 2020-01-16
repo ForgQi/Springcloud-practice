@@ -26,7 +26,6 @@ public class FeignConfiguration {
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public HttpClient request(){
-        System.out.println("???????????????????");
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         return HttpClient.newBuilder()
@@ -37,12 +36,6 @@ public class FeignConfiguration {
                 .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
     }
-//    @Bean
-////    @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-//    public Client client(HttpClient httpClient) {
-//        System.out.println("?!!!!!!!!!!?");
-//        return new Http2Client(httpClient);
-//    }
 
     @Bean
     public Logger.Level logger() {
