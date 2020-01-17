@@ -24,8 +24,7 @@ import static com.forgqi.authenticationserver.entity.User.Type;
 
 @Entity
 @Table(indexes = {@Index(columnList = "user_name", unique = true)})
-@Getter
-@Setter
+@Getter @Setter
 public class User extends AbstractAuditingEntity implements UserDetails {
     private static final long serialVersionUID = -1205293048576328829L;
 

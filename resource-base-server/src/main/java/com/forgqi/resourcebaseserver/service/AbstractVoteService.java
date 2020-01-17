@@ -6,8 +6,10 @@ import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.entity.forum.IVoteEntity;
 import com.forgqi.resourcebaseserver.entity.forum.Vote;
 import com.forgqi.resourcebaseserver.repository.VoteRepository;
+import org.hibernate.StaleStateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -30,6 +32,7 @@ public abstract class AbstractVoteService<R extends IVoteEntity> {
         voteRepository.save(new Vote(type, id, user, state));
     }
 
+    @Retryable(StaleStateException.class)
     @Transactional
     // 枚举使用==判断相同，其重写的equals也是这么判断的
     public Optional<R> vote(Long id, String voteState) {

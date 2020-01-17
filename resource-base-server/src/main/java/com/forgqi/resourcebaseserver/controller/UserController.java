@@ -1,14 +1,17 @@
 package com.forgqi.resourcebaseserver.controller;
 
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
+import com.forgqi.resourcebaseserver.entity.Advise;
 import com.forgqi.resourcebaseserver.entity.Notice;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Vote;
+import com.forgqi.resourcebaseserver.repository.AdviseRepository;
 import com.forgqi.resourcebaseserver.repository.NoticeRepository;
 import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.repository.VoteRepository;
 import com.forgqi.resourcebaseserver.service.UserService;
 import com.forgqi.resourcebaseserver.service.dto.Editable;
+import com.forgqi.resourcebaseserver.service.dto.IUserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,9 +30,10 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final NoticeRepository noticeRepository;
+    private final AdviseRepository adviseRepository;
     private final UserRepository userRepository;
     private final VoteRepository voteRepository;
+    private final NoticeRepository noticeRepository;
 
     @PutMapping(value = "/editable")
     public Optional<User> change(Editable editable) {
@@ -37,10 +41,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
-//    public String home(@RequestParam(value = "name", defaultValue = "World") String name)
     public User role(@PathVariable Long id, @RequestBody List<String> sysRoles) {
-//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication() .getPrincipal();
-//        String name = userDetails.getUsername();
         return userService.reloadUserFromSecurityContext(id, sysRoles);
     }
 
@@ -55,20 +56,36 @@ public class UserController {
                 .flatMap(user -> voteRepository.findByUserId(user.getId(), pageable));
     }
 
+    @GetMapping(value = "/Notification")
+    public Page<Notice> getNotification(
+            @RequestBody List<String> registrationTokens,
+            @RequestParam(defaultValue = "")String notificationChannel,
+            @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        if (!notificationChannel.isBlank()){
+            return noticeRepository.findAllByNotificationChannel(notificationChannel, pageable);
+        }
+        return noticeRepository.findAllByRegistrationTokensIn(registrationTokens, pageable);
+    }
+
+    @PostMapping(value = "/Notification")
+    public Notice pushNotification(@RequestBody Notice notice) {
+        return noticeRepository.save(notice);
+    }
+
     @GetMapping(value = "/profile")
-    public Optional<User> getProfile() {
-        return userService.findUserBySecurityContextFormRepository();
+    public Optional<IUserDTO> getProfile() {
+        return UserHelper.getUserBySecurityContext().flatMap(user -> userRepository.findUserById(user.getId()));
     }
 
     @GetMapping(value = "/notice")
     @Cacheable(cacheNames = {"notice"}, key = "'notify'")
-    public Optional<Notice> getNotice() {
-        return noticeRepository.findFirstByOrderByIdDesc();
+    public Optional<Advise> getNotice() {
+        return adviseRepository.findFirstByOrderByIdDesc();
     }
 
-    @CacheEvict(cacheNames = {"notice"}, key = "'notify'")
     @PostMapping(value = "/notice")
-    public Notice pushNotice(@RequestBody Notice notice) {
-        return noticeRepository.save(notice);
+    @CacheEvict(cacheNames = {"notice"}, key = "'notify'")
+    public Advise pushNotice(@RequestBody Advise advise) {
+        return adviseRepository.save(advise);
     }
 }

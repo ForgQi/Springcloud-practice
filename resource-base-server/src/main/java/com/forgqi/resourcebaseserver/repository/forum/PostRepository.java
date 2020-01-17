@@ -7,8 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.history.RevisionRepository;
 
+import java.util.Collection;
+import java.util.List;
+
 public interface PostRepository extends RevisionRepository<Post, Long, Integer>, JpaRepository<Post, Long> {
     Page<IPostDTO> findBySubjectEqualsAndSticky(String subject, boolean sticky, Pageable pageable);
 
     Page<IPostDTO> findAllBySticky(boolean sticky, Pageable pageable);
+
+    Page<IPostDTO> findByImageUrlIn(List<String> imageUrl, Pageable pageable);
 }

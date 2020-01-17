@@ -58,11 +58,6 @@ public class UserService {
 
     }
 
-    public Optional<User> findUserBySecurityContextFormRepository() {
-        return UserHelper.getUserBySecurityContext()
-                .flatMap(user -> userRepository.findById(user.getId()));
-    }
-
     public User reloadUserFromSecurityContext(Long id, List<String> sysRoles) {
 
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("用户不存在"));

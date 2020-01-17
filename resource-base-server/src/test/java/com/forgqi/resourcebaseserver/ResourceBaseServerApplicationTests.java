@@ -3,6 +3,7 @@ package com.forgqi.resourcebaseserver;
 import com.forgqi.resourcebaseserver.common.Voted;
 import com.forgqi.resourcebaseserver.common.errors.InvalidPasswordException;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
+import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
 import com.forgqi.resourcebaseserver.service.impl.PostServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -42,6 +45,9 @@ public class ResourceBaseServerApplicationTests {
 
     @Autowired
     PostRepository postRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     PostServiceImpl postService;
@@ -84,7 +90,14 @@ public class ResourceBaseServerApplicationTests {
     public void retryTest() throws InterruptedException {
         retry();
         postService.changeNumSize(5L, null);
-
         Thread.sleep(5000);
+    }
+
+    @Test
+    public void postRepositoryTest() {
+        log.info("oh,no!");
+        postRepository.findByImageUrlIn(Arrays.asList("123", "12"), Pageable.unpaged())
+                .forEach(iPostDTO -> System.out.println(iPostDTO.getId()));
+        userRepository.findUserById(320160936051L).ifPresent(iUserDTO -> System.out.println(iUserDTO.isEnabled()));
     }
 }

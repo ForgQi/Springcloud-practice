@@ -1,26 +1,33 @@
 package com.forgqi.resourcebaseserver.entity;
 
-import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 
+@Getter @Setter
 @Entity
-@Data
-@EntityListeners(AuditingEntityListener.class)
-public class Notice {
+public class Notice extends AbstractAuditingEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
     @Column(nullable = false)
     private Long id;
 
-    @CreatedDate
-    @Column(name = "created_date", updatable = false, nullable = false)
-    private Instant createdDate;
+    @ElementCollection
+    private List<String> registrationTokens;
 
-    private String msg;
+    private Notification notification;
 
-    private String url;
+    private String notificationChannel;
+
+    @Column(name = "is_read")
+    private boolean read = false;
+
+    @ElementCollection
+    @Column(name = "options")
+    private Map<String, String> option;
 }
