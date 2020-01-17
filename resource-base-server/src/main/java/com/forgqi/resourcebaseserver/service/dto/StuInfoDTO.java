@@ -1,10 +1,12 @@
 package com.forgqi.resourcebaseserver.service.dto;
 
 import com.forgqi.resourcebaseserver.entity.User;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 @Data
+@Builder
 public class StuInfoDTO {
     private Long id;
     private String name;

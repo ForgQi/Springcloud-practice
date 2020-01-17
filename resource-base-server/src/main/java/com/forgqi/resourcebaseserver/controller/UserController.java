@@ -67,6 +67,19 @@ public class UserController {
         return noticeRepository.findAllByRegistrationTokensIn(registrationTokens, pageable);
     }
 
+    @GetMapping(value = "/Notification/{id}")
+    public Optional<Notice> findNotification(@PathVariable Long id) {
+        return noticeRepository.findById(id).map(notice -> {
+            notice.setRead(true);
+            return noticeRepository.save(notice);
+        });
+    }
+
+    @DeleteMapping(value = "/Notification/{id}")
+    public void deleteNotification(@PathVariable Long id) {
+        noticeRepository.deleteById(id);
+    }
+
     @PostMapping(value = "/Notification")
     public Notice pushNotification(@RequestBody Notice notice) {
         return noticeRepository.save(notice);
