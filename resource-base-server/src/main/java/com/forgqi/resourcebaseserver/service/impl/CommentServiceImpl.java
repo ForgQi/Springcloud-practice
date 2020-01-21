@@ -20,8 +20,8 @@ public class CommentServiceImpl extends AbstractVoteService<Comment> implements 
 
     @Override
     public Comment packageInstance(User user, ContentDTO content, Long attach) {
-        postService.changeNumSize(attach, "CommentSize");
-        return content.convertToComment(user, new Post(attach));
+        // version仅用来解决Not-null property references a transient value，不会改变version值
+        return content.convertToComment(user, new Post(attach, 0L));
     }
 
     public boolean decide(User user, Long resourceId) {

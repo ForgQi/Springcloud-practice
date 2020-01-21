@@ -74,4 +74,9 @@ public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum<
     public Post(Long id) {
         this.id = id;
     }
+
+    public Post(Long id, Long version) {
+        this.id = id;
+        this.version = version;
+    }
 }

@@ -20,10 +20,7 @@ public class ReplyServiceImpl implements ForumService<Reply, ContentDTO, Long> {
 
     @Override
     public Reply packageInstance(User user, ContentDTO content, Long attach) {
-        return commentRepository.findById(attach).map(comment -> {
-            postService.changeNumSize(comment.getPost().getId(), "CommentSize");
-            return content.convertToReply(user, comment);
-        }).get();
+        return content.convertToReply(user, new Comment(attach));
     }
 
     @Override

@@ -81,7 +81,7 @@ public class ResourceBaseServerApplicationTests {
             postRepository.findById(5L).ifPresent(post -> {
                 post.setCommentSize(80);
                 Post save = postRepository.save(post);
-                log.info("yes"+save.getVersion());
+//                log.info("yes"+save.getVersion());
             });
         }).start();
     }

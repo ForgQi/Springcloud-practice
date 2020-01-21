@@ -9,6 +9,7 @@ import com.forgqi.resourcebaseserver.repository.AdviseRepository;
 import com.forgqi.resourcebaseserver.repository.NoticeRepository;
 import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.repository.VoteRepository;
+import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
 import com.forgqi.resourcebaseserver.service.UserService;
 import com.forgqi.resourcebaseserver.service.dto.Editable;
 import com.forgqi.resourcebaseserver.service.dto.IUserDTO;
@@ -34,6 +35,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final VoteRepository voteRepository;
     private final NoticeRepository noticeRepository;
+    private final PostRepository postRepository;
 
     @PutMapping(value = "/editable")
     public Optional<User> change(Editable editable) {
@@ -45,9 +47,16 @@ public class UserController {
         return userService.reloadUserFromSecurityContext(id, sysRoles);
     }
 
-    @GetMapping(value = "/users/{id}")
-    public Optional<User> getUser(@PathVariable Long id) {
-        return userRepository.findById(id);
+    @GetMapping(value = "/users/{id}/{category}")
+    public Optional<?> getUser(@PathVariable Long id,
+                                  @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                  @PathVariable(required = false) String category) {
+        if (category == null){
+            return userRepository.findById(id);
+        }else if ("posts".equals(category)){
+            return postRepository.getAllByUserId(id, pageable);
+        }
+        return Optional.empty();
     }
 
     @GetMapping(value = "/users/votes")

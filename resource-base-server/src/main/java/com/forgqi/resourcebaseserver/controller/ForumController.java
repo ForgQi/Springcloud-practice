@@ -3,6 +3,7 @@ package com.forgqi.resourcebaseserver.controller;
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
 import com.forgqi.resourcebaseserver.entity.forum.Reply;
+import com.forgqi.resourcebaseserver.repository.forum.CommentRepository;
 import com.forgqi.resourcebaseserver.service.AbstractVoteService;
 import com.forgqi.resourcebaseserver.service.ForumService;
 import com.forgqi.resourcebaseserver.service.dto.ContentDTO;
@@ -29,6 +30,7 @@ public class ForumController {
     private final PostServiceImpl postService;
     private final CommentServiceImpl commentService;
     private final ReplyServiceImpl replyService;
+    private final CommentRepository commentRepository;
 
     @PostMapping(value = "/posts/subjects/{subject}")
     public Optional<Post> push(@RequestBody RichTextDTO richTextDTO, @PathVariable String subject) {
@@ -37,12 +39,16 @@ public class ForumController {
 
     @PostMapping(value = "/posts/{postId}/comments")
     public Optional<Comment> comment(@RequestBody ContentDTO contentDTO, @PathVariable Long postId) {
-        return commentService.save(contentDTO, postId);
+        Optional<Comment> save = commentService.save(contentDTO, postId);
+        postService.changeNumSize(postId, "CommentSize");
+        return save;
     }
 
     @PostMapping(value = "/comments/{commentId}/replies")
     public Optional<Reply> reply(@RequestBody ContentDTO contentDTO, @PathVariable Long commentId) {
-        return replyService.save(contentDTO, commentId);
+        Optional<Reply> save = replyService.save(contentDTO, commentId);
+        commentRepository.findById(commentId).ifPresent(comment -> postService.changeNumSize(comment.getPost().getId(), "CommentSize"));
+        return save;
     }
 
     @PutMapping(value = "/{service}/{id}/{state:up|down}")
