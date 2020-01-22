@@ -47,7 +47,7 @@ public class UserController {
         return userService.reloadUserFromSecurityContext(id, sysRoles);
     }
 
-    @GetMapping(value = "/users/{id}/{category}")
+    @GetMapping(value = {"/users/{id}", "/users/{id}/{category}"})
     public Optional<?> getUser(@PathVariable Long id,
                                   @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable,
                                   @PathVariable(required = false) String category) {
