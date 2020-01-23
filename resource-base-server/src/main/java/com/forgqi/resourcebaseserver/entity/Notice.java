@@ -30,4 +30,7 @@ public class Notice extends AbstractAuditingEntity {
     @ElementCollection
     @Column(name = "options")
     private Map<String, String> option;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    private User originalSourceUser;
 }

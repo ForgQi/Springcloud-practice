@@ -7,7 +7,6 @@ import com.forgqi.resourcebaseserver.repository.forum.CommentRepository;
 import com.forgqi.resourcebaseserver.service.AbstractVoteService;
 import com.forgqi.resourcebaseserver.service.ForumService;
 import com.forgqi.resourcebaseserver.service.dto.ContentDTO;
-import com.forgqi.resourcebaseserver.service.dto.RichTextDTO;
 import com.forgqi.resourcebaseserver.service.impl.CommentServiceImpl;
 import com.forgqi.resourcebaseserver.service.impl.PostServiceImpl;
 import com.forgqi.resourcebaseserver.service.impl.ReplyServiceImpl;
@@ -25,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 public class ForumController {
 
-    private final Map<String, ForumService<?, ?, ?>> forumServiceMap;
+    private final Map<String, ForumService<?>> forumServiceMap;
     private final Map<String, AbstractVoteService<?>> voteServiceMap;
     private final PostServiceImpl postService;
     private final CommentServiceImpl commentService;
@@ -33,20 +32,21 @@ public class ForumController {
     private final CommentRepository commentRepository;
 
     @PostMapping(value = "/posts/subjects/{subject}")
-    public Optional<Post> push(@RequestBody RichTextDTO richTextDTO, @PathVariable String subject) {
-        return postService.save(richTextDTO, subject);
+    public Post push(@RequestBody ContentDTO richTextDTO, @PathVariable String subject) {
+        return postService.save(richTextDTO.convertToPost(subject));
     }
 
     @PostMapping(value = "/posts/{postId}/comments")
-    public Optional<Comment> comment(@RequestBody ContentDTO contentDTO, @PathVariable Long postId) {
-        Optional<Comment> save = commentService.save(contentDTO, postId);
+    public Comment comment(@RequestBody ContentDTO contentDTO, @PathVariable Long postId) {
+        Comment save = commentService.save(contentDTO.convertToComment(new Post(postId, 0L)));
         postService.changeNumSize(postId, "CommentSize");
         return save;
     }
 
     @PostMapping(value = "/comments/{commentId}/replies")
-    public Optional<Reply> reply(@RequestBody ContentDTO contentDTO, @PathVariable Long commentId) {
-        Optional<Reply> save = replyService.save(contentDTO, commentId);
+    public Reply reply(@RequestBody ContentDTO contentDTO, @PathVariable Long commentId) {
+        // version仅用来解决Not-null property references a transient value，不会改变version值
+        Reply save = replyService.save(contentDTO.convertToReply(new Comment(commentId, 0L)));
         commentRepository.findById(commentId).ifPresent(comment -> postService.changeNumSize(comment.getPost().getId(), "CommentSize"));
         return save;
     }

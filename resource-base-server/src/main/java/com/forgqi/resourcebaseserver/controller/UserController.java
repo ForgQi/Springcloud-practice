@@ -68,12 +68,13 @@ public class UserController {
     @GetMapping(value = "/Notification")
     public Page<Notice> getNotification(
             @RequestParam List<String> registrationTokens,
-            @RequestParam(defaultValue = "")String notificationChannel,
+            @RequestParam List<String> notificationChannel,
+            Long userId,
             @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        if (!notificationChannel.isBlank()){
-            return noticeRepository.findAllByNotificationChannel(notificationChannel, pageable);
+        if (userId != null){
+            return noticeRepository.findAllByOriginalSourceUserId(userId, pageable);
         }
-        return noticeRepository.findAllByRegistrationTokensIn(registrationTokens, pageable);
+        return noticeRepository.findDistinctByRegistrationTokensInAndNotificationChannelIn(registrationTokens, notificationChannel, pageable);
     }
 
     @GetMapping(value = "/Notification/{id}")

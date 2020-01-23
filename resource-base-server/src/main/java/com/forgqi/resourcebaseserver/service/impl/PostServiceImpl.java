@@ -6,7 +6,6 @@ import com.forgqi.resourcebaseserver.entity.forum.Post;
 import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
 import com.forgqi.resourcebaseserver.service.AbstractVoteService;
 import com.forgqi.resourcebaseserver.service.ForumService;
-import com.forgqi.resourcebaseserver.service.dto.RichTextDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.StaleStateException;
@@ -15,21 +14,18 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StreamUtils;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service("postsService")
 @RequiredArgsConstructor
-public class PostServiceImpl extends AbstractVoteService<Post> implements ForumService<Post, RichTextDTO, String> {
+public class PostServiceImpl extends AbstractVoteService<Post> implements ForumService<Post> {
     private final PostRepository postRepository;
 
-    @Override
-    public Post packageInstance(User user, RichTextDTO content, String attach) {
-        return content.convertToPost(user, attach);
+    public boolean decide(User user, Long resourceId) {
+        return postRepository.findById(resourceId).map(post -> post.getUser().getId() == user.getId() ||
+                user.getAuthorities().stream().anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()))).get();
     }
 
     @Override
@@ -40,11 +36,6 @@ public class PostServiceImpl extends AbstractVoteService<Post> implements ForumS
     @Override
     public CrudRepository<Post, Long> getRepository() {
         return postRepository;
-    }
-
-    public boolean decide(User user, Long resourceId) {
-        return postRepository.findById(resourceId).map(post -> post.getUser().getId() == user.getId() ||
-                user.getAuthorities().stream().anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()))).get();
     }
 
     @Transactional
