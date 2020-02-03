@@ -80,7 +80,7 @@ public class BrowseController {
 
     @PostMapping(value = "/registry")
     public User register(String type) {
-        UsrPswDTO usrPswDTO = (UsrPswDTO)ThreadLocalUtil.get();
+        UsrPswDTO usrPswDTO = ThreadLocalUtil.get();
         return userService.registerUser(usrPswDTO, type);
     }
 

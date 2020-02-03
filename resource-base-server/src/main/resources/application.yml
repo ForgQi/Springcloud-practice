@@ -64,6 +64,7 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB # 上传文件最大为 10M （默认值 1M 根据自身业务自行控制即可）
+
 server:
   #端口号
   port: 8080

@@ -65,9 +65,6 @@ public class UserService {
                 .map(sysRoleRepository::findFirstByRole)
                 .collect(Collectors.toList());
 
-        UserHelper.reloadUserFromSecurityContext(principal -> principal.setRoles(roles.stream()
-                .map(role -> new com.forgqi.authenticationserver.entity.SysRole(role.getId(), role.getRole()))
-                .collect(Collectors.toList())), id);
         user.setRoles(roles);
         return userRepository.save(user);
     }
@@ -84,7 +81,6 @@ public class UserService {
             if (editable.getIndividualSignature() != null) {
                 user.setSignature(editable.getIndividualSignature());
             }
-            UserHelper.reloadUserFromSecurityContext(user1 -> BeanUtils.copyProperties(user, user1, "roles"));
             return userRepository.save(user);
         });
     }

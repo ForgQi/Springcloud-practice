@@ -67,8 +67,8 @@ public class UserController {
 
     @GetMapping(value = "/Notification")
     public Page<Notice> getNotification(
-            @RequestParam List<String> registrationTokens,
-            @RequestParam List<String> notificationChannel,
+            @RequestParam(required = false) List<String> registrationTokens,
+            @RequestParam(required = false) List<String> notificationChannel,
             Long userId,
             @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
         if (userId != null){

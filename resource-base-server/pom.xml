@@ -21,6 +21,7 @@
         <feign-java11.version>10.5.0</feign-java11.version>
         <javassist.version>3.26.0-GA</javassist.version> <!--要匹配org.hibernate版本-->
         <logstash-logback-encoder.version>6.2</logstash-logback-encoder.version>
+        <oauth2-oidc-sdk.version>6.14</oauth2-oidc-sdk.version>
         <!--        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>-->
     </properties>
 
@@ -114,13 +115,35 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ForgQi</groupId>
-            <artifactId>common</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>oauth2-oidc-sdk</artifactId>
+            <version>${oauth2-oidc-sdk.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-oauth2</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.ForgQi</groupId>-->
+<!--            <artifactId>common</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
@@ -155,6 +178,7 @@
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
+
     </dependencies>
 
     <!--    <dependencyManagement>-->
@@ -178,4 +202,18 @@
         </plugins>
     </build>
 
+<!--    <repositories>&lt;!&ndash; 代码库 &ndash;&gt;-->
+<!--        <repository>-->
+<!--            <id>maven-ali</id>-->
+<!--            <url>http://maven.aliyun.com/nexus/content/groups/public//</url>;-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--            <snapshots>-->
+<!--                <enabled>true</enabled>-->
+<!--                <updatePolicy>always</updatePolicy>-->
+<!--                <checksumPolicy>fail</checksumPolicy>-->
+<!--            </snapshots>-->
+<!--        </repository>-->
+<!--    </repositories>-->
 </project>

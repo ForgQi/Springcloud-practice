@@ -1,8 +1,8 @@
 package com.forgqi.resourcebaseserver.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.forgqi.authenticationserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.SysRole;
+import com.forgqi.resourcebaseserver.entity.User;
 import lombok.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

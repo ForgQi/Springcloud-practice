@@ -8,6 +8,16 @@ spring:
         event:
           merge:
             entity_copy_observer: allow
+
+  security:
+    oauth2:
+      resourceserver:
+        opaque-token:
+          client-id: Lzu
+          client-secret: 196460cfce2638a2529568978b068340b9adb02e447be36378e8c13e8030880a
+          introspection-uri: http://localhost:8081/oauth/check_token
+
 logging:
   level:
     com.forgqi.resourcebaseserver.client: debug
+#    org.springframework.security: debug

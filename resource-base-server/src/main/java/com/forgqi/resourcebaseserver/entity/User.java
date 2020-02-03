@@ -8,24 +8,25 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.forgqi.authenticationserver.entity.User.Type;
 
 @Entity
 @Table(indexes = {@Index(columnList = "user_name", unique = true)})
 @Getter @Setter
-public class User extends AbstractAuditingEntity implements UserDetails {
+public class User extends AbstractAuditingEntity implements UserDetails, OAuth2User {
     private static final long serialVersionUID = -1205293048576328829L;
 
     // 最小值为1可以取到1
@@ -66,6 +67,9 @@ public class User extends AbstractAuditingEntity implements UserDetails {
     @NotAudited
     private List<SysRole> roles = Collections.emptyList();
 
+    @Transient
+    private Map<String, Object> attributes;
+
     public User() {
     }
 
@@ -77,6 +81,12 @@ public class User extends AbstractAuditingEntity implements UserDetails {
 
     public String getUserName() {
         return userName;
+    }
+
+    @Override
+    @JsonIgnore
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
     @Override
@@ -107,4 +117,8 @@ public class User extends AbstractAuditingEntity implements UserDetails {
         return true;
     }
 
+    public enum Type {
+        STUDENT,
+        GRADUATE;
+    }
 }

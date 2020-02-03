@@ -1,11 +1,8 @@
 package com.forgqi.resourcebaseserver.service.client;
 
-import com.forgqi.authenticationserver.entity.User.Type;
 import com.forgqi.resourcebaseserver.client.parse.GmsParse;
 import com.forgqi.resourcebaseserver.entity.User;
-import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
-import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +27,7 @@ public class GmsService {
     public User saveStuInfo(){
         User user = gmsParse.getStuInfo();
 //            userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> user.setCreatedDate(u.getCreatedDate()));
-        user.setType(Type.GRADUATE);
+        user.setType(User.Type.GRADUATE);
         return user;
     }
 
