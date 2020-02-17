@@ -15,7 +15,7 @@ public class YjsxgService {
     private final HttpClient httpClient;
 
     public List<HttpCookie> getCookie() {
-        return ((CookieManager)httpClient.cookieHandler().orElseThrow())
+        return ((CookieManager) httpClient.cookieHandler().orElseThrow())
                 .getCookieStore().get(URI.create("http://zhxg.lzu.edu.cn/"));
     }
 }

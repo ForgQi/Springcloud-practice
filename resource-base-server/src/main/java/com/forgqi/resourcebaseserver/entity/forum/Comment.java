@@ -58,6 +58,7 @@ public class Comment extends AbstractAuditingEntity implements IVoteEntity, IFor
     public Comment(Long id) {
         this.id = id;
     }
+
     public Comment(Long id, Long version) {
         this.id = id;
         this.version = version;

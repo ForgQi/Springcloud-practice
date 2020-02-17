@@ -1,10 +1,8 @@
 package com.forgqi.resourcebaseserver.common;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forgqi.resourcebaseserver.client.LoginFeignClient;
 import com.forgqi.resourcebaseserver.client.parse.ParseUtil;
-import com.forgqi.resourcebaseserver.common.errors.InvalidPasswordException;
 import com.forgqi.resourcebaseserver.common.util.ApplicationContextHelper;
 import com.forgqi.resourcebaseserver.common.util.ThreadLocalUtil;
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static net.logstash.logback.marker.Markers.append;
 
@@ -43,7 +40,7 @@ public class RegisterInterceptor extends HandlerInterceptorAdapter {
                 try {
                     response.sendError(400, "Incorrect password");
                 } catch (IOException e) {
-                    log.error("RegisterInterceptor,IOException",e);
+                    log.error("RegisterInterceptor,IOException", e);
                 }
                 return false;
             }

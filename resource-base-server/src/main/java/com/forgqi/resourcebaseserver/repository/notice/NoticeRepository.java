@@ -1,15 +1,12 @@
-package com.forgqi.resourcebaseserver.repository;
+package com.forgqi.resourcebaseserver.repository.notice;
 
-import com.forgqi.resourcebaseserver.entity.Notice;
-import com.forgqi.resourcebaseserver.service.dto.IPostDTO;
+import com.forgqi.resourcebaseserver.entity.Notice.Notice;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.validation.constraints.Min;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
     Page<Notice> findAllByRegistrationTokensIn(List<String> registrationTokens, Pageable pageable);

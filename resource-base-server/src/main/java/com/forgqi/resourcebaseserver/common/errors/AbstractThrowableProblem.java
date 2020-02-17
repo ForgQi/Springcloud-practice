@@ -34,6 +34,10 @@ public abstract class AbstractThrowableProblem extends RuntimeException {
         this.errorCode = errorCode;
     }
 
+    public AbstractThrowableProblem(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     int getHttpStatusCode() {
         return httpStatus.value();
     }

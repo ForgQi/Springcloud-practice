@@ -40,5 +40,5 @@ spring:
   cloud:
     consul:
       discovery:
-#        给actuator认证用的，对consul的检查无效
+        #        给actuator认证用的，对consul的检查无效
         tags: user.name=${spring.security.user.name}, user.password=${spring.security.user.password}

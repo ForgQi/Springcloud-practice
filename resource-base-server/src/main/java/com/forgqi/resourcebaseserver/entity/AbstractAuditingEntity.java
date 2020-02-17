@@ -1,5 +1,6 @@
 package com.forgqi.resourcebaseserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     @CreatedDate
     @Column(name = "created_date", updatable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Instant createdDate = Instant.now();
 
     @LastModifiedDate

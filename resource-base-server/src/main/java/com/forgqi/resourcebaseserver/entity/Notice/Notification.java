@@ -1,4 +1,4 @@
-package com.forgqi.resourcebaseserver.entity;
+package com.forgqi.resourcebaseserver.entity.Notice;
 
 
 import lombok.Data;
@@ -22,8 +22,9 @@ public class Notification {
     private ClickAction clickAction;
 
     @Embeddable
-    @Getter @Setter
-    static class ClickAction{
+    @Getter
+    @Setter
+    public static class ClickAction {
         private String url;
         private String intent;
     }

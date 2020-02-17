@@ -16,7 +16,22 @@ spring:
           client-id: Lzu
           client-secret: 196460cfce2638a2529568978b068340b9adb02e447be36378e8c13e8030880a
           introspection-uri: http://localhost:8081/oauth/check_token
-
+      client:
+        registration:
+          opaque-token:
+            provider: opaque-token
+            client-id: Lzu
+            client-secret: 196460cfce2638a2529568978b068340b9adb02e447be36378e8c13e8030880a
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          opaque-token:
+            authorization-uri: http://127.0.0.1:8081/oauth/authorize
+            token-uri: http://127.0.0.1:8081/oauth/token
+            user-info-uri: http://localhost:8080/v1/profile
+            user-name-attribute: id
+storage:
+  location: resource-base-server\target\classes\static\upload
 logging:
   level:
     com.forgqi.resourcebaseserver.client: debug

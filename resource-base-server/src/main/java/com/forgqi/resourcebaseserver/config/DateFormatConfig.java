@@ -26,6 +26,7 @@ public class DateFormatConfig extends JsonSerializer<Instant> {
     }
 
 }
+
 //@JsonComponent
 //public class DateFormatConfig {
 //    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");

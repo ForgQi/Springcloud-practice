@@ -3,8 +3,7 @@ package com.forgqi.resourcebaseserver.common.util;
 import com.forgqi.resourcebaseserver.client.parse.SsoParse;
 import com.forgqi.resourcebaseserver.common.errors.OperationException;
 import com.forgqi.resourcebaseserver.entity.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,8 +15,8 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class UserHelper {
-    private final static Logger log = LoggerFactory.getLogger(UserHelper.class);
     private final static
     TextEncryptor textEncryptor = Encryptors.text("lzu", "deadbeef");
 
@@ -25,7 +24,12 @@ public class UserHelper {
 
     public static Optional<User> getUserBySecurityContext() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication()).map(authentication -> (User) authentication.getPrincipal());
+        return Optional.ofNullable(securityContext.getAuthentication()).map(authentication -> {
+            if ("anonymousUser".equals(authentication.getPrincipal())) {
+                return null;
+            }
+            return (User) authentication.getPrincipal();
+        });
 //                .map(principal -> {
 //                    User user = new User();
 //                    BeanUtils.copyProperties(principal, user);
@@ -34,6 +38,11 @@ public class UserHelper {
 //                            .collect(Collectors.toUnmodifiableList()));
 //                    return user;
 //                });
+    }
+
+    public static long getUserIdBySecurityContext() {
+        return getUserBySecurityContext()
+                .map(User::getId).get();
     }
 
     public static Optional<Map<String, String>> getUserLoginMap() {

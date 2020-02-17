@@ -1,11 +1,8 @@
 package com.forgqi.resourcebaseserver.service.client;
 
-import com.forgqi.resourcebaseserver.client.JwkFeignClient;
 import com.forgqi.resourcebaseserver.client.parse.JwkParse;
 import com.forgqi.resourcebaseserver.entity.User;
-import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
-import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +29,7 @@ public class JwkService {
     }
 
     public List<HttpCookie> getCookie() {
-        return ((CookieManager)httpClient.cookieHandler().orElseThrow())
+        return ((CookieManager) httpClient.cookieHandler().orElseThrow())
                 .getCookieStore().get(URI.create("http://jwk.lzu.edu.cn/"));
 //        return cookieManager.getCookieStore().get(URI.create("http://jwk.lzu.edu.cn/"))
 //                .stream().filter(httpCookie -> "JSESSIONID".equals(httpCookie.getName()))

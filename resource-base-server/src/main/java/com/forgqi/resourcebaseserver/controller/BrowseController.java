@@ -17,7 +17,6 @@ import com.forgqi.resourcebaseserver.repository.studymode.WeekRepository;
 import com.forgqi.resourcebaseserver.service.StudyModeService;
 import com.forgqi.resourcebaseserver.service.UserService;
 import com.forgqi.resourcebaseserver.service.dto.IPostDTO;
-import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
 import com.forgqi.resourcebaseserver.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -79,15 +77,14 @@ public class BrowseController {
     }
 
     @PostMapping(value = "/registry")
-    public User register(String type) {
-        UsrPswDTO usrPswDTO = ThreadLocalUtil.get();
-        return userService.registerUser(usrPswDTO, type);
+    public User register(@RequestParam(defaultValue = "") String type) {
+        return userService.registerUser(ThreadLocalUtil.get(), type);
     }
 
     @GetMapping(value = {"/posts/subjects/{subject}", "/posts/subjects"})
     public Page<IPostDTO> getPage(@PathVariable(required = false) String subject,
                                   @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable,
-                                  @RequestParam(required = false, defaultValue = "false")Boolean sticky) {
+                                  @RequestParam(required = false, defaultValue = "false") Boolean sticky) {
         if (subject == null) {
             return postRepository.findAllBySticky(sticky, pageable);
         }

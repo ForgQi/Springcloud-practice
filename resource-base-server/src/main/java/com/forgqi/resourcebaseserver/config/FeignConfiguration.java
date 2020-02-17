@@ -1,8 +1,6 @@
 package com.forgqi.resourcebaseserver.config;
 
-import feign.Client;
 import feign.Logger;
-import feign.http2client.Http2Client;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +23,7 @@ public class FeignConfiguration {
      */
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public HttpClient request(){
+    public HttpClient request() {
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         return HttpClient.newBuilder()

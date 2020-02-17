@@ -1,22 +1,12 @@
 package com.forgqi.resourcebaseserver.client;
 
 import com.forgqi.resourcebaseserver.client.parse.Config;
-import feign.Client;
 import feign.Response;
-import feign.codec.Encoder;
-import feign.form.spring.SpringFormEncoder;
-import feign.http2client.Http2Client;
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.cloud.openfeign.support.SpringEncoder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.net.http.HttpClient;
 import java.util.Map;
 
 // 在使用url属性时，在老版本的Spring Cloud中，不需要提供name属性，

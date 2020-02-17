@@ -24,7 +24,7 @@ public class GmsService {
      * @return 用户信息
      */
     @Transactional
-    public User saveStuInfo(){
+    public User saveStuInfo() {
         User user = gmsParse.getStuInfo();
 //            userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> user.setCreatedDate(u.getCreatedDate()));
         user.setType(User.Type.GRADUATE);
@@ -32,7 +32,7 @@ public class GmsService {
     }
 
     public List<HttpCookie> getCookie() {
-        return ((CookieManager)httpClient.cookieHandler().orElseThrow())
+        return ((CookieManager) httpClient.cookieHandler().orElseThrow())
                 .getCookieStore().get(URI.create("http://gms.lzu.edu.cn/"));
     }
 

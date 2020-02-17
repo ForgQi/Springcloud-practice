@@ -1,4 +1,4 @@
-package com.forgqi.resourcebaseserver.entity;
+package com.forgqi.resourcebaseserver.entity.Notice;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;

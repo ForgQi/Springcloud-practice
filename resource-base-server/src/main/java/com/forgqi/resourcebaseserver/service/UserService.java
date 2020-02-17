@@ -14,7 +14,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -38,12 +37,15 @@ public class UserService {
         this.jwkService = jwkService;
     }
 
-    public User registerUser(UsrPswDTO usrPswDTO, String type){
+    public User registerUser(UsrPswDTO usrPswDTO, String type) {
         User user;
         if ("graduate".equals(type)) {
             user = gmsService.saveStuInfo();
+        } else if (type.isEmpty()) {
+            user = jwkService.saveStuInfo();
         } else {
             user = jwkService.saveStuInfo();
+            user.setType(User.Type.valueOf(type.toUpperCase()));
         }
         User temporaryUser = new User();
         userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> BeanUtils.copyProperties(u, temporaryUser));

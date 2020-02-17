@@ -4,7 +4,6 @@ import com.forgqi.resourcebaseserver.common.util.ParseUtil;
 import com.forgqi.resourcebaseserver.entity.studymode.PersonalData;
 import com.forgqi.resourcebaseserver.entity.studymode.StudyMode;
 import com.forgqi.resourcebaseserver.repository.studymode.PersonalDataRepository;
-import com.forgqi.resourcebaseserver.repository.studymode.StudyModeRepository;
 import com.forgqi.resourcebaseserver.service.StudyModeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -58,3 +57,4 @@ public class OtherController {
         return personalDataRepository.findById(id);
     }
 }
+

@@ -1,6 +1,6 @@
-package com.forgqi.resourcebaseserver.repository;
+package com.forgqi.resourcebaseserver.repository.notice;
 
-import com.forgqi.resourcebaseserver.entity.Advise;
+import com.forgqi.resourcebaseserver.entity.Notice.Advise;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

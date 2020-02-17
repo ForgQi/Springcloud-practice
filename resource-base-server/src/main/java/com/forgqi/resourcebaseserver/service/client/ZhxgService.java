@@ -1,6 +1,5 @@
 package com.forgqi.resourcebaseserver.service.client;
 
-import com.forgqi.resourcebaseserver.client.ZhxgFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ public class ZhxgService {
     private final HttpClient httpClient;
 
     public List<HttpCookie> getCookie() {
-        return ((CookieManager)httpClient.cookieHandler().orElseThrow())
+        return ((CookieManager) httpClient.cookieHandler().orElseThrow())
                 .getCookieStore().get(URI.create("http://zhxg.lzu.edu.cn/"));
 //        return cookieManager.getCookieStore().get(URI.create("http://zhxg.lzu.edu.cn/lzuyz/sys/sysindex/toIndex"))
 //                .stream().filter(httpCookie -> "JSESSIONID".equals(httpCookie.getName()))

@@ -7,32 +7,21 @@ import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
 import com.forgqi.resourcebaseserver.service.impl.PostServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.time.*;
-import java.util.*;
+import java.util.Arrays;
 
 import static java.time.temporal.TemporalAdjusters.previous;
 import static java.time.temporal.TemporalAdjusters.previousOrSame;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -76,7 +65,7 @@ public class ResourceBaseServerApplicationTests {
     }
 
     @Transactional
-    public void retry(){
+    public void retry() {
         new Thread(() -> {
             postRepository.findById(5L).ifPresent(post -> {
                 post.setCommentSize(80);

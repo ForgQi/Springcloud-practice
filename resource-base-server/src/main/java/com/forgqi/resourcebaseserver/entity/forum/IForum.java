@@ -16,7 +16,7 @@ public interface IForum<T> {
 
     void setImageUrl(T imageUrl);
 
-    default void setImgUrl(Object imageUrl){
+    default void setImgUrl(Object imageUrl) {
         setImageUrl(CastUtils.cast(imageUrl));
     }
 }

@@ -1,14 +1,16 @@
-package com.forgqi.resourcebaseserver.entity;
+package com.forgqi.resourcebaseserver.entity.Notice;
 
+import com.forgqi.resourcebaseserver.entity.AbstractAuditingEntity;
+import com.forgqi.resourcebaseserver.entity.User;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
 
-@Getter @Setter
+@Getter
+@Setter
 @Entity
 public class Notice extends AbstractAuditingEntity {
 

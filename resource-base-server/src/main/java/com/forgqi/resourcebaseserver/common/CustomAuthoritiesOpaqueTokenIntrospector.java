@@ -1,18 +1,13 @@
 package com.forgqi.resourcebaseserver.common;
 
 import com.forgqi.resourcebaseserver.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.server.resource.introspection.NimbusOpaqueTokenIntrospector;
 import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionClaimNames;
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
-import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -31,7 +26,7 @@ public class CustomAuthoritiesOpaqueTokenIntrospector implements OpaqueTokenIntr
             @Value("${spring.security.oauth2.resourceserver.opaque-token.client-secret}") String clientSecret,
             UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.delegate  =
+        this.delegate =
                 new NimbusOpaqueTokenIntrospector(introspectionUri, clientId, clientSecret);
 
     }

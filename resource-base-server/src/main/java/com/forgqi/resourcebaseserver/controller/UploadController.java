@@ -6,6 +6,9 @@ import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.UserFile;
 import com.forgqi.resourcebaseserver.repository.FileRepository;
+import com.forgqi.resourcebaseserver.service.StorageService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,12 +21,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/v1")
+@RequiredArgsConstructor
+@Slf4j
 public class UploadController {
     private final FileRepository fileRepository;
+    private final StorageService storageService;
 
-    public UploadController(FileRepository fileRepository) {
-        this.fileRepository = fileRepository;
-    }
 
     @PostMapping("/image")
     public Map<String, String> receiveImage(@RequestPart("upload") MultipartFile file) {
@@ -42,7 +45,7 @@ public class UploadController {
 //            map.put("url", "http://localhost:8080"+path);
             map.put("url", path);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("上传错误", e);
             map.put("uploaded", "false");
             map.put("url", "#");
         }
@@ -56,5 +59,27 @@ public class UploadController {
             return fileRepository.deleteUserFileByPath(path);
         }
         throw new NonexistenceException("文件不存在或删除错误:" + path);
+    }
+
+    @PostMapping("/file")
+    public Map<String, String> receiveFile(@RequestPart("upload") MultipartFile file) {
+        Map<String, String> map = new HashMap<>();
+
+        String name = file.getOriginalFilename();
+
+        String path = storageService.store("files", name, file);
+        map.put("uploaded", "true");
+        map.put("url", path);
+
+        return map;
+    }
+
+    @DeleteMapping("/file")
+    public void deleteFile(String path) {
+        try {
+            storageService.delete(path);
+        } catch (IOException e) {
+            throw new NonexistenceException("文件不存在或删除错误:" + path);
+        }
     }
 }

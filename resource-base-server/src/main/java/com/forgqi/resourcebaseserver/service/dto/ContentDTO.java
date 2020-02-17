@@ -1,7 +1,6 @@
 package com.forgqi.resourcebaseserver.service.dto;
 
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
-import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
 import com.forgqi.resourcebaseserver.entity.forum.Reply;

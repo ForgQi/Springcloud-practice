@@ -41,13 +41,13 @@ public class PostServiceImpl extends AbstractVoteService<Post> implements ForumS
     @Transactional
     @Async
     @Retryable(StaleStateException.class)
-    public void changeNumSize(Long id, String field){
+    public void changeNumSize(Long id, String field) {
         postRepository.findById(id).ifPresent(post -> {
-            if ("CommentSize".equals(field)){
-                post.setCommentSize(post.getCommentSize()+1);
-            }else if ("Pv".equals(field)){
-                post.setPv(post.getPv()+1);
-            }else {
+            if ("CommentSize".equals(field)) {
+                post.setCommentSize(post.getCommentSize() + 1);
+            } else if ("Pv".equals(field)) {
+                post.setPv(post.getPv() + 1);
+            } else {
                 post.setCommentSize((int) post.getCommentList().parallelStream().flatMap(comment -> Stream.concat(Stream.of(comment), comment.getReplyList().stream())).count());
             }
             postRepository.save(post);

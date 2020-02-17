@@ -3,7 +3,6 @@ package com.forgqi.resourcebaseserver.service.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.forgqi.resourcebaseserver.entity.SysRole;
 import com.forgqi.resourcebaseserver.entity.User;
-import lombok.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -19,7 +18,7 @@ public interface IUserDTO {
 
     boolean isEnabled();
 
-    default Collection<? extends GrantedAuthority> getAuthorities(){
+    default Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles().stream()
                 .map(sysRole -> new SimpleGrantedAuthority(sysRole.getRole()))
                 .collect(Collectors.toSet());

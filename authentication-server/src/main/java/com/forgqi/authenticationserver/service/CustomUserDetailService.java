@@ -19,10 +19,10 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         return userRepository.findByUserName(username).or(() -> {
-                    if (StringUtils.isNumeric(username)) {
-                        return userRepository.findById(Long.valueOf(username));
-                    }
-                    return java.util.Optional.empty();
-                }).orElseThrow(() -> new UsernameNotFoundException("用户名不存在"));
+            if (StringUtils.isNumeric(username)) {
+                return userRepository.findById(Long.valueOf(username));
+            }
+            return java.util.Optional.empty();
+        }).orElseThrow(() -> new UsernameNotFoundException("用户名不存在"));
     }
 }

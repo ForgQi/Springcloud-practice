@@ -8,24 +8,25 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
 @Entity
 @Table(indexes = {@Index(columnList = "user_name", unique = true)})
-@Getter @Setter
+@Getter
+@Setter
 public class User extends AbstractAuditingEntity implements UserDetails, OAuth2User {
     private static final long serialVersionUID = -1205293048576328829L;
 
@@ -60,7 +61,7 @@ public class User extends AbstractAuditingEntity implements UserDetails, OAuth2U
     @ColumnDefault("1")
     private boolean accountNonLocked = true;
 
-    @JsonIgnore
+    //    @JsonIgnore
     //级联更新，急加载 会查询role表
     @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
@@ -71,6 +72,10 @@ public class User extends AbstractAuditingEntity implements UserDetails, OAuth2U
     private Map<String, Object> attributes;
 
     public User() {
+    }
+
+    public User(long id) {
+        this.id = id;
     }
 
     User(long id, String password, String nickName) {
@@ -97,6 +102,10 @@ public class User extends AbstractAuditingEntity implements UserDetails, OAuth2U
     }
 
     @JsonIgnore
+    public void setAuthorities(Collection<? extends GrantedAuthority> collection) {
+    }
+
+    @JsonIgnore
     @Override
     public String getUsername() {
         return String.valueOf(this.id);
@@ -119,6 +128,7 @@ public class User extends AbstractAuditingEntity implements UserDetails, OAuth2U
 
     public enum Type {
         STUDENT,
-        GRADUATE;
+        GRADUATE,
+        TEACHER;
     }
 }

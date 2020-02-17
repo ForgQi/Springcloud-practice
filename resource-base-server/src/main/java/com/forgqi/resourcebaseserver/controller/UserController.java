@@ -1,15 +1,17 @@
 package com.forgqi.resourcebaseserver.controller;
 
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
-import com.forgqi.resourcebaseserver.entity.Advise;
-import com.forgqi.resourcebaseserver.entity.Notice;
+import com.forgqi.resourcebaseserver.entity.Notice.Advise;
+import com.forgqi.resourcebaseserver.entity.Notice.Notice;
+import com.forgqi.resourcebaseserver.entity.Notice.UserNoticeState;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Vote;
-import com.forgqi.resourcebaseserver.repository.AdviseRepository;
-import com.forgqi.resourcebaseserver.repository.NoticeRepository;
 import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.repository.VoteRepository;
 import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
+import com.forgqi.resourcebaseserver.repository.notice.AdviseRepository;
+import com.forgqi.resourcebaseserver.repository.notice.NoticeRepository;
+import com.forgqi.resourcebaseserver.repository.notice.UserNoticeStateRepository;
 import com.forgqi.resourcebaseserver.service.UserService;
 import com.forgqi.resourcebaseserver.service.dto.Editable;
 import com.forgqi.resourcebaseserver.service.dto.IUserDTO;
@@ -36,6 +38,7 @@ public class UserController {
     private final VoteRepository voteRepository;
     private final NoticeRepository noticeRepository;
     private final PostRepository postRepository;
+    private final UserNoticeStateRepository userNoticeStateRepository;
 
     @PutMapping(value = "/editable")
     public Optional<User> change(Editable editable) {
@@ -49,11 +52,11 @@ public class UserController {
 
     @GetMapping(value = {"/users/{id}", "/users/{id}/{category}"})
     public Optional<?> getUser(@PathVariable Long id,
-                                  @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable,
-                                  @PathVariable(required = false) String category) {
-        if (category == null){
+                               @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable,
+                               @PathVariable(required = false) String category) {
+        if (category == null) {
             return userRepository.findById(id);
-        }else if ("posts".equals(category)){
+        } else if ("posts".equals(category)) {
             return postRepository.getAllByUserId(id, pageable);
         }
         return Optional.empty();
@@ -71,14 +74,31 @@ public class UserController {
             @RequestParam(required = false) List<String> notificationChannel,
             Long userId,
             @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        if (userId != null){
-            return noticeRepository.findAllByOriginalSourceUserId(userId, pageable);
+        if (userId != null) {
+            return noticeRepository.findAllByOriginalSourceUserId(userId, pageable).map(notice -> {
+                if (!userNoticeStateRepository.existsById(new UserNoticeState.UserNotice(UserHelper.getUserIdBySecurityContext(), notice.getId()))) {
+                    notice.setRead(false);
+                }
+                return notice;
+            });
+//            return noticeRepository.findAllByOriginalSourceUserId(userId, pageable);
         }
-        return noticeRepository.findDistinctByRegistrationTokensInAndNotificationChannelIn(registrationTokens, notificationChannel, pageable);
+        return noticeRepository.findDistinctByRegistrationTokensInAndNotificationChannelIn(registrationTokens, notificationChannel, pageable).map(notice -> {
+            if (!userNoticeStateRepository.existsById(new UserNoticeState.UserNotice(UserHelper.getUserIdBySecurityContext(), notice.getId()))) {
+                notice.setRead(false);
+            }
+            return notice;
+        });
+//        return noticeRepository.findDistinctByRegistrationTokensInAndNotificationChannelIn(registrationTokens, notificationChannel, pageable);
     }
 
     @GetMapping(value = "/Notification/{id}")
     public Optional<Notice> findNotification(@PathVariable Long id) {
+        UserHelper.getUserBySecurityContext().ifPresent(user -> {
+            UserNoticeState userNoticeState = new UserNoticeState();
+            userNoticeState.setId(new UserNoticeState.UserNotice(user.getId(), id));
+            userNoticeStateRepository.save(userNoticeState);
+        });
         return noticeRepository.findById(id).map(notice -> {
             notice.setRead(true);
             return noticeRepository.save(notice);
