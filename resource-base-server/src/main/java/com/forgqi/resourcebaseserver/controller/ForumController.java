@@ -59,10 +59,12 @@ public class ForumController {
         // version仅用来解决Not-null property references a transient value，不会改变version值
         Reply save = replyService.save(contentDTO.convertToReply(new Comment(commentId, 0L)));
         commentRepository.findById(commentId).ifPresent(comment -> postService.changeNumSize(comment.getPost().getId(), "CommentSize"));
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
         noticeRepository.save(NoticeUtil.buildNotice("social",
                 contentDTO.getContent(),
-                String.valueOf(commentRepository.findById(commentId).orElseThrow().getPost().getId()),
-                List.of(String.valueOf(commentRepository.findById(commentId).orElseThrow().getPost().getUser().getId()))
+                String.valueOf(comment.getPost().getId()),
+                List.of(String.valueOf(comment.getPost().getUser().getId()),
+                        String.valueOf(comment.getUser().getId()))
         ));
         return save;
     }
