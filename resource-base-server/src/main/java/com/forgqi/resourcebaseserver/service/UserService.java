@@ -8,8 +8,10 @@ import com.forgqi.resourcebaseserver.repository.SysRoleRepository;
 import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.service.client.GmsService;
 import com.forgqi.resourcebaseserver.service.client.JwkService;
+import com.forgqi.resourcebaseserver.service.client.MyLzuService;
 import com.forgqi.resourcebaseserver.service.dto.Editable;
 import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,31 +22,24 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    private final
-    UserRepository userRepository;
-    private final
-    SysRoleRepository sysRoleRepository;
+    private final UserRepository userRepository;
+    private final SysRoleRepository sysRoleRepository;
     private final GmsService gmsService;
     private final JwkService jwkService;
+    private final MyLzuService myLzuService;
 
 //    private final Logger log = LoggerFactory.getLogger(UserService.class);
-
-    public UserService(UserRepository userRepository, SysRoleRepository sysRoleRepository, GmsService gmsService, JwkService jwkService) {
-        this.userRepository = userRepository;
-        this.sysRoleRepository = sysRoleRepository;
-        this.gmsService = gmsService;
-        this.jwkService = jwkService;
-    }
 
     public User registerUser(UsrPswDTO usrPswDTO, String type) {
         User user;
         if ("graduate".equals(type)) {
             user = gmsService.saveStuInfo();
-        } else if (type.isEmpty()) {
+        } else if ("student".equals(type)) {
             user = jwkService.saveStuInfo();
         } else {
-            user = jwkService.saveStuInfo();
+            user = myLzuService.getUser();
             user.setType(User.Type.valueOf(type.toUpperCase()));
         }
         User temporaryUser = new User();

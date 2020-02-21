@@ -37,6 +37,6 @@ public class FeignConfiguration {
 
     @Bean
     public Logger.Level logger() {
-        return Logger.Level.HEADERS;
+        return Logger.Level.NONE;
     }
 }

@@ -237,6 +237,7 @@ public class User implements UserDetails {
 
     public enum Type {
         STUDENT,
-        GRADUATE;
+        GRADUATE,
+        TEACHER;
     }
 }

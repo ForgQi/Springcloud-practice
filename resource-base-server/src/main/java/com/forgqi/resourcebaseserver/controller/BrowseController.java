@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.util.CastUtils;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +48,7 @@ public class BrowseController {
     private final MonthRepository monthRepository;
     private final WeekRepository weekRepository;
 
-    @SuppressWarnings("unchecked")
+    //    @SuppressWarnings("unchecked")
     @GetMapping(value = "/study-modes")
     public Map<?, ?> group(String query, Integer lastFewDays, Instant start, Instant end) {
         ZoneId zone = ZoneId.systemDefault();
@@ -63,7 +64,7 @@ public class BrowseController {
                                     Map<String, Object> m = new HashMap<>(longMapEntry.getValue());
                                     m.put("like", v.getUpVote());
                                     return Map.entry(longMapEntry.getKey(), m);
-                                }).orElse(Map.entry(longMapEntry.getKey(), (Map<String, Object>) longMapEntry.getValue())))
+                                }).orElse(Map.entry(longMapEntry.getKey(), CastUtils.cast(longMapEntry.getValue()))))
                         .collect(Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue));
             }
             return map;
@@ -77,7 +78,7 @@ public class BrowseController {
     }
 
     @PostMapping(value = "/registry")
-    public User register(@RequestParam(defaultValue = "") String type) {
+    public User register(@RequestParam(defaultValue = "student") String type) {
         return userService.registerUser(ThreadLocalUtil.get(), type);
     }
 

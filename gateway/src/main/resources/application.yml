@@ -37,3 +37,5 @@ spring:
             - Path=/** # 按顺序匹配其他请求走这个路由
         #          filters:
         #            - StripPrefix=1 # 转发之前将/api去掉
+      forwarded:
+        enabled: false

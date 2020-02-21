@@ -3,7 +3,7 @@ package com.forgqi.resourcebaseserver.client.parse;
 import com.forgqi.resourcebaseserver.client.GmsFeignClient;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
-import com.forgqi.resourcebaseserver.service.dto.StuInfoDTO;
+import com.forgqi.resourcebaseserver.service.dto.UsrInfoDTO;
 import feign.Response;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,7 +31,7 @@ public class GmsParse {
         Element element = document.getElementsByClass("xSectionForm").first();
         Element child1 = element.child(0);
         Element child2 = element.child(1);
-        return StuInfoDTO.builder()
+        return UsrInfoDTO.builder()
                 .id(Long.valueOf(child1.select("tr").get(0).select("td").get(0).text()))
                 .name(child1.select("tr").get(1).select("td").get(0).text())
                 .college(child2.select("td").get(11).text())

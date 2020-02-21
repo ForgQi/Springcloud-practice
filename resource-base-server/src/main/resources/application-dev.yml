@@ -36,3 +36,7 @@ logging:
   level:
     com.forgqi.resourcebaseserver.client: debug
 #    org.springframework.security: debug
+server:
+  forward-headers-strategy: FRAMEWORK
+  tomcat:
+    protocol-header: X-Forwarded-Proto

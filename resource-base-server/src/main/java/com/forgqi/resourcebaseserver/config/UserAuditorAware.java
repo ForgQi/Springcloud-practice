@@ -25,7 +25,7 @@ public class UserAuditorAware implements AuditorAware<String> {
     }
 
     @Bean
-    public HttpTraceRepository getTraceRepository(){
+    public HttpTraceRepository getTraceRepository() {
         return new InMemoryHttpTraceRepository();
     }
 }

@@ -3,7 +3,7 @@ package com.forgqi.resourcebaseserver.client.parse;
 import com.forgqi.resourcebaseserver.client.JwkFeignClient;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
-import com.forgqi.resourcebaseserver.service.dto.StuInfoDTO;
+import com.forgqi.resourcebaseserver.service.dto.UsrInfoDTO;
 import feign.Response;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,7 +32,7 @@ public class JwkParse {
 
         Document document = ParseUtil.getDocument(response).orElseThrow();
         Element element = document.select("tbody").first();
-        return StuInfoDTO.builder()
+        return UsrInfoDTO.builder()
                 .id(Long.valueOf(element.select("tr").get(0).select("td").get(0).text()))
                 .name(element.select("tr").get(0).select("td").get(1).text())
                 .college(element.select("tr").get(1).select("td").get(0).text())

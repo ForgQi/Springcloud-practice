@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 
 @Data
 @Builder
-public class StuInfoDTO {
+public class UsrInfoDTO {
     private Long id;
     private String name;
     private String college;
