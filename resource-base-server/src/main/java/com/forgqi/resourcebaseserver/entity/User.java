@@ -1,6 +1,7 @@
 package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -94,6 +95,7 @@ public class User extends AbstractAuditingEntity implements UserDetails, OAuth2U
         return attributes;
     }
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles().stream()
@@ -101,9 +103,9 @@ public class User extends AbstractAuditingEntity implements UserDetails, OAuth2U
                 .collect(Collectors.toSet());
     }
 
-    @JsonIgnore
-    public void setAuthorities(Collection<? extends GrantedAuthority> collection) {
-    }
+//    @JsonIgnore
+//    public void setAuthorities(Collection<? extends GrantedAuthority> collection) {
+//    }
 
     @JsonIgnore
     @Override
