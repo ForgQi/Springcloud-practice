@@ -29,7 +29,7 @@ spring:
         - id: service-auth
           uri: lb://auth-server
           predicates:
-            - Path=/oauth/**,/login # 所有oauth开头的请求走这个路由
+            - Path=/oauth/** # 所有oauth开头的请求走这个路由
         - id: service-authbase
           # lb 表示负载均衡loadbalance
           uri: lb://base-server

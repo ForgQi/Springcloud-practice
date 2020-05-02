@@ -16,7 +16,7 @@ public class PasswordWriterFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest httpServletRequest, @NonNull HttpServletResponse httpServletResponse, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        if ("POST".equals(httpServletRequest.getMethod()) && new AntPathMatcher().match("/login", httpServletRequest.getServletPath())) {
+        if ("POST".equals(httpServletRequest.getMethod()) && new AntPathMatcher().match("/oauth/login", httpServletRequest.getServletPath())) {
             filterChain.doFilter(new ChangePasswordHttpServletRequestWrapper(httpServletRequest), httpServletResponse);
         } else {
             filterChain.doFilter(httpServletRequest, httpServletResponse);

@@ -34,7 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http
                 .addFilterBefore(new PasswordWriterFilter(), UsernamePasswordAuthenticationFilter.class)
-                .formLogin();
+                .formLogin(form -> form
+                        .loginPage("/oauth/login"));
 //                .and()
 //                .requestMatchers().antMatchers("/actuator/**")
 //                .and()
