@@ -40,3 +40,4 @@ server:
   forward-headers-strategy: FRAMEWORK
   tomcat:
     protocol-header: X-Forwarded-Proto
+  port: 8080
