@@ -7,12 +7,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 import javax.servlet.http.HttpServletResponse;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @EnableWebSecurity
 public class OAuth2ResourceServerSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
+        http.cors(withDefaults());
         http
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests

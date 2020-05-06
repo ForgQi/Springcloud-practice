@@ -12,6 +12,6 @@ public class RichTextHelper {
 
     public String parseSummary() {
         String s = document.text();
-        return s.length() > 50 ? s.substring(0, 49) : s;
+        return s.length() > 100 ? s.substring(0, 99) : s;
     }
 }

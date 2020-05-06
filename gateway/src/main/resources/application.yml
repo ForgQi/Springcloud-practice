@@ -1,5 +1,6 @@
 server:
   port: 8760
+  forward-headers-strategy: FRAMEWORK
 
 management:
   endpoints:
