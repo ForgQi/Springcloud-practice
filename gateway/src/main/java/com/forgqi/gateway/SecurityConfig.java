@@ -5,15 +5,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.web.server.DefaultServerRedirectStrategy;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.savedrequest.ServerRequestCache;
+import org.springframework.security.web.server.savedrequest.WebSessionServerRequestCache;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import org.springframework.web.reactive.config.CorsRegistry;
-import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.server.ServerWebExchange;
 
-import static org.springframework.security.config.Customizer.withDefaults;
+import java.net.URI;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Configuration
 public class SecurityConfig {
@@ -21,7 +25,21 @@ public class SecurityConfig {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,
                                                             ReactiveClientRegistrationRepository clientRegistrationRepository) {
         // Authenticate through configured OpenID Provider
-        http.oauth2Login();
+        http.oauth2Login()
+                .authenticationSuccessHandler((webFilterExchange, authentication) -> {
+                    ServerRequestCache requestCache = new WebSessionServerRequestCache();
+                    ServerWebExchange exchange = webFilterExchange.getExchange();
+                    return requestCache.getRedirectUri(exchange).defaultIfEmpty(URI.create("/")).flatMap((location) -> {
+//                        System.out.println(location);
+                        Map<String, String> query = location.getQuery().lines().map(s -> s.split("=")).collect(Collectors.toMap(strings -> strings[0], strings -> strings[1]));
+                        if (query.get("originalURL") == null) {
+                            return new DefaultServerRedirectStrategy().sendRedirect(exchange, location);
+                        }
+                        URI originalURL = URI.create(query.get("originalURL"));
+//                        System.out.println(originalURL);
+                        return new DefaultServerRedirectStrategy().sendRedirect(exchange, originalURL);
+                    });
+                });
         http.oauth2ResourceServer().opaqueToken();
         // Require authentication for all requests
         http.authorizeExchange()

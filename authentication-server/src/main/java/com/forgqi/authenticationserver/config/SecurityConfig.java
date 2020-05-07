@@ -78,6 +78,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    private AuthenticationSuccessHandler successHandler() {
+        return (request, response, authentication) -> {
+            response.setContentType("application/json;charset=utf-8");
+            PrintWriter out = response.getWriter();
+            JsonResult ok = JsonResult.ok("登录成功");
+            out.write(objectMapper.writeValueAsString(ok));
+            out.flush();
+            out.close();
+        };
+    }
+
+    /**
+     * 自定义登录失败处理器，成功返回一个带有失败信息的Json数据包装类
+     */
+    private AuthenticationFailureHandler failureHandler() {
+        return (request, response, authentication) -> {
+            response.setContentType("application/json;charset=utf-8");
+            PrintWriter out = response.getWriter();
+            JsonResult error = JsonResult.error("账号或密码错误");
+            out.write(objectMapper.writeValueAsString(error));
+            out.flush();
+            out.close();
+        };
+    }
+
     public static class AESEncryptPasswordEncoder implements PasswordEncoder {
         private final TextEncryptor textEncryptor = Encryptors.text("lzu", "deadbeef");
 
@@ -97,29 +122,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 return false;
             }
         }
-    }
-
-    private AuthenticationSuccessHandler successHandler() {
-        return (request, response, authentication) -> {
-            response.setContentType("application/json;charset=utf-8");
-            PrintWriter out = response.getWriter();
-            JsonResult ok = JsonResult.ok("登录成功");
-            out.write(objectMapper.writeValueAsString(ok));
-            out.flush();
-            out.close();
-        };
-    }
-    /**
-     *自定义登录失败处理器，成功返回一个带有失败信息的Json数据包装类
-     */
-    private AuthenticationFailureHandler failureHandler() {
-        return (request, response, authentication) -> {
-            response.setContentType("application/json;charset=utf-8");
-            PrintWriter out = response.getWriter();
-            JsonResult error = JsonResult.error("账号或密码错误");
-            out.write(objectMapper.writeValueAsString(error));
-            out.flush();
-            out.close();
-        };
     }
 }

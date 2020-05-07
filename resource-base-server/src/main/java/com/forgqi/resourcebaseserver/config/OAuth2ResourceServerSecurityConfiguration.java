@@ -34,7 +34,6 @@ public class OAuth2ResourceServerSecurityConfiguration extends WebSecurityConfig
 
     }
 
-
 //    private OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
 //        final OAuth2UserService delegate = new OAuth2UserService();
 //        final OidcUserService delegate = new OidcUserService();

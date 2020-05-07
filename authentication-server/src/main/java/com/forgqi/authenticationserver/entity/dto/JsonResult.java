@@ -22,7 +22,7 @@ public class JsonResult {
     }
 
     public static JsonResult ok() {
-        return new JsonResult( "ok", "success", null);
+        return new JsonResult("ok", "success", null);
     }
 
     public static JsonResult ok(String msg) {
@@ -33,12 +33,12 @@ public class JsonResult {
         return new JsonResult("ok", "success", data);
     }
 
-    public static JsonResult ok(String msg,Object data) {
+    public static JsonResult ok(String msg, Object data) {
         return new JsonResult("ok", msg, data);
     }
 
     public static JsonResult error() {
-        return new JsonResult( "error", "error", null);
+        return new JsonResult("error", "error", null);
     }
 
     public static JsonResult error(String msg) {
