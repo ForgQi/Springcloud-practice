@@ -31,6 +31,9 @@ public class SecurityConfig {
                     ServerWebExchange exchange = webFilterExchange.getExchange();
                     return requestCache.getRedirectUri(exchange).defaultIfEmpty(URI.create("/")).flatMap((location) -> {
 //                        System.out.println(location);
+                        if (!location.getQuery().contains("=")){
+                            return new DefaultServerRedirectStrategy().sendRedirect(exchange, location);
+                        }
                         Map<String, String> query = location.getQuery().lines().map(s -> s.split("=")).collect(Collectors.toMap(strings -> strings[0], strings -> strings[1]));
                         if (query.get("originalURL") == null) {
                             return new DefaultServerRedirectStrategy().sendRedirect(exchange, location);

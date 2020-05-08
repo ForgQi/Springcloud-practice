@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import java.io.PrintWriter;
+import java.util.UUID;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -47,6 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors(withDefaults());
         http
                 .addFilterBefore(new PasswordWriterFilter(), UsernamePasswordAuthenticationFilter.class)
+                .rememberMe().key(UUID.randomUUID().toString())
+                .and()
                 .formLogin(form -> form
                         //因为表单验证方式默认是跳转页面，而我们前后分离不需要后端处理跳转
                         //所以自定义一个登录成功处理器，它只需要告诉我们登录结果就可以了
