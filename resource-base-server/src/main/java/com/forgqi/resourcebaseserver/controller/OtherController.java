@@ -3,6 +3,7 @@ package com.forgqi.resourcebaseserver.controller;
 import com.forgqi.resourcebaseserver.common.util.ParseUtil;
 import com.forgqi.resourcebaseserver.entity.studymode.PersonalData;
 import com.forgqi.resourcebaseserver.entity.studymode.StudyMode;
+import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.repository.studymode.PersonalDataRepository;
 import com.forgqi.resourcebaseserver.service.StudyModeService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class OtherController {
     private final StudyModeService studyModeService;
     private final PersonalDataRepository personalDataRepository;
+    private final UserRepository userRepository;
 
     @PostMapping(value = "/study-modes")
     public Optional<StudyMode> creat(Instant estimate) {
@@ -55,6 +57,11 @@ public class OtherController {
     @GetMapping(value = "/study-modes/users/{id}")
     public Optional<PersonalData> findPersonalData(@PathVariable Long id) {
         return personalDataRepository.findById(id);
+    }
+
+    @GetMapping(value = "/statistic/users")
+    public long getTotalUsers() {
+        return userRepository.count();
     }
 }
 
