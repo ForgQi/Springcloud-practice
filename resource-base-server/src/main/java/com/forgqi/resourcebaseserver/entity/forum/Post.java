@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum {
+public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum<List<String>> {
     @Id // 主键
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
     @Column(nullable = false)
@@ -43,6 +43,8 @@ public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum 
     //拥有mappedBy注解的实体类为关系被维护端
     //mappedBy="post"中的post是comment中的post属性
     private List<Comment> commentList;//评论列表
+    private Integer commentSize = 0;
+
     private String subject;
     @Size(min = 2, max = 50)
     @Column(nullable = false, length = 50) // 映射为字段，值不能为空
@@ -63,10 +65,18 @@ public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum 
     @Column(nullable = false)
     private Integer pv = 0;
 
+    @Version
+    private Long version;
+
     public Post() {
     }
 
     public Post(Long id) {
         this.id = id;
+    }
+
+    public Post(Long id, Long version) {
+        this.id = id;
+        this.version = version;
     }
 }

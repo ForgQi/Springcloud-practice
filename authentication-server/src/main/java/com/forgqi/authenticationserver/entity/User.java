@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,6 +44,7 @@ public class User implements UserDetails {
     private String signature;
 
     private boolean accountNonLocked = true;
+
     public User() {
     }
 
@@ -76,7 +76,6 @@ public class User implements UserDetails {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
 
     public long getId() {
@@ -207,18 +206,13 @@ public class User implements UserDetails {
         this.signature = signature;
     }
 
-    public void setAccountNonLocked(boolean accountNonLocked) {
-        this.accountNonLocked = accountNonLocked;
-    }
-
-    public enum Type {
-        STUDENT,
-        GRADUATE;
-    }
-
     @Override
     public boolean isAccountNonLocked() {
         return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
     }
 
     @Override
@@ -239,5 +233,11 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public enum Type {
+        STUDENT,
+        GRADUATE,
+        TEACHER;
     }
 }

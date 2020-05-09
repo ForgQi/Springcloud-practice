@@ -7,7 +7,8 @@ spring:
   #    host: 172.18.0.2
   datasource:
     url: jdbc:mysql://172.18.0.1:3306/lzu
-
+storage:
+  location: /opt/data/static/upload
 #server:
 #  #端口号
 #  port: 9090

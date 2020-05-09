@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.forgqi.authenticationserver.entity.User.Type;
 
 @RestController
 @RequestMapping("/v1")
@@ -38,7 +37,7 @@ public class MISController {
     List<CourseDTO> getCourse(Integer user) throws IOException {
         User user1 = UserHelper.getUserBySecurityContext().orElseThrow();
         List<CourseDTO> courseDTOList;
-        if (user1.getType() == Type.STUDENT) {
+        if (user1.getType() == User.Type.STUDENT) {
             courseDTOList = jwkService.getCourse();
         } else {
             courseDTOList = gmsService.getCourse();
@@ -51,7 +50,7 @@ public class MISController {
     public Map<String, List<HttpCookie>> getCookie() {
         HashMap<String, List<HttpCookie>> map = new HashMap<>();
         User user = UserHelper.getUserBySecurityContext().orElseThrow();
-        if (user.getType() == Type.STUDENT) {
+        if (user.getType() == User.Type.STUDENT) {
             map.put("jwk", jwkService.getCookie());
             map.put("zhxg", zhxgService.getCookie());
             return map;

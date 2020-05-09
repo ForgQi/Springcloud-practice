@@ -3,7 +3,7 @@ package com.forgqi.resourcebaseserver.client.parse;
 import com.forgqi.resourcebaseserver.client.JwkFeignClient;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
-import com.forgqi.resourcebaseserver.service.dto.StuInfoDTO;
+import com.forgqi.resourcebaseserver.service.dto.UsrInfoDTO;
 import feign.Response;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,16 +32,16 @@ public class JwkParse {
 
         Document document = ParseUtil.getDocument(response).orElseThrow();
         Element element = document.select("tbody").first();
-        StuInfoDTO stuInfoDTO = new StuInfoDTO();
-        stuInfoDTO.setId(Long.valueOf(element.select("tr").get(0).select("td").get(0).text()));
-        stuInfoDTO.setName(element.select("tr").get(0).select("td").get(1).text());
-        stuInfoDTO.setCollege(element.select("tr").get(1).select("td").get(0).text());
-        stuInfoDTO.setSubject(element.select("tr").get(1).select("td").get(1).text());
-        stuInfoDTO.setEducation(element.select("tr").get(2).select("td").get(1).text());
-        stuInfoDTO.setGrade(element.select("tr").get(3).select("td").get(0).text());
-        stuInfoDTO.setClassNo(element.select("tr").get(3).select("td").get(1).text());
-        stuInfoDTO.setIdCard(element.select("tr").get(4).select("td").get(1).text());
-        return stuInfoDTO.convertToUser();
+        return UsrInfoDTO.builder()
+                .id(Long.valueOf(element.select("tr").get(0).select("td").get(0).text()))
+                .name(element.select("tr").get(0).select("td").get(1).text())
+                .college(element.select("tr").get(1).select("td").get(0).text())
+                .subject(element.select("tr").get(1).select("td").get(1).text())
+                .education(element.select("tr").get(2).select("td").get(1).text())
+                .grade(element.select("tr").get(3).select("td").get(0).text())
+                .classNo(element.select("tr").get(3).select("td").get(1).text())
+                .idCard(element.select("tr").get(4).select("td").get(1).text())
+                .build().convertToUser();
     }
 
     public List<CourseDTO> getCourse() {

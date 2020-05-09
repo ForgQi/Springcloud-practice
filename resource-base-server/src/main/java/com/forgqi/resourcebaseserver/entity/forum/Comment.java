@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Comment extends AbstractAuditingEntity implements IVoteEntity, IForum {
+public class Comment extends AbstractAuditingEntity implements IVoteEntity, IForum<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
     @Column(nullable = false)
@@ -27,7 +27,7 @@ public class Comment extends AbstractAuditingEntity implements IVoteEntity, IFor
     @Audited
     private String content;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
-//可选属性optional=false,表示author不能为空。删除文章，不影响用户
+//可选属性optional=false,表示user不能为空。删除评论，不影响用户
     @JoinColumn(name = "user_id")//设置在post表中的关联字段(外键)
     private User user;//所属用户
     private Long toUser;
@@ -49,10 +49,18 @@ public class Comment extends AbstractAuditingEntity implements IVoteEntity, IFor
     @Column(nullable = false)
     private Integer downVote = 0;
 
+    @Version
+    private Long version;
+
     public Comment() {
     }
 
     public Comment(Long id) {
         this.id = id;
+    }
+
+    public Comment(Long id, Long version) {
+        this.id = id;
+        this.version = version;
     }
 }

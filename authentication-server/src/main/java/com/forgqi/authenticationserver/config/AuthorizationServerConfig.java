@@ -54,6 +54,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security
                 .tokenKeyAccess("permitAll()")
+//                .checkTokenAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
                 //允许表单认证,否则只能使用basic auth
                 .allowFormAuthenticationForClients();

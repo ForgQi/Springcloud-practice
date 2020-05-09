@@ -20,7 +20,7 @@ public class SsoParse {
     public Map<String, String> getLoginMap() {
         Response response = loginFeignClient.get();
         Document document = ParseUtil.getDocument(response).orElseThrow();
-        if (!(document.getElementById("capt") == null)) {
+        if (!(document.getElementById("captcha") == null)) {
             throw new OperationException("需要输入验证码，请稍后再试");
         }
         String lt = document.getElementsByAttributeValue("name", "lt").first().val();

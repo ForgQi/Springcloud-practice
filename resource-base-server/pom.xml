@@ -16,6 +16,12 @@
 
     <properties>
         <java.version>11</java.version>
+        <springfox-swagger.version>2.9.2</springfox-swagger.version>
+        <jsoup.version>1.12.1</jsoup.version>
+        <feign-java11.version>10.5.0</feign-java11.version>
+        <javassist.version>3.26.0-GA</javassist.version> <!--要匹配org.hibernate版本-->
+        <logstash-logback-encoder.version>6.2</logstash-logback-encoder.version>
+        <oauth2-oidc-sdk.version>6.14</oauth2-oidc-sdk.version>
         <!--        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>-->
     </properties>
 
@@ -64,12 +70,12 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
+            <version>${springfox-swagger.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
+            <version>${springfox-swagger.version}</version>
         </dependency>
 
         <dependency>
@@ -79,12 +85,12 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.12.1</version>
+            <version>${jsoup.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-java11</artifactId>
-            <version>10.5.0</version>
+            <version>${feign-java11.version}</version>
         </dependency>
         <!--        <dependency>-->
         <!--            <groupId>io.github.openfeign</groupId>-->
@@ -97,18 +103,53 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-thymeleaf</artifactId>-->
+        <!--        </dependency>-->
+
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ForgQi</groupId>
-            <artifactId>common</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>oauth2-oidc-sdk</artifactId>
+            <version>${oauth2-oidc-sdk.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.cloud</groupId>-->
+        <!--            <artifactId>spring-cloud-starter-oauth2</artifactId>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.ForgQi</groupId>-->
+        <!--            <artifactId>common</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
@@ -116,7 +157,7 @@
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.26.0-GA</version>    <!--要匹配org.hibernate版本-->
+            <version>${javassist.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -130,7 +171,7 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>6.2</version>
+            <version>${logstash-logback-encoder.version}</version>
         </dependency>
 
         <dependency>
@@ -138,6 +179,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
+
     </dependencies>
 
     <!--    <dependencyManagement>-->
@@ -161,4 +208,18 @@
         </plugins>
     </build>
 
+    <!--    <repositories>&lt;!&ndash; 代码库 &ndash;&gt;-->
+    <!--        <repository>-->
+    <!--            <id>maven-ali</id>-->
+    <!--            <url>http://maven.aliyun.com/nexus/content/groups/public//</url>;-->
+    <!--            <releases>-->
+    <!--                <enabled>true</enabled>-->
+    <!--            </releases>-->
+    <!--            <snapshots>-->
+    <!--                <enabled>true</enabled>-->
+    <!--                <updatePolicy>always</updatePolicy>-->
+    <!--                <checksumPolicy>fail</checksumPolicy>-->
+    <!--            </snapshots>-->
+    <!--        </repository>-->
+    <!--    </repositories>-->
 </project>

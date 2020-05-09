@@ -11,10 +11,10 @@
     <modules>
         <module>admin-server</module>
         <module>authentication-server</module>
-<!--        <module>eureka-server</module>-->
+        <!--        <module>eureka-server</module>-->
         <module>gateway</module>
         <module>resource-base-server</module>
-        <module>common</module>
+        <!--        <module>common</module>-->
     </modules>
 
     <groupId>com.ForgQi</groupId>

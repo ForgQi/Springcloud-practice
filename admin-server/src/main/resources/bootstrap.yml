@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: admin-server
+  cloud:
+    consul:
+      config:
+        format: YAML
+
+---
+spring:
+  profiles: docker
+  cloud:
+    consul:
+      host: consul-client

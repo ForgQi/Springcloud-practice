@@ -37,6 +37,7 @@ spring:
       port: 8500
 server:
   port: 8081
+  forward-headers-strategy: FRAMEWORK
 #debug: true
 #eureka:
 #  client:

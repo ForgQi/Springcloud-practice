@@ -6,7 +6,6 @@ import com.forgqi.authenticationserver.entity.User;
 import com.forgqi.authenticationserver.repository.OauthClientDetailsRepository;
 import com.forgqi.authenticationserver.repository.SysRoleRepository;
 import com.forgqi.authenticationserver.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,11 +41,17 @@ public class Registry {
             return sysRole;
         }
         return sysRoleRepository.save(new SysRole(role));
-
     }
 
     @RequestMapping(value = "/clients", method = RequestMethod.POST)
     public OauthClientDetails clients(OauthClientDetails oauthClientDetails) {
         return oauthClientDetailsRepository.save(oauthClientDetails);
     }
+
+    //        UserHelper.reloadUserFromSecurityContext(principal -> principal.setRoles(roles.stream()
+//                .map(role -> new com.forgqi.authenticationserver.entity.SysRole(role.getId(), role.getRole()))
+//                .collect(Collectors.toList())), id);
+//重新加载redis里存储的token对应用户信息的两个方法
+    //            UserHelper.reloadUserFromSecurityContext(user1 -> BeanUtils.copyProperties(user, user1, "roles"));
+
 }

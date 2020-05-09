@@ -5,3 +5,15 @@ spring:
     consul:
       config:
         format: YAML
+  profiles:
+    active: dev
+---
+#development environment
+spring:
+  profiles: dev
+  cloud:
+    consul:
+      host: 192.168.44.128
+      discovery:
+        # 目前仅测试时使用
+        prefer-ip-address: true

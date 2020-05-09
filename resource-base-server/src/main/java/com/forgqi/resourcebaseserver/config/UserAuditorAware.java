@@ -2,6 +2,9 @@ package com.forgqi.resourcebaseserver.config;
 
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.entity.User;
+import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
+import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.envers.repository.support.EnversRevisionRepositoryFactoryBean;
@@ -19,5 +22,10 @@ public class UserAuditorAware implements AuditorAware<String> {
     @NonNull
     public Optional<String> getCurrentAuditor() {
         return UserHelper.getUserBySecurityContext().map(User::getUsername);
+    }
+
+    @Bean
+    public HttpTraceRepository getTraceRepository() {
+        return new InMemoryHttpTraceRepository();
     }
 }

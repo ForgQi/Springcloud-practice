@@ -8,42 +8,39 @@ import com.forgqi.resourcebaseserver.repository.SysRoleRepository;
 import com.forgqi.resourcebaseserver.repository.UserRepository;
 import com.forgqi.resourcebaseserver.service.client.GmsService;
 import com.forgqi.resourcebaseserver.service.client.JwkService;
+import com.forgqi.resourcebaseserver.service.client.MyLzuService;
 import com.forgqi.resourcebaseserver.service.dto.Editable;
 import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    private final
-    UserRepository userRepository;
-    private final
-    SysRoleRepository sysRoleRepository;
+    private final UserRepository userRepository;
+    private final SysRoleRepository sysRoleRepository;
     private final GmsService gmsService;
     private final JwkService jwkService;
+    private final MyLzuService myLzuService;
 
 //    private final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, SysRoleRepository sysRoleRepository, GmsService gmsService, JwkService jwkService) {
-        this.userRepository = userRepository;
-        this.sysRoleRepository = sysRoleRepository;
-        this.gmsService = gmsService;
-        this.jwkService = jwkService;
-    }
-
-    public User registerUser(UsrPswDTO usrPswDTO, String type) throws IOException {
+    public User registerUser(UsrPswDTO usrPswDTO, String type) {
         User user;
         if ("graduate".equals(type)) {
-            user = gmsService.saveStuInfo(usrPswDTO);
+            user = gmsService.saveStuInfo();
+        } else if ("student".equals(type)) {
+            user = jwkService.saveStuInfo();
         } else {
-            user = jwkService.saveStuInfo(usrPswDTO);
+            user = myLzuService.getUser();
+            user.setType(User.Type.valueOf(type.toUpperCase()));
         }
         User temporaryUser = new User();
         userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> BeanUtils.copyProperties(u, temporaryUser));
@@ -58,11 +55,6 @@ public class UserService {
 
     }
 
-    public Optional<User> findUserBySecurityContextFormRepository() {
-        return UserHelper.getUserBySecurityContext()
-                .flatMap(user -> userRepository.findById(user.getId()));
-    }
-
     public User reloadUserFromSecurityContext(Long id, List<String> sysRoles) {
 
         User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("用户不存在"));
@@ -70,9 +62,6 @@ public class UserService {
                 .map(sysRoleRepository::findFirstByRole)
                 .collect(Collectors.toList());
 
-        UserHelper.reloadUserFromSecurityContext(principal -> principal.setRoles(roles.stream()
-                .map(role -> new com.forgqi.authenticationserver.entity.SysRole(role.getId(), role.getRole()))
-                .collect(Collectors.toList())), id);
         user.setRoles(roles);
         return userRepository.save(user);
     }
@@ -89,7 +78,6 @@ public class UserService {
             if (editable.getIndividualSignature() != null) {
                 user.setSignature(editable.getIndividualSignature());
             }
-            UserHelper.reloadUserFromSecurityContext(user1 -> BeanUtils.copyProperties(user, user1, "roles"));
             return userRepository.save(user);
         });
     }

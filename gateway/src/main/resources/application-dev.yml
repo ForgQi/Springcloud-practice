@@ -7,8 +7,32 @@
 #  instance:
 #    # 是否注册IP到eureka server，如不指定或设为false，那就会注册主机名到eureka server
 #    prefer-ip-address: true
-
 spring:
   cloud:
     consul:
       host: 192.168.44.128
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+
+  security:
+    oauth2:
+      resourceserver:
+        opaque-token:
+          client-id: Lzu
+          client-secret: 196460cfce2638a2529568978b068340b9adb02e447be36378e8c13e8030880a
+          introspection-uri: http://localhost:8081/oauth/check_token
+      client:
+        registration:
+          opaque-token:
+            provider: opaque-token
+            client-id: Lzu
+            client-secret: 196460cfce2638a2529568978b068340b9adb02e447be36378e8c13e8030880a
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          opaque-token:
+            authorization-uri: http://localhost:8760/oauth/authorize
+            token-uri: http://localhost:8760/oauth/token
+            user-info-uri: http://localhost:8080/v1/profile
+            user-name-attribute: id

@@ -3,7 +3,7 @@ package com.forgqi.resourcebaseserver.client.parse;
 import com.forgqi.resourcebaseserver.client.GmsFeignClient;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
-import com.forgqi.resourcebaseserver.service.dto.StuInfoDTO;
+import com.forgqi.resourcebaseserver.service.dto.UsrInfoDTO;
 import feign.Response;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,16 +31,16 @@ public class GmsParse {
         Element element = document.getElementsByClass("xSectionForm").first();
         Element child1 = element.child(0);
         Element child2 = element.child(1);
-        StuInfoDTO stuInfoDTO = new StuInfoDTO();
-        stuInfoDTO.setId(Long.valueOf(child1.select("tr").get(0).select("td").get(0).text()));
-        stuInfoDTO.setName(child1.select("tr").get(1).select("td").get(0).text());
-        stuInfoDTO.setCollege(child2.select("td").get(11).text());
-        stuInfoDTO.setSubject(child2.select("td").get(13).text());
-        stuInfoDTO.setEducation(child2.select("td").get(9).text());
-        stuInfoDTO.setGrade(child2.select("td").get(4).text());
-        stuInfoDTO.setClassNo(child2.select("td").get(17).text());
-        stuInfoDTO.setIdCard(child1.select("tr").get(6).select("td").get(0).text());
-        return stuInfoDTO.convertToUser();
+        return UsrInfoDTO.builder()
+                .id(Long.valueOf(child1.select("tr").get(0).select("td").get(0).text()))
+                .name(child1.select("tr").get(1).select("td").get(0).text())
+                .college(child2.select("td").get(11).text())
+                .subject(child2.select("td").get(13).text())
+                .education(child2.select("td").get(9).text())
+                .grade(child2.select("td").get(4).text())
+                .classNo(child2.select("td").get(17).text())
+                .idCard(child1.select("tr").get(6).select("td").get(0).text())
+                .build().convertToUser();
     }
 
     public List<CourseDTO> getCourse() {

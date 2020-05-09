@@ -2,15 +2,23 @@ package com.forgqi.resourcebaseserver;
 
 import com.forgqi.resourcebaseserver.common.Voted;
 import com.forgqi.resourcebaseserver.common.errors.InvalidPasswordException;
+import com.forgqi.resourcebaseserver.entity.forum.Post;
+import com.forgqi.resourcebaseserver.repository.UserRepository;
+import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
+import com.forgqi.resourcebaseserver.service.impl.PostServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
+import java.util.Arrays;
 
 import static java.time.temporal.TemporalAdjusters.previous;
 import static java.time.temporal.TemporalAdjusters.previousOrSame;
@@ -19,9 +27,19 @@ import static java.time.temporal.TemporalAdjusters.previousOrSame;
 @SpringBootTest
 //用来注入request
 @WebAppConfiguration
+@Slf4j
 public class ResourceBaseServerApplicationTests {
     @Autowired
     MockHttpServletRequest request;
+
+    @Autowired
+    PostRepository postRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PostServiceImpl postService;
 
     @Test
     public void contextLoads() {
@@ -44,5 +62,31 @@ public class ResourceBaseServerApplicationTests {
 
         System.out.println(Instant.from(date.atStartOfDay(ZoneId.systemDefault())));
 
+    }
+
+    @Transactional
+    public void retry() {
+        new Thread(() -> {
+            postRepository.findById(5L).ifPresent(post -> {
+                post.setCommentSize(80);
+                Post save = postRepository.save(post);
+//                log.info("yes"+save.getVersion());
+            });
+        }).start();
+    }
+
+    @Test
+    public void retryTest() throws InterruptedException {
+        retry();
+        postService.changeNumSize(5L, null);
+        Thread.sleep(5000);
+    }
+
+    @Test
+    public void postRepositoryTest() {
+        log.info("oh,no!");
+        postRepository.findByImageUrlIn(Arrays.asList("123", "12"), Pageable.unpaged())
+                .forEach(iPostDTO -> System.out.println(iPostDTO.getId()));
+        userRepository.findUserById(320160936051L).ifPresent(iUserDTO -> System.out.println(iUserDTO.isEnabled()));
     }
 }

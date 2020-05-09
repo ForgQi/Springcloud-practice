@@ -2,6 +2,7 @@ package com.forgqi.resourcebaseserver.controller;
 
 import com.forgqi.resourcebaseserver.common.errors.NonexistenceException;
 import com.forgqi.resourcebaseserver.common.util.ParseUtil;
+import com.forgqi.resourcebaseserver.common.util.ThreadLocalUtil;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
@@ -16,15 +17,15 @@ import com.forgqi.resourcebaseserver.repository.studymode.WeekRepository;
 import com.forgqi.resourcebaseserver.service.StudyModeService;
 import com.forgqi.resourcebaseserver.service.UserService;
 import com.forgqi.resourcebaseserver.service.dto.IPostDTO;
-import com.forgqi.resourcebaseserver.service.dto.UsrPswDTO;
+import com.forgqi.resourcebaseserver.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.util.CastUtils;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 @RequestMapping
 @RequiredArgsConstructor
 public class BrowseController {
+    private final PostServiceImpl postService;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
@@ -46,7 +48,7 @@ public class BrowseController {
     private final MonthRepository monthRepository;
     private final WeekRepository weekRepository;
 
-    @SuppressWarnings("unchecked")
+    //    @SuppressWarnings("unchecked")
     @GetMapping(value = "/study-modes")
     public Map<?, ?> group(String query, Integer lastFewDays, Instant start, Instant end) {
         ZoneId zone = ZoneId.systemDefault();
@@ -62,7 +64,7 @@ public class BrowseController {
                                     Map<String, Object> m = new HashMap<>(longMapEntry.getValue());
                                     m.put("like", v.getUpVote());
                                     return Map.entry(longMapEntry.getKey(), m);
-                                }).orElse(Map.entry(longMapEntry.getKey(), (Map<String, Object>) longMapEntry.getValue())))
+                                }).orElse(Map.entry(longMapEntry.getKey(), CastUtils.cast(longMapEntry.getValue()))))
                         .collect(Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue));
             }
             return map;
@@ -76,27 +78,24 @@ public class BrowseController {
     }
 
     @PostMapping(value = "/registry")
-    public User register(@RequestBody UsrPswDTO usrPswDTO, String type) throws IOException {
-        //        UserDTO userDTO = new UserDTO().convertFor(user);
-//        userDTO.setTokenDTO(authorizationFeignClient.getToken(loginDTO.convertToTokenMap()));
-
-        return userService.registerUser(usrPswDTO, type);
+    public User register(@RequestParam(defaultValue = "student") String type) {
+        return userService.registerUser(ThreadLocalUtil.get(), type);
     }
 
     @GetMapping(value = {"/posts/subjects/{subject}", "/posts/subjects"})
-    public Page<IPostDTO> getPage(@PathVariable(required = false) String subject, @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    public Page<IPostDTO> getPage(@PathVariable(required = false) String subject,
+                                  @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                  @RequestParam(required = false, defaultValue = "false") Boolean sticky) {
         if (subject == null) {
-            return postRepository.findAllBy(pageable);
+            return postRepository.findAllBySticky(sticky, pageable);
         }
-        return postRepository.findBySubjectEquals(subject, pageable);
+        return postRepository.findBySubjectEqualsAndSticky(subject, sticky, pageable);
     }
 
     @GetMapping(value = "/posts/{id}")
     public Post getPost(@PathVariable Long id) {
-        return postRepository.findById(id).map(post -> {
-            post.setPv(post.getPv() + 1);
-            return postRepository.save(post);
-        }).orElseThrow(() -> new NonexistenceException("帖子不存在"));
+        postService.changeNumSize(id, "Pv");
+        return postRepository.findById(id).orElseThrow(() -> new NonexistenceException("帖子不存在"));
     }
 
     @GetMapping(value = "/posts/{postId}/comments")

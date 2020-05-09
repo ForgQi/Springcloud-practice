@@ -3,25 +3,18 @@ package com.forgqi.resourcebaseserver.service.impl;
 import com.forgqi.resourcebaseserver.common.Voted;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
-import com.forgqi.resourcebaseserver.entity.forum.Post;
 import com.forgqi.resourcebaseserver.repository.forum.CommentRepository;
 import com.forgqi.resourcebaseserver.service.AbstractVoteService;
 import com.forgqi.resourcebaseserver.service.ForumService;
-import com.forgqi.resourcebaseserver.service.dto.ContentDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 @Service("commentsService")
 @RequiredArgsConstructor
-public class CommentServiceImpl extends AbstractVoteService<Comment> implements ForumService<Comment, ContentDTO, Long> {
+public class CommentServiceImpl extends AbstractVoteService<Comment> implements ForumService<Comment> {
     private final CommentRepository commentRepository;
     private final PostServiceImpl postService;
-
-    @Override
-    public Comment packageInstance(User user, ContentDTO content, Long attach) {
-        return content.convertToComment(user, new Post(attach));
-    }
 
     public boolean decide(User user, Long resourceId) {
         return commentRepository.findById(resourceId).map(comment -> {

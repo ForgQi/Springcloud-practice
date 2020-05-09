@@ -15,7 +15,7 @@ public class SysRole implements Serializable {
     @NotBlank
     private String role;
 
-    SysRole() {
+    public SysRole() {
     }
 
     public SysRole(String role) {
