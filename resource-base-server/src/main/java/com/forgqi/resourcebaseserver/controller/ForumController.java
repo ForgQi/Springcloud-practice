@@ -46,11 +46,11 @@ public class ForumController {
     public Comment comment(@RequestBody ContentDTO contentDTO, @PathVariable Long postId) {
         Comment save = commentService.save(contentDTO.convertToComment(new Post(postId, 0L)));
         postService.changeNumSize(postId, "CommentSize");
-        noticeRepository.save(NoticeUtil.buildNotice("social",
-                contentDTO.getContent(),
-                String.valueOf(postId),
-                List.of(String.valueOf(postRepository.findById(postId).orElseThrow().getUser().getId()))
-        ));
+//        noticeRepository.save(NoticeUtil.buildNotice("social",
+//                contentDTO.getContent(),
+//                String.valueOf(postId),
+//                List.of(String.valueOf(postRepository.findById(postId).orElseThrow().getUser().getId()))
+//        ));
         return save;
     }
 
@@ -59,13 +59,13 @@ public class ForumController {
         // version仅用来解决Not-null property references a transient value，不会改变version值
         Reply save = replyService.save(contentDTO.convertToReply(new Comment(commentId, 0L)));
         commentRepository.findById(commentId).ifPresent(comment -> postService.changeNumSize(comment.getPost().getId(), "CommentSize"));
-        Comment comment = commentRepository.findById(commentId).orElseThrow();
-        noticeRepository.save(NoticeUtil.buildNotice("social",
-                contentDTO.getContent(),
-                String.valueOf(comment.getPost().getId()),
-                List.of(String.valueOf(comment.getPost().getUser().getId()),
-                        String.valueOf(comment.getUser().getId()))
-        ));
+//        Comment comment = commentRepository.findById(commentId).orElseThrow();
+//        noticeRepository.save(NoticeUtil.buildNotice("social",
+//                contentDTO.getContent(),
+//                String.valueOf(comment.getPost().getId()),
+//                List.of(String.valueOf(comment.getPost().getUser().getId()),
+//                        String.valueOf(comment.getUser().getId()))
+//        ));
         return save;
     }
 
