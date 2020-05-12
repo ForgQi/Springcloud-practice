@@ -1,6 +1,7 @@
 package com.forgqi.resourcebaseserver.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.forgqi.resourcebaseserver.entity.SysRole;
 import com.forgqi.resourcebaseserver.entity.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,19 +35,9 @@ public interface IUserDTO {
 
     String getName();
 
-    String getCollege();
 
-    String getSubject();
-
-    String getEducation();
-
-    String getGrade();
-
-    String getClassNo();
 
     Instant getCreatedDate();
-
-    String getIdCard();
 
     String getSignature();
 
@@ -56,4 +47,21 @@ public interface IUserDTO {
     List<SysRole> getRoles();
 
     String getAvatar();
+
+    @JsonUnwrapped
+    Detail getDetail();
+
+    interface Detail {
+        String getCollege();
+
+        String getSubject();
+
+        String getEducation();
+
+        String getGrade();
+
+        String getClassNo();
+
+        String getIdCard();
+    }
 }

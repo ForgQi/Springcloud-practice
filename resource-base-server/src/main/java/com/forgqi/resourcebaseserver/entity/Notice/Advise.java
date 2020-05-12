@@ -19,7 +19,7 @@ public class Advise {
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private Instant createdDate;
-
+    @Lob
     private String msg;
 
     private String url;

@@ -69,7 +69,7 @@ public class OtherController {
     @GetMapping(value = "/statistic/users")
     public Map<String, Long> getTotalUsers() {
         try (Stream<GradeOnly> stream = userRepository.findAllBy()) {
-            return stream.collect(Collectors.groupingBy(gradeOnly -> gradeOnly == null ? "unknown" : gradeOnly.getGrade(), Collectors.counting()));
+            return stream.collect(Collectors.groupingBy(gradeOnly -> gradeOnly.getDetail().getGrade() == null ? "unknown" : gradeOnly.getDetail().getGrade(), Collectors.counting()));
         }
 //        return userRepository.count();
     }

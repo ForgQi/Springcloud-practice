@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.URI;
@@ -37,7 +36,7 @@ public class JwkService {
 //                .map(HttpCookie::getValue).get();
     }
 
-    public List<CourseDTO> getCourse() throws IOException {
+    public List<CourseDTO> getCourse() {
         return jwkParse.getCourse();
     }
 }

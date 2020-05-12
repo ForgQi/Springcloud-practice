@@ -42,16 +42,18 @@ public class UserService {
             user = myLzuService.getUser();
             user.setType(User.Type.valueOf(type.toUpperCase()));
         }
-        User temporaryUser = new User();
-        userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> BeanUtils.copyProperties(u, temporaryUser));
-        String[] nullPropertyNames = ParseUtil.getNullPropertyNames(user);
-        String[] copyOf = Arrays.copyOf(nullPropertyNames, nullPropertyNames.length + 2);
-        copyOf[nullPropertyNames.length] = "accountNonLocked";
-        copyOf[nullPropertyNames.length + 1] = "roles";
-        BeanUtils.copyProperties(user, temporaryUser, copyOf);
-        temporaryUser.setUserName(usrPswDTO.getUserName());
-        temporaryUser.setPassword(usrPswDTO.getPassword());
-        return userRepository.save(temporaryUser);
+//        User temporaryUser = new User();
+//        userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> BeanUtils.copyProperties(u, temporaryUser));
+        userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> BeanUtils.copyProperties(u, user, "detail"));
+//        String[] nullPropertyNames = ParseUtil.getNullPropertyNames(user);
+//        String[] copyOf = Arrays.copyOf(nullPropertyNames, nullPropertyNames.length + 2);
+//        copyOf[nullPropertyNames.length] = "accountNonLocked";
+//        copyOf[nullPropertyNames.length + 1] = "roles";
+//        BeanUtils.copyProperties(user, temporaryUser, copyOf);
+//        temporaryUser.setUserName(usrPswDTO.getUserName());
+//        temporaryUser.setPassword(usrPswDTO.getPassword());
+        user.setPassword(usrPswDTO.getPassword());
+        return userRepository.save(user);
 
     }
 

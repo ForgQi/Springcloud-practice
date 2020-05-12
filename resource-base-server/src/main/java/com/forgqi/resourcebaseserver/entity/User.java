@@ -2,6 +2,7 @@ package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -45,16 +46,20 @@ public class User extends AbstractAuditingEntity implements UserDetails, OAuth2U
     private String nickName;
     private String avatar;
 
+    @Embedded
+    @JsonUnwrapped
+    private Detail detail;
+    @JsonIgnore
     private String name;
-    private String college;
-    private String subject;
-    private String education;
+//    private String college;
+//    private String subject;
+//    private String education;
     private Type type = Type.STUDENT;
 
-    private String grade;
-    private String classNo;
-    @JsonIgnore
-    private String idCard;
+//    private String grade;
+//    private String classNo;
+//    @JsonIgnore
+//    private String idCard;
 
     @Size(max = 50)
     private String signature;
@@ -132,5 +137,18 @@ public class User extends AbstractAuditingEntity implements UserDetails, OAuth2U
         STUDENT,
         GRADUATE,
         TEACHER;
+    }
+
+    @Embeddable
+    @Getter
+    @Setter
+    public static class Detail {
+        private String college;
+        private String subject;
+        private String education;
+        private String grade;
+        private String classNo;
+        @JsonIgnore
+        private String idCard;
     }
 }

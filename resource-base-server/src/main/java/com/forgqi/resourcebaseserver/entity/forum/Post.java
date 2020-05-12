@@ -47,7 +47,7 @@ public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum<
 
     private String subject;
     @Size(min = 2, max = 50)
-    @Column(nullable = false, length = 50) // 映射为字段，值不能为空
+    @Column(nullable = false, length = 100) // 映射为字段，值不能为空
     private String summary;
 
     @Column(nullable = false)
