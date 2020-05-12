@@ -126,6 +126,11 @@ public class UserController {
         return adviseRepository.findFirstByOrderByIdDesc();
     }
 
+    @GetMapping(value = "/notice/{id}")
+    public Optional<Advise> getNoticeById(@PathVariable Long id) {
+        return adviseRepository.findById(id);
+    }
+
     @PostMapping(value = "/notice")
     @CacheEvict(cacheNames = {"notice"}, key = "'notify'")
     public Advise pushNotice(@RequestBody Advise advise) {
