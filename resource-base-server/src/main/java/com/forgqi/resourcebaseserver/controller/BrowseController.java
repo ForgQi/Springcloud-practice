@@ -3,6 +3,7 @@ package com.forgqi.resourcebaseserver.controller;
 import com.forgqi.resourcebaseserver.common.errors.NonexistenceException;
 import com.forgqi.resourcebaseserver.common.util.ParseUtil;
 import com.forgqi.resourcebaseserver.common.util.ThreadLocalUtil;
+import com.forgqi.resourcebaseserver.entity.Notice.Advice;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
@@ -11,6 +12,7 @@ import com.forgqi.resourcebaseserver.entity.studymode.PersonalData;
 import com.forgqi.resourcebaseserver.repository.forum.CommentRepository;
 import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
 import com.forgqi.resourcebaseserver.repository.forum.ReplyRepository;
+import com.forgqi.resourcebaseserver.repository.notice.AdviseRepository;
 import com.forgqi.resourcebaseserver.repository.studymode.MonthRepository;
 import com.forgqi.resourcebaseserver.repository.studymode.PersonalDataRepository;
 import com.forgqi.resourcebaseserver.repository.studymode.WeekRepository;
@@ -47,6 +49,7 @@ public class BrowseController {
     private final PersonalDataRepository personalDataRepository;
     private final MonthRepository monthRepository;
     private final WeekRepository weekRepository;
+    private final AdviseRepository adviseRepository;
 
     //    @SuppressWarnings("unchecked")
     @GetMapping(value = "/study-modes")
@@ -107,4 +110,15 @@ public class BrowseController {
     public Page<Reply> getReplies(@PathVariable Long commentId, @PageableDefault(sort = {"createdDate"}) Pageable pageable) {
         return replyRepository.findAllByCommentEquals(commentRepository.getOne(commentId), pageable);
     }
+
+    @GetMapping(value = "/notice/{id}")
+    public Optional<Advice> getNoticeById(@PathVariable Long id) {
+        return adviseRepository.findById(id);
+    }
+
+    @GetMapping(value = "/notice")
+    public Page<Advice> getNotices(@PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return adviseRepository.findAll(pageable);
+    }
+
 }

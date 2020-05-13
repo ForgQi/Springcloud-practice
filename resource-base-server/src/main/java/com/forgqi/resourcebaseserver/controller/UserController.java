@@ -1,7 +1,7 @@
 package com.forgqi.resourcebaseserver.controller;
 
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
-import com.forgqi.resourcebaseserver.entity.Notice.Advise;
+import com.forgqi.resourcebaseserver.entity.Notice.Advice;
 import com.forgqi.resourcebaseserver.entity.Notice.Notice;
 import com.forgqi.resourcebaseserver.entity.Notice.UserNoticeState;
 import com.forgqi.resourcebaseserver.entity.User;
@@ -122,18 +122,13 @@ public class UserController {
 
     @GetMapping(value = "/notice")
     @Cacheable(cacheNames = {"notice"}, key = "'notify'")
-    public Optional<Advise> getNotice() {
+    public Optional<Advice> getNotice() {
         return adviseRepository.findFirstByOrderByIdDesc();
-    }
-
-    @GetMapping(value = "/notice/{id}")
-    public Optional<Advise> getNoticeById(@PathVariable Long id) {
-        return adviseRepository.findById(id);
     }
 
     @PostMapping(value = "/notice")
     @CacheEvict(cacheNames = {"notice"}, key = "'notify'")
-    public Advise pushNotice(@RequestBody Advise advise) {
-        return adviseRepository.save(advise);
+    public Advice pushNotice(@RequestBody Advice advice) {
+        return adviseRepository.save(advice);
     }
 }
