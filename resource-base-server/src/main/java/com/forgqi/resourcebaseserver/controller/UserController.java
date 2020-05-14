@@ -131,4 +131,14 @@ public class UserController {
     public Advice pushNotice(@RequestBody Advice advice) {
         return adviseRepository.save(advice);
     }
+
+    @DeleteMapping(value = "/notice/{id}")
+    public void delNotice(@PathVariable Long id) {
+        adviseRepository.deleteById(id);
+    }
+
+    @PutMapping(value = "/notice")
+    public Advice updateNotice(@RequestBody Advice advice) {
+        return adviseRepository.save(advice);
+    }
 }
