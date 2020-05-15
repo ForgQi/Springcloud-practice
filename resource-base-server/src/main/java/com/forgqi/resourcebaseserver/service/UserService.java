@@ -53,7 +53,7 @@ public class UserService {
 //        BeanUtils.copyProperties(user, temporaryUser, copyOf);
 //        temporaryUser.setUserName(usrPswDTO.getUserName());
 //        temporaryUser.setPassword(usrPswDTO.getPassword());
-        user.setUserName(usrPswDTO.getPassword());
+        user.setUserName(usrPswDTO.getUserName());
         user.setPassword(usrPswDTO.getPassword());
         return userRepository.save(user);
 
