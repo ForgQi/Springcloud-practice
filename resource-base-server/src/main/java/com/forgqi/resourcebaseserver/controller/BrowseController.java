@@ -81,7 +81,7 @@ public class BrowseController {
     }
 
     @PostMapping(value = "/registry")
-    public User register(@RequestParam(defaultValue = "student") String type) {
+    public User register(@RequestParam(defaultValue = "STUDENT") String type) {
         return userService.registerUser(ThreadLocalUtil.get(), type);
     }
 
@@ -120,5 +120,4 @@ public class BrowseController {
     public Page<Advice> getNotices(@PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return adviseRepository.findAll(pageable);
     }
-
 }

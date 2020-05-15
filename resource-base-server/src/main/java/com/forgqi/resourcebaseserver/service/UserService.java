@@ -34,13 +34,14 @@ public class UserService {
 
     public User registerUser(UsrPswDTO usrPswDTO, String type) {
         User user;
-        if ("graduate".equals(type)) {
+        User.Type userType = User.Type.valueOf(type.toUpperCase());
+        if (User.Type.GRADUATE == userType) {
             user = gmsService.saveStuInfo();
-        } else if ("student".equals(type)) {
+        } else if (User.Type.STUDENT == userType) {
             user = jwkService.saveStuInfo();
         } else {
             user = myLzuService.getUser();
-            user.setType(User.Type.valueOf(type.toUpperCase()));
+            user.setType(userType);
         }
 //        User temporaryUser = new User();
 //        userRepository.findByUserName(usrPswDTO.getUserName()).ifPresent(u -> BeanUtils.copyProperties(u, temporaryUser));
@@ -52,6 +53,7 @@ public class UserService {
 //        BeanUtils.copyProperties(user, temporaryUser, copyOf);
 //        temporaryUser.setUserName(usrPswDTO.getUserName());
 //        temporaryUser.setPassword(usrPswDTO.getPassword());
+        user.setUserName(usrPswDTO.getPassword());
         user.setPassword(usrPswDTO.getPassword());
         return userRepository.save(user);
 
