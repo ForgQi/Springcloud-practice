@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 @Slf4j
 public class StorageService implements InitializingBean {
     @Value("${storage.location}")
-    private String location = "upload-dir";
+    private final String location = "upload-dir";
 
     private Path uploadDir;
 

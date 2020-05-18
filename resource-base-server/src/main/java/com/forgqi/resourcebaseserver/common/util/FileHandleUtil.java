@@ -25,7 +25,7 @@ public class FileHandleUtil {
     /**
      * 文件存放的目录
      **/
-    private static String fileDir = "/upload/";
+    private static final String fileDir = "/upload/";
 
     static {
         try {
