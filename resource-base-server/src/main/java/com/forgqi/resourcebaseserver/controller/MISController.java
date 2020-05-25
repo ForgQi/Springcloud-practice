@@ -113,7 +113,7 @@ public class MISController {
     }
 
     @GetMapping(value = "/audit/users/{id}")
-    public PageImpl<?> getUserAuditedLog(@PathVariable String id, String category, @PageableDefault Pageable pageable) throws ClassNotFoundException {
+    public PageImpl<?> getUserAuditedLog(@PathVariable String id, String category, @RequestParam(required = false)String operation, @PageableDefault Pageable pageable) throws ClassNotFoundException {
         Class<?> aClass = Class.forName("com.forgqi.resourcebaseserver.entity.forum." + ParseUtil.upperFirstCase(category));
         AuditReader auditReader = AuditReaderFactory.get(entityManager);
         AuditQuery auditQuery = auditReader.createQuery()
@@ -121,6 +121,9 @@ public class MISController {
                 .forRevisionsOfEntity(aClass, false, true)
                 // false for Entities only, true for selectDeletedEntities
                 .add(AuditEntity.property("lastModifiedBy").eq(id));
+        if (operation != null) {
+            auditQuery = auditQuery.add(AuditEntity.revisionType().eq(RevisionType.valueOf(operation.toUpperCase())));
+        }
         List<Object[]> resultList = CastUtils.cast(auditQuery
                 .addOrder(AuditEntity.property("lastModifiedDate").desc())
                 .setFirstResult((int) pageable.getOffset())
