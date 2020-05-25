@@ -38,4 +38,12 @@ public class ParseUtil {
         String[] result = new String[emptyNames.size()];
         return emptyNames.toArray(result);
     }
+
+    public static String upperFirstCase(String str) {
+        char[] chars = str.toCharArray();
+        if (chars[0] >= 'a' && chars[0] <= 'z') {
+            chars[0] -= 32;
+        }
+        return String.valueOf(chars);
+    }
 }
