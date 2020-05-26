@@ -135,6 +135,6 @@ public class MISController {
                     AuditedRevisionEntity defaultRevisionEntity = CastUtils.cast(objects[1]);
                     return Map.of("entity", objects[0], "metadata", Map.of("RevisionType", objects[2], "RevisionEntity", Map.of("id", defaultRevisionEntity.getId(), "revisionDate", defaultRevisionEntity.getRevisionDate(), "user", defaultRevisionEntity.getUser())));
                 })
-                .collect(Collectors.toList()), pageable, (long)auditReader.createQuery().forRevisionsOfEntity(aClass, true).add(AuditEntity.property("lastModifiedBy").eq(id)).addProjection(AuditEntity.revisionNumber().count()).getSingleResult());
+                .collect(Collectors.toList()), pageable, (long)auditReader.createQuery().forRevisionsOfEntity(aClass, true).add(AuditEntity.revisionProperty("user").eq(id)).addProjection(AuditEntity.revisionNumber().count()).getSingleResult());
     }
 }
