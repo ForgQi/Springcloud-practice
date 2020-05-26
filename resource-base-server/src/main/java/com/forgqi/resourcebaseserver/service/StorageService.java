@@ -1,6 +1,7 @@
 package com.forgqi.resourcebaseserver.service;
 
 import com.forgqi.resourcebaseserver.common.errors.UnsupportedOperationException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +15,10 @@ import java.nio.file.Paths;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class StorageService implements InitializingBean {
-    @Value("${storage.location}")
-    private final String location = "upload-dir";
+    @Value("${storage.location: upload-dir}")
+    private final String location;
 
     private Path uploadDir;
 
