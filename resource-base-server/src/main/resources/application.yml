@@ -54,6 +54,8 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
+    properties:
+      org.hibernate.envers.store_data_at_delete: true
   datasource:
     hikari:
       maximumPoolSize: 16

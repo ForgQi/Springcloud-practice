@@ -21,7 +21,7 @@ public class UserAuditorAware implements AuditorAware<String> {
     @Override
     @NonNull
     public Optional<String> getCurrentAuditor() {
-        return UserHelper.getUserBySecurityContext().map(User::getUsername);
+        return UserHelper.getUserBySecurityContext().map(User::getUsername).or(() -> Optional.of("anonymousUser"));
     }
 
     @Bean

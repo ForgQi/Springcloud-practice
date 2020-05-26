@@ -39,7 +39,7 @@ public class CustomAuthoritiesOpaqueTokenIntrospector implements OpaqueTokenIntr
         return userRepository.findById(Long.valueOf(userName)).map(user -> {
             user.setAttributes(principal.getAttributes());
             return user;
-        }).get();
+        }).orElseThrow();
 //        return new DefaultOAuth2AuthenticatedPrincipal(
 //                principal.getName(), principal.getAttributes(), extractAuthorities(principal));
     }

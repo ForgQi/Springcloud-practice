@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 @Table(indexes = {@Index(columnList = "user_name", unique = true)})
 @Getter
 @Setter
+@ToString
 public class User extends AbstractAuditingEntity implements UserDetails, OAuth2User {
     private static final long serialVersionUID = -1205293048576328829L;
 

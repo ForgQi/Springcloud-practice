@@ -25,7 +25,7 @@ public class PostServiceImpl extends AbstractVoteService<Post> implements ForumS
 
     public boolean decide(User user, Long resourceId) {
         return postRepository.findById(resourceId).map(post -> post.getUser().getId() == user.getId() ||
-                user.getAuthorities().stream().anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()))).get();
+                user.getAuthorities().stream().anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()))).orElseThrow();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.forgqi.resourcebaseserver.controller;
 import com.forgqi.resourcebaseserver.common.util.ParseUtil;
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.entity.AbstractAuditingEntity;
+import com.forgqi.resourcebaseserver.entity.AuditedRevisionEntity;
 import com.forgqi.resourcebaseserver.entity.SysRole;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
@@ -120,19 +121,19 @@ public class MISController {
                 //  Creates a query, which selects the revisions, at which the given entity was modified.
                 .forRevisionsOfEntity(aClass, false, true)
                 // false for Entities only, true for selectDeletedEntities
-                .add(AuditEntity.property("lastModifiedBy").eq(id));
+                .add(AuditEntity.revisionProperty("user").eq(id));
         if (operation != null) {
             auditQuery = auditQuery.add(AuditEntity.revisionType().eq(RevisionType.valueOf(operation.toUpperCase())));
         }
         List<Object[]> resultList = CastUtils.cast(auditQuery
-                .addOrder(AuditEntity.property("lastModifiedDate").desc())
+                .addOrder(AuditEntity.revisionNumber().desc())
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList());
         return new PageImpl<>(resultList.stream()
                 .map(objects -> {
-                    DefaultRevisionEntity defaultRevisionEntity = CastUtils.cast(objects[1]);
-                    return Map.of("entity", objects[0], "metadata", Map.of("RevisionType", objects[2], "RevisionEntity", Map.of("id", defaultRevisionEntity.getId(), "revisionDate", defaultRevisionEntity.getRevisionDate())));
+                    AuditedRevisionEntity defaultRevisionEntity = CastUtils.cast(objects[1]);
+                    return Map.of("entity", objects[0], "metadata", Map.of("RevisionType", objects[2], "RevisionEntity", Map.of("id", defaultRevisionEntity.getId(), "revisionDate", defaultRevisionEntity.getRevisionDate(), "user", defaultRevisionEntity.getUser())));
                 })
                 .collect(Collectors.toList()), pageable, (long)auditReader.createQuery().forRevisionsOfEntity(aClass, true).add(AuditEntity.property("lastModifiedBy").eq(id)).addProjection(AuditEntity.revisionNumber().count()).getSingleResult());
     }

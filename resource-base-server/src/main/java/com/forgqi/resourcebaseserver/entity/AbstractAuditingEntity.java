@@ -2,9 +2,11 @@ package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,8 +15,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PreRemove;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -32,10 +36,12 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
+    @NotAudited
     private Instant lastModifiedDate = Instant.now();
 
     @LastModifiedBy
     @Column(name = "last_modified_by", length = 50)
     @JsonIgnore
+    @NotAudited
     private String lastModifiedBy;
 }

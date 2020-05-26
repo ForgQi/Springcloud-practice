@@ -43,7 +43,7 @@ public interface IUserDTO {
 
     boolean isAccountNonLocked();
 
-    @JsonIgnore
+//    @JsonIgnore
     List<SysRole> getRoles();
 
     String getAvatar();
