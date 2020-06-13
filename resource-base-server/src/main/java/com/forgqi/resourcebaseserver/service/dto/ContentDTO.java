@@ -23,7 +23,7 @@ public class ContentDTO {
     private String html;
 
     private Object imageUrl;
-    private List<String> topicList;
+    private List<String> topic;
     private Map<String, ?> profile;
 
     public Reply convertToReply(Comment comment) {

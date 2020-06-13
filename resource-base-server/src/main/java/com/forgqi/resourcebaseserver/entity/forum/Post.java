@@ -60,6 +60,8 @@ public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum<
     private boolean highlight = false;
     @ElementCollection
     private List<String> imageUrl;
+    @ElementCollection
+    private List<String> topic;
     @Column(nullable = false)
     private Integer upVote = 0;
     @Column(nullable = false)
