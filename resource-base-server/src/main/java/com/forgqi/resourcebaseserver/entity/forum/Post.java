@@ -6,7 +6,6 @@ import com.forgqi.resourcebaseserver.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;

@@ -18,7 +18,8 @@ import javax.persistence.Entity;
         @AttributeOverride(name = "id", column = @Column(name = "rev")),
         @AttributeOverride(name = "timestamp", column = @Column(name = "revtstmp"))
 })
-@Getter @Setter
+@Getter
+@Setter
 public class AuditedRevisionEntity extends DefaultRevisionEntity {
 
     private String user;

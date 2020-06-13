@@ -2,7 +2,6 @@ package com.forgqi.resourcebaseserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
@@ -15,10 +14,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.PreRemove;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Optional;
 
 @Getter
 @Setter

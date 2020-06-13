@@ -1,4 +1,4 @@
-package com.forgqi.resourcebaseserver.repository.studymode;
+package com.forgqi.resourcebaseserver.repository.redis;
 
 import com.forgqi.resourcebaseserver.entity.studymode.MonthRank;
 import org.springframework.data.repository.CrudRepository;

@@ -1,4 +1,7 @@
 spring:
+  elasticsearch:
+    rest:
+      uris: http://172.18.0.1:9200
   cloud:
     consul:
       host: consul-client

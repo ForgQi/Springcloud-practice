@@ -3,13 +3,14 @@ package com.forgqi.resourcebaseserver.controller;
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
 import com.forgqi.resourcebaseserver.entity.forum.Reply;
-import com.forgqi.resourcebaseserver.repository.forum.CommentRepository;
-import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
-import com.forgqi.resourcebaseserver.repository.notice.NoticeRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.forum.CommentRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.forum.PostRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.notice.NoticeRepository;
 import com.forgqi.resourcebaseserver.service.AbstractVoteService;
 import com.forgqi.resourcebaseserver.service.ForumService;
+import com.forgqi.resourcebaseserver.service.SearchService;
 import com.forgqi.resourcebaseserver.service.dto.ContentDTO;
-import com.forgqi.resourcebaseserver.service.dto.util.NoticeUtil;
+import com.forgqi.resourcebaseserver.service.dto.util.ConvertUtil;
 import com.forgqi.resourcebaseserver.service.impl.CommentServiceImpl;
 import com.forgqi.resourcebaseserver.service.impl.PostServiceImpl;
 import com.forgqi.resourcebaseserver.service.impl.ReplyServiceImpl;
@@ -17,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -34,12 +34,15 @@ public class ForumController {
     private final CommentServiceImpl commentService;
     private final ReplyServiceImpl replyService;
     private final CommentRepository commentRepository;
+    private final SearchService searchService;
     private final NoticeRepository noticeRepository;
     private final PostRepository postRepository;
 
     @PostMapping(value = "/posts/subjects/{subject}")
     public Post push(@RequestBody ContentDTO richTextDTO, @PathVariable String subject) {
-        return postService.save(richTextDTO.convertToPost(subject));
+        Post post = postService.save(richTextDTO.convertToPost(subject));
+        searchService.save(ConvertUtil.convertToSearchable(post));
+        return post;
     }
 
     @PostMapping(value = "/posts/{postId}/comments")
@@ -94,10 +97,17 @@ public class ForumController {
     @DeleteMapping(value = "/{service}/{id}")
     public void delete(@PathVariable Long id, @PathVariable String service) {
         if ("comments".equals(service)) {
-            commentService.getRepository().findById(id).ifPresent(comment -> postService.changeNumSize(comment.getPost().getId(), null));
+            commentService.getRepository().findById(id).ifPresent(comment -> {
+                forumServiceMap.get(service + "Service").delete(id);
+                postService.changeNumSize(comment.getPost().getId(), null);
+            });
         } else if ("replies".equals(service)) {
-            replyService.getRepository().findById(id).ifPresent(reply -> postService.changeNumSize(reply.getComment().getPost().getId(), null));
+            replyService.getRepository().findById(id).ifPresent(reply -> {
+                forumServiceMap.get(service + "Service").delete(id);
+                postService.changeNumSize(reply.getComment().getPost().getId(), null);
+            });
+        } else {
+            forumServiceMap.get(service + "Service").delete(id);
         }
-        forumServiceMap.get(service + "Service").delete(id);
     }
 }

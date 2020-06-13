@@ -1,11 +1,10 @@
 package com.forgqi.resourcebaseserver.service;
 
-import com.forgqi.resourcebaseserver.common.util.ParseUtil;
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.entity.SysRole;
 import com.forgqi.resourcebaseserver.entity.User;
-import com.forgqi.resourcebaseserver.repository.SysRoleRepository;
-import com.forgqi.resourcebaseserver.repository.UserRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.SysRoleRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.UserRepository;
 import com.forgqi.resourcebaseserver.service.client.GmsService;
 import com.forgqi.resourcebaseserver.service.client.JwkService;
 import com.forgqi.resourcebaseserver.service.client.MyLzuService;
@@ -16,7 +15,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

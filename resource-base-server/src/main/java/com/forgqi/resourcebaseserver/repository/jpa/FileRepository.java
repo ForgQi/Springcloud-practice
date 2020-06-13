@@ -1,4 +1,4 @@
-package com.forgqi.resourcebaseserver.repository;
+package com.forgqi.resourcebaseserver.repository.jpa;
 
 import com.forgqi.resourcebaseserver.entity.UserFile;
 import org.springframework.data.jpa.repository.JpaRepository;

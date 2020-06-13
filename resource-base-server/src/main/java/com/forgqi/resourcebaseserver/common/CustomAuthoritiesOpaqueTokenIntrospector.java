@@ -1,6 +1,6 @@
 package com.forgqi.resourcebaseserver.common;
 
-import com.forgqi.resourcebaseserver.repository.UserRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

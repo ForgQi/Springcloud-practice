@@ -34,7 +34,7 @@ public class ContentDTO {
             t.setUser(user);
             t.setComment(comment);
             return t;
-        }).get();
+        }).orElseThrow();
 
     }
 
@@ -46,7 +46,7 @@ public class ContentDTO {
             t.setUser(user);
             t.setPost(post);
             return t;
-        }).get();
+        }).orElseThrow();
     }
 
     public Post convertToPost(String subject) {
@@ -59,6 +59,6 @@ public class ContentDTO {
             post.setSummary(new RichTextHelper(html).parseSummary());
             post.setUser(user);
             return post;
-        }).get();
+        }).orElseThrow();
     }
 }

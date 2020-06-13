@@ -8,14 +8,16 @@ import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
 import com.forgqi.resourcebaseserver.entity.forum.Reply;
+import com.forgqi.resourcebaseserver.entity.search.Searchable;
 import com.forgqi.resourcebaseserver.entity.studymode.PersonalData;
-import com.forgqi.resourcebaseserver.repository.forum.CommentRepository;
-import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
-import com.forgqi.resourcebaseserver.repository.forum.ReplyRepository;
-import com.forgqi.resourcebaseserver.repository.notice.AdviseRepository;
-import com.forgqi.resourcebaseserver.repository.studymode.MonthRepository;
-import com.forgqi.resourcebaseserver.repository.studymode.PersonalDataRepository;
-import com.forgqi.resourcebaseserver.repository.studymode.WeekRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.forum.CommentRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.forum.PostRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.forum.ReplyRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.notice.AdviseRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.studymode.PersonalDataRepository;
+import com.forgqi.resourcebaseserver.repository.redis.MonthRepository;
+import com.forgqi.resourcebaseserver.repository.redis.WeekRepository;
+import com.forgqi.resourcebaseserver.service.SearchService;
 import com.forgqi.resourcebaseserver.service.StudyModeService;
 import com.forgqi.resourcebaseserver.service.UserService;
 import com.forgqi.resourcebaseserver.service.dto.IPostDTO;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.util.CastUtils;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,6 +54,18 @@ public class BrowseController {
     private final MonthRepository monthRepository;
     private final WeekRepository weekRepository;
     private final AdviseRepository adviseRepository;
+    private final SearchService searchService;
+
+    @GetMapping(value = "/search")
+    public SearchHits<Searchable> search(String q, @PageableDefault Pageable pageable) {
+        return searchService.search(q, pageable);
+//        return searchService.find(q);
+    }
+
+    @GetMapping(value = "/suggest")
+    public List<String> suggest(String q) {
+        return searchService.suggest(q);
+    }
 
     //    @SuppressWarnings("unchecked")
     @GetMapping(value = "/study-modes")

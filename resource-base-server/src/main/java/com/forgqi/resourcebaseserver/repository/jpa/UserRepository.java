@@ -1,4 +1,4 @@
-package com.forgqi.resourcebaseserver.repository;
+package com.forgqi.resourcebaseserver.repository.jpa;
 
 import com.forgqi.resourcebaseserver.entity.GradeOnly;
 import com.forgqi.resourcebaseserver.entity.SysRole;
@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 

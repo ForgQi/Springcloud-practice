@@ -1,4 +1,4 @@
-package com.forgqi.resourcebaseserver.repository.forum;
+package com.forgqi.resourcebaseserver.repository.jpa.forum;
 
 import com.forgqi.resourcebaseserver.entity.forum.Post;
 import com.forgqi.resourcebaseserver.service.dto.IPostDTO;

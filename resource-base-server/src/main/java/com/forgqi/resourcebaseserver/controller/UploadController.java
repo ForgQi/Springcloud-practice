@@ -5,7 +5,7 @@ import com.forgqi.resourcebaseserver.common.util.FileHandleUtil;
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.UserFile;
-import com.forgqi.resourcebaseserver.repository.FileRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.FileRepository;
 import com.forgqi.resourcebaseserver.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

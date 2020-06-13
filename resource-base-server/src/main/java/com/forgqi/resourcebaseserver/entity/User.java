@@ -53,7 +53,7 @@ public class User extends AbstractAuditingEntity implements UserDetails, OAuth2U
     private Detail detail;
     @JsonIgnore
     private String name;
-//    private String college;
+    //    private String college;
 //    private String subject;
 //    private String education;
     private Type type = Type.STUDENT;

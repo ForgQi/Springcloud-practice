@@ -1,7 +1,6 @@
 package com.forgqi.resourcebaseserver.service;
 
 import com.forgqi.resourcebaseserver.common.errors.UnsupportedOperationException;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;

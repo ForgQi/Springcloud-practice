@@ -1,6 +1,5 @@
 package com.forgqi.resourcebaseserver.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.forgqi.resourcebaseserver.entity.SysRole;
 import com.forgqi.resourcebaseserver.entity.User;
@@ -36,14 +35,13 @@ public interface IUserDTO {
     String getName();
 
 
-
     Instant getCreatedDate();
 
     String getSignature();
 
     boolean isAccountNonLocked();
 
-//    @JsonIgnore
+    //    @JsonIgnore
     List<SysRole> getRoles();
 
     String getAvatar();

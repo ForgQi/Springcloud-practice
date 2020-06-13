@@ -5,7 +5,7 @@ import com.forgqi.resourcebaseserver.common.errors.OperationException;
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
 import com.forgqi.resourcebaseserver.entity.forum.IVoteEntity;
 import com.forgqi.resourcebaseserver.entity.forum.Vote;
-import com.forgqi.resourcebaseserver.repository.VoteRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.VoteRepository;
 import org.hibernate.StaleStateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;

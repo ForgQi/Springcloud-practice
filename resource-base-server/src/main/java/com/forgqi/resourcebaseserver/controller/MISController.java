@@ -6,32 +6,24 @@ import com.forgqi.resourcebaseserver.entity.AbstractAuditingEntity;
 import com.forgqi.resourcebaseserver.entity.AuditedRevisionEntity;
 import com.forgqi.resourcebaseserver.entity.SysRole;
 import com.forgqi.resourcebaseserver.entity.User;
-import com.forgqi.resourcebaseserver.entity.forum.Post;
-import com.forgqi.resourcebaseserver.repository.SysRoleRepository;
-import com.forgqi.resourcebaseserver.repository.UserRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.SysRoleRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.UserRepository;
 import com.forgqi.resourcebaseserver.service.client.GmsService;
 import com.forgqi.resourcebaseserver.service.client.JwkService;
 import com.forgqi.resourcebaseserver.service.client.YjsxgService;
 import com.forgqi.resourcebaseserver.service.client.ZhxgService;
 import com.forgqi.resourcebaseserver.service.dto.CourseDTO;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.criterion.CountProjection;
-import org.hibernate.criterion.Order;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
-import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
-import org.hibernate.envers.query.order.AuditOrder;
-import org.hibernate.envers.query.order.internal.PropertyAuditOrder;
-import org.hibernate.envers.query.projection.AuditProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.data.util.CastUtils;
-import org.springframework.data.util.Pair;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
@@ -109,12 +101,12 @@ public class MISController {
                 // false for Entities only, true for selectDeletedEntities
                 .add(AuditEntity.id().eq(id)).getResultList());
         return resultList.stream()
-                .map(objects -> Map.of("entity", objects[0], "metadata", objects[2], "user", userRepository.findById(Long.valueOf(Optional.ofNullable(((AbstractAuditingEntity)objects[0]).getLastModifiedBy()).orElse("0")))))
+                .map(objects -> Map.of("entity", objects[0], "metadata", objects[2], "user", userRepository.findById(Long.valueOf(Optional.ofNullable(((AbstractAuditingEntity) objects[0]).getLastModifiedBy()).orElse("0")))))
                 .collect(Collectors.toList());
     }
 
     @GetMapping(value = "/audit/users/{id}")
-    public PageImpl<?> getUserAuditedLog(@PathVariable String id, String category, @RequestParam(required = false)String operation, @PageableDefault Pageable pageable) throws ClassNotFoundException {
+    public PageImpl<?> getUserAuditedLog(@PathVariable String id, String category, @RequestParam(required = false) String operation, @PageableDefault Pageable pageable) throws ClassNotFoundException {
         Class<?> aClass = Class.forName("com.forgqi.resourcebaseserver.entity.forum." + ParseUtil.upperFirstCase(category));
         AuditReader auditReader = AuditReaderFactory.get(entityManager);
         AuditQuery auditQuery = auditReader.createQuery()
@@ -135,6 +127,6 @@ public class MISController {
                     AuditedRevisionEntity defaultRevisionEntity = CastUtils.cast(objects[1]);
                     return Map.of("entity", objects[0], "metadata", Map.of("RevisionType", objects[2], "RevisionEntity", Map.of("id", defaultRevisionEntity.getId(), "revisionDate", defaultRevisionEntity.getRevisionDate(), "user", defaultRevisionEntity.getUser())));
                 })
-                .collect(Collectors.toList()), pageable, (long)auditReader.createQuery().forRevisionsOfEntity(aClass, true).add(AuditEntity.revisionProperty("user").eq(id)).addProjection(AuditEntity.revisionNumber().count()).getSingleResult());
+                .collect(Collectors.toList()), pageable, (long) auditReader.createQuery().forRevisionsOfEntity(aClass, true).add(AuditEntity.revisionProperty("user").eq(id)).addProjection(AuditEntity.revisionNumber().count()).getSingleResult());
     }
 }

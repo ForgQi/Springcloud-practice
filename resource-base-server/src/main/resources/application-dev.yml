@@ -35,9 +35,8 @@ storage:
 logging:
   level:
     com.forgqi.resourcebaseserver.client: debug
+#    tracer: TRACE
 #    org.springframework.security: debug
 server:
   forward-headers-strategy: FRAMEWORK
-  tomcat:
-    protocol-header: X-Forwarded-Proto
   port: 8080

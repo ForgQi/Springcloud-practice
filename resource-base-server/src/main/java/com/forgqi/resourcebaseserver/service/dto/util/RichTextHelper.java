@@ -12,7 +12,11 @@ public class RichTextHelper {
     }
 
     public String parseSummary() {
+        return parseSummary(100);
+    }
+
+    public String parseSummary(int length) {
         String s = Jsoup.clean(html, "", Whitelist.basic(), new Document.OutputSettings().prettyPrint(false));
-        return s.length() > 100 ? s.substring(0, 99) : s;
+        return s.length() > length ? s.substring(0, length - 1) : s;
     }
 }

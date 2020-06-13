@@ -4,8 +4,8 @@ import com.forgqi.resourcebaseserver.common.util.ParseUtil;
 import com.forgqi.resourcebaseserver.entity.GradeOnly;
 import com.forgqi.resourcebaseserver.entity.studymode.PersonalData;
 import com.forgqi.resourcebaseserver.entity.studymode.StudyMode;
-import com.forgqi.resourcebaseserver.repository.UserRepository;
-import com.forgqi.resourcebaseserver.repository.studymode.PersonalDataRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.UserRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.studymode.PersonalDataRepository;
 import com.forgqi.resourcebaseserver.service.StudyModeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,6 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
