@@ -1,6 +1,6 @@
 package com.forgqi.resourcebaseserver.common;
 
-import com.forgqi.resourcebaseserver.repository.UserRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,7 +39,7 @@ public class CustomAuthoritiesOpaqueTokenIntrospector implements OpaqueTokenIntr
         return userRepository.findById(Long.valueOf(userName)).map(user -> {
             user.setAttributes(principal.getAttributes());
             return user;
-        }).get();
+        }).orElseThrow();
 //        return new DefaultOAuth2AuthenticatedPrincipal(
 //                principal.getName(), principal.getAttributes(), extractAuthorities(principal));
     }

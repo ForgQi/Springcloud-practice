@@ -1,4 +1,4 @@
-package com.forgqi.resourcebaseserver.repository.studymode;
+package com.forgqi.resourcebaseserver.repository.jpa.studymode;
 
 import com.forgqi.resourcebaseserver.entity.studymode.PersonalData;
 import com.forgqi.resourcebaseserver.entity.studymode.StudyMode;

@@ -1,4 +1,4 @@
-package com.forgqi.resourcebaseserver.repository.notice;
+package com.forgqi.resourcebaseserver.repository.jpa.notice;
 
 import com.forgqi.resourcebaseserver.entity.Notice.Notice;
 import org.springframework.data.domain.Page;

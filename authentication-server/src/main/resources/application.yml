@@ -1,5 +1,5 @@
 ip:
-  addr: 192.168.44.128
+  addr: localhost
 management:
   endpoints:
     web:

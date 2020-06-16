@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 @JsonComponent
 public class DateFormatConfig extends JsonSerializer<Instant> {
 
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
      * 日期格式化

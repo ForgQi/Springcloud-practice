@@ -2,16 +2,21 @@ package com.forgqi.resourcebaseserver.service.dto.util;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.safety.Whitelist;
 
 public class RichTextHelper {
-    private Document document;
+    private final String html;
 
     public RichTextHelper(String html) {
-        document = Jsoup.parse(html);
+        this.html = html;
     }
 
     public String parseSummary() {
-        String s = document.text();
-        return s.length() > 100 ? s.substring(0, 99) : s;
+        return parseSummary(100);
+    }
+
+    public String parseSummary(int length) {
+        String s = Jsoup.clean(html, "", Whitelist.basic(), new Document.OutputSettings().prettyPrint(false));
+        return s.length() > length ? s.substring(0, length - 1) : s;
     }
 }

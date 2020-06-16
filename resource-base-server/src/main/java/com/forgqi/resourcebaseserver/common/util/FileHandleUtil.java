@@ -11,21 +11,18 @@ import java.io.IOException;
 
 public class FileHandleUtil {
     private static final Logger log = LoggerFactory.getLogger(FileHandleUtil.class);
-
+    /**
+     * 文件存放的目录
+     **/
+    private static final String fileDir = "/upload/";
     /**
      * 绝对路径
      **/
     public static String absolutePath = "";
-
     /**
      * 静态目录
      **/
     public static String staticDir = "static";
-
-    /**
-     * 文件存放的目录
-     **/
-    private static String fileDir = "/upload/";
 
     static {
         try {

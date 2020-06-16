@@ -1,17 +1,17 @@
 package com.forgqi.resourcebaseserver.controller;
 
 import com.forgqi.resourcebaseserver.common.util.UserHelper;
-import com.forgqi.resourcebaseserver.entity.Notice.Advise;
+import com.forgqi.resourcebaseserver.entity.Notice.Advice;
 import com.forgqi.resourcebaseserver.entity.Notice.Notice;
 import com.forgqi.resourcebaseserver.entity.Notice.UserNoticeState;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Vote;
-import com.forgqi.resourcebaseserver.repository.UserRepository;
-import com.forgqi.resourcebaseserver.repository.VoteRepository;
-import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
-import com.forgqi.resourcebaseserver.repository.notice.AdviseRepository;
-import com.forgqi.resourcebaseserver.repository.notice.NoticeRepository;
-import com.forgqi.resourcebaseserver.repository.notice.UserNoticeStateRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.UserRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.VoteRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.forum.PostRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.notice.AdviseRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.notice.NoticeRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.notice.UserNoticeStateRepository;
 import com.forgqi.resourcebaseserver.service.UserService;
 import com.forgqi.resourcebaseserver.service.dto.Editable;
 import com.forgqi.resourcebaseserver.service.dto.IUserDTO;
@@ -122,13 +122,23 @@ public class UserController {
 
     @GetMapping(value = "/notice")
     @Cacheable(cacheNames = {"notice"}, key = "'notify'")
-    public Optional<Advise> getNotice() {
+    public Optional<Advice> getNotice() {
         return adviseRepository.findFirstByOrderByIdDesc();
     }
 
     @PostMapping(value = "/notice")
     @CacheEvict(cacheNames = {"notice"}, key = "'notify'")
-    public Advise pushNotice(@RequestBody Advise advise) {
-        return adviseRepository.save(advise);
+    public Advice pushNotice(@RequestBody Advice advice) {
+        return adviseRepository.save(advice);
+    }
+
+    @DeleteMapping(value = "/notice/{id}")
+    public void delNotice(@PathVariable Long id) {
+        adviseRepository.deleteById(id);
+    }
+
+    @PutMapping(value = "/notice")
+    public Advice updateNotice(@RequestBody Advice advice) {
+        return adviseRepository.save(advice);
     }
 }

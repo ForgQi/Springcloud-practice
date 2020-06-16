@@ -3,7 +3,7 @@ package com.forgqi.resourcebaseserver.service.impl;
 import com.forgqi.resourcebaseserver.common.Voted;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
-import com.forgqi.resourcebaseserver.repository.forum.CommentRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.forum.CommentRepository;
 import com.forgqi.resourcebaseserver.service.AbstractVoteService;
 import com.forgqi.resourcebaseserver.service.ForumService;
 import lombok.RequiredArgsConstructor;

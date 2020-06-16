@@ -1,4 +1,4 @@
-package com.forgqi.resourcebaseserver.repository.forum;
+package com.forgqi.resourcebaseserver.repository.jpa.forum;
 
 import com.forgqi.resourcebaseserver.entity.forum.Comment;
 import com.forgqi.resourcebaseserver.entity.forum.Reply;

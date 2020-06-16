@@ -19,7 +19,10 @@ public class UsrInfoDTO {
 
     public User convertToUser() {
         User user = new User();
+        User.Detail detail = new User.Detail();
         BeanUtils.copyProperties(this, user);
+        BeanUtils.copyProperties(this, detail);
+        user.setDetail(detail);
         return user;
     }
 }

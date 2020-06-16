@@ -10,7 +10,7 @@ import java.time.Instant;
 @Entity
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class Advise {
+public class Advice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 自增长策略
     @Column(nullable = false)
@@ -19,7 +19,7 @@ public class Advise {
     @CreatedDate
     @Column(updatable = false, nullable = false)
     private Instant createdDate;
-
+    @Lob
     private String msg;
 
     private String url;

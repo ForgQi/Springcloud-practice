@@ -2,8 +2,8 @@ package com.forgqi.resourcebaseserver.service.impl;
 
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Reply;
-import com.forgqi.resourcebaseserver.repository.forum.CommentRepository;
-import com.forgqi.resourcebaseserver.repository.forum.ReplyRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.forum.CommentRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.forum.ReplyRepository;
 import com.forgqi.resourcebaseserver.service.ForumService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.CrudRepository;

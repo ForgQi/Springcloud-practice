@@ -24,6 +24,8 @@ public interface IPostDTO {
 
     List<String> getImageUrl();
 
+    List<String> getTopic();
+
     Integer getUpVote();
 
     Integer getDownVote();

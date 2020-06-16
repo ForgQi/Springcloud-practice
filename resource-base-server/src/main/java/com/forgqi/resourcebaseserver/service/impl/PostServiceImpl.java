@@ -3,7 +3,7 @@ package com.forgqi.resourcebaseserver.service.impl;
 import com.forgqi.resourcebaseserver.common.Voted;
 import com.forgqi.resourcebaseserver.entity.User;
 import com.forgqi.resourcebaseserver.entity.forum.Post;
-import com.forgqi.resourcebaseserver.repository.forum.PostRepository;
+import com.forgqi.resourcebaseserver.repository.jpa.forum.PostRepository;
 import com.forgqi.resourcebaseserver.service.AbstractVoteService;
 import com.forgqi.resourcebaseserver.service.ForumService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class PostServiceImpl extends AbstractVoteService<Post> implements ForumS
 
     public boolean decide(User user, Long resourceId) {
         return postRepository.findById(resourceId).map(post -> post.getUser().getId() == user.getId() ||
-                user.getAuthorities().stream().anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()))).get();
+                user.getAuthorities().stream().anyMatch(a -> "ROLE_ADMIN".equals(a.getAuthority()))).orElseThrow();
     }
 
     @Override

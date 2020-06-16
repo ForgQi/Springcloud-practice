@@ -1,5 +1,9 @@
 package com.forgqi.resourcebaseserver.entity;
 
 public interface GradeOnly {
-    String getGrade();
+    Detail getDetail();
+
+    interface Detail {
+        String getGrade();
+    }
 }

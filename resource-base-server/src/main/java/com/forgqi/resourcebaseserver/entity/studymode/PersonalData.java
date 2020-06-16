@@ -1,5 +1,6 @@
 package com.forgqi.resourcebaseserver.entity.studymode;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,6 @@ public class PersonalData {
 
     @Column(nullable = false)
     private Double score = 0d;
-
     @Column(nullable = false)
     private Duration totalTime = Duration.ZERO;
     @Column(nullable = false)

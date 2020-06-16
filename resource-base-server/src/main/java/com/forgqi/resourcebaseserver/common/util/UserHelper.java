@@ -42,7 +42,7 @@ public class UserHelper {
 
     public static long getUserIdBySecurityContext() {
         return getUserBySecurityContext()
-                .map(User::getId).get();
+                .map(User::getId).orElseThrow();
     }
 
     public static Optional<Map<String, String>> getUserLoginMap() {
