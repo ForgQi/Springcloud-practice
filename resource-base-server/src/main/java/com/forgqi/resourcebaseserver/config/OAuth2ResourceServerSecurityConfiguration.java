@@ -20,6 +20,7 @@ public class OAuth2ResourceServerSecurityConfiguration extends WebSecurityConfig
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .antMatchers("/v1/user/*").hasRole("SUPER")
+                                .antMatchers("/swagger-ui.html/**").hasRole("SUPER")
                                 .antMatchers("/v1/**").authenticated()
                                 .anyRequest().permitAll()
                 )
