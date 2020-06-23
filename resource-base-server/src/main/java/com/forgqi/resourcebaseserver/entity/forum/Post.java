@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -62,6 +63,9 @@ public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum<
     private List<String> imageUrl;
     @ElementCollection
     private List<String> topic;
+    @ElementCollection
+    private Map<String, String> profile;
+
     @Column(nullable = false)
     private Integer upVote = 0;
     @Column(nullable = false)

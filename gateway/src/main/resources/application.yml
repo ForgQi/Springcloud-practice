@@ -35,7 +35,7 @@ spring:
           # lb 表示负载均衡loadbalance
           uri: lb://base-server
           predicates:
-            - Path=/v1/** # 按顺序匹配其他请求走这个路由
+            - Path=/v1/**,/swagger-ui.html/** # 按顺序匹配其他请求走这个路由
           filters:
             - TokenRelay=
         #          filters:

@@ -4,6 +4,7 @@ import com.forgqi.resourcebaseserver.entity.User;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 public interface IPostDTO {
     Long getId();
@@ -25,6 +26,8 @@ public interface IPostDTO {
     List<String> getImageUrl();
 
     List<String> getTopic();
+
+    Map<String, String> getProfile();
 
     Integer getUpVote();
 
