@@ -20,8 +20,8 @@ public class Reply extends AbstractAuditingEntity implements IForum<String> {
     @Column(name = "id", nullable = false)
     private Long id;
     @NotEmpty(message = "内容不能为空")
-    @Size(min = 2, max = 100)
-    @Column(nullable = false, length = 100) // 映射为字段，值不能为空
+    @Size(min = 2, max = 250)
+    @Column(nullable = false, length = 250) // 映射为字段，值不能为空
     @Audited
     private String content;
     private Long toUser;

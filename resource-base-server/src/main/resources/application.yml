@@ -77,6 +77,8 @@ spring:
 server:
   #端口号
   port: 8080
+  error:
+    include-message: always
   #  security:
 #    user:
 #      name: 242bc36f
