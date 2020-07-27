@@ -10,6 +10,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -35,4 +36,7 @@ public class Reply extends AbstractAuditingEntity implements IForum<String> {
 //可选属性optional=false,表示author不能为空。删除文章，不影响用户
     @JoinColumn(name = "comment_id")//设置在comment表中的关联字段(外键)
     private Comment comment;//所属评论
+
+    @ElementCollection
+    private Map<String, String> profile;
 }

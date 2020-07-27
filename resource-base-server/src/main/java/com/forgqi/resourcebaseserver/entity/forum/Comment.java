@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -41,7 +42,7 @@ public class Comment extends AbstractAuditingEntity implements IVoteEntity, IFor
     //级联保存、更新、删除、刷新;延迟加载。当删除帖子，会级联删除该用户的所有评论
     //拥有mappedBy注解的实体类为关系被维护端
     //mappedBy="comment"中的comment是Reply中的comment属性
-    @Where(clause = "")
+//    @Where(clause = "")
 //    @BatchSize(size = 2) 仅改变每次处理的大小而不是总大小
     private List<Reply> replyList;//回复列表
     @Column(nullable = false)
@@ -49,6 +50,8 @@ public class Comment extends AbstractAuditingEntity implements IVoteEntity, IFor
     @Column(nullable = false)
     private Integer downVote = 0;
 
+    @ElementCollection
+    private Map<String, String> profile;
     @Version
     private Long version;
 
