@@ -10,6 +10,7 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -73,6 +74,7 @@ public class Post extends AbstractAuditingEntity implements IVoteEntity, IForum<
     @Column(nullable = false)
     private Integer pv = 0;
 
+    private Instant lastRepliedDate = Instant.now();
     @Version
     private Long version;
 

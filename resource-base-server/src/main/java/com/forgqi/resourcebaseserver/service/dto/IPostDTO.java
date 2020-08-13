@@ -39,5 +39,7 @@ public interface IPostDTO {
 
     Instant getLastModifiedDate();
 
+    Instant getLastRepliedDate();
+
     Integer getCommentSize();
 }
