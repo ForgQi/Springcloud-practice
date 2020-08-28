@@ -29,6 +29,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.util.CastUtils;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -135,5 +136,11 @@ public class BrowseController {
     @GetMapping(value = "/notice")
     public Page<Advice> getNotices(@PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return adviseRepository.findAll(pageable);
+    }
+
+    @GetMapping(value = "/captcha")
+    public Map<String, String> getCaptcha(@RequestHeader("User-Agent") String userAgent) {
+        String captcha = userAgent.toLowerCase().split("/").length - 1 + "&" + LocalDate.now().getDayOfMonth();
+        return Map.of("captcha", DigestUtils.md5DigestAsHex(captcha.toLowerCase().getBytes()));
     }
 }
