@@ -42,7 +42,7 @@ public class SearchService implements InitializingBean {
 
     public List<String> suggest(String query) {
         CompletionSuggestionBuilder completionSuggestionBuilder = SuggestBuilders.completionSuggestion("title").prefix(query).skipDuplicates(true);
-        var suggestion = elasticsearchOperations.suggest(new SuggestBuilder().addSuggestion("search-suggest", completionSuggestionBuilder), IndexCoordinates.of("searchable"))
+        Suggest.Suggestion<? extends Suggest.Suggestion.Entry<? extends Suggest.Suggestion.Entry.Option>> suggestion = elasticsearchOperations.suggest(new SuggestBuilder().addSuggestion("search-suggest", completionSuggestionBuilder), IndexCoordinates.of("searchable"))
                 .getSuggest().getSuggestion("search-suggest");
         return suggestion.getEntries().stream().map(Suggest.Suggestion.Entry::getOptions).flatMap(options -> options.stream().map(option -> option.getText().string())).collect(Collectors.toList());
     }
