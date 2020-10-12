@@ -3,16 +3,11 @@ package com.forgqi.gateway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.server.DefaultServerRedirectStrategy;
 import org.springframework.security.web.server.DelegatingServerAuthenticationEntryPoint;
+import org.springframework.security.web.server.DelegatingServerAuthenticationEntryPoint.DelegateEntry;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
@@ -20,24 +15,19 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.security.web.server.savedrequest.ServerRequestCache;
 import org.springframework.security.web.server.savedrequest.WebSessionServerRequestCache;
 import org.springframework.security.web.server.util.matcher.MediaTypeServerWebExchangeMatcher;
-import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.springframework.security.web.server.DelegatingServerAuthenticationEntryPoint.DelegateEntry;
 
 @Configuration
 public class SecurityConfig {
@@ -66,7 +56,7 @@ public class SecurityConfig {
             ServerWebExchange exchange = webFilterExchange.getExchange();
             return requestCache.getRedirectUri(exchange).defaultIfEmpty(URI.create("/")).flatMap((location) -> {
 //                        System.out.println(location);
-                if (location.getQuery() == null || !location.getQuery().contains("=")){
+                if (location.getQuery() == null || !location.getQuery().contains("=")) {
                     return new DefaultServerRedirectStrategy().sendRedirect(exchange, location);
                 }
                 Map<String, String> query = location.getQuery().lines().map(s -> s.split("=")).collect(Collectors.toMap(strings -> strings[0], strings -> strings[1]));
@@ -92,7 +82,7 @@ public class SecurityConfig {
         try {
             urlToText = (Map<String, String>) getLinks.invoke(http.oauth2Login());
         } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         assert urlToText != null;
         if (urlToText.size() == 1) {

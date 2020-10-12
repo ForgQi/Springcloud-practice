@@ -5,7 +5,6 @@ import com.forgqi.resourcebaseserver.entity.AbstractAuditingEntity;
 import com.forgqi.resourcebaseserver.entity.User;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Where;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;

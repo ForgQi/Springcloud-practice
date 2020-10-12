@@ -13,9 +13,9 @@ management:
 spring:
   jackson:
     serialization:
-#  为了兼容之前,spring boot把默认改为了false
-#  the Jackson version is changed to 2.10. WRITE_DURATIONS_AS_TIMESTAMPS for serializing the Duration time stamps instead of the earlier WRITE_DATES_AS_TIMESTAMPS.
-#  By adding following property to the application.properties the service (and the serialization feature) will behave like pre 2.2
+      #  为了兼容之前,spring boot把默认改为了false
+      #  the Jackson version is changed to 2.10. WRITE_DURATIONS_AS_TIMESTAMPS for serializing the Duration time stamps instead of the earlier WRITE_DATES_AS_TIMESTAMPS.
+      #  By adding following property to the application.properties the service (and the serialization feature) will behave like pre 2.2
       write-durations-as-timestamps: true
   cloud:
     loadbalancer:
